@@ -329,6 +329,7 @@
       "space": "공간",
       "appName": "앱 이름",
       "appURL": "앱 URL",
+      "appFile": "앱 업로드",
       "memory": "메모리",
       "disk": "디스크",
       "domain": "도메인",
@@ -379,7 +380,8 @@
       "selectOrgAndSpace": "조직과 공간을 선택해 주십시오.",
       "inputAppName": "앱 이름을 입력하여 주십시오.",
       "inputHostName": "호스트를 입력하여 주십시오.",
-      "inputService": "서비스 이름을 입력하여 주십시오."
+      "inputService": "서비스 이름을 입력하여 주십시오.",
+      "appFile" : "업로드할 파일을 선택해 주세요."
     },
     "result": {
       "appNameError": "현재 입력한 앱 이름으로 생성할 수 없습니다.",

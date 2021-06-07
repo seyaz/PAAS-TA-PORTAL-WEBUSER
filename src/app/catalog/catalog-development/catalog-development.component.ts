@@ -61,8 +61,8 @@ export class CatalogDevelopmentComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.translateEntities = event.translations.catalog;
       if(this.orgs.length > 1){
-      this.orgs[0].name = event.translations.catalog.nav.org_name;
-      this.spaces[0].name = event.translations.catalog.nav.space_name;
+        this.orgs[0].name = event.translations.catalog.nav.org_name;
+        this.spaces[0].name = event.translations.catalog.nav.space_name;
       }
     });
     this.catalogService.navView = 'appDevelopment';
@@ -181,11 +181,11 @@ export class CatalogDevelopmentComponent implements OnInit {
     }
     this.catalogService.getBuildPacks(CATALOGURLConstant.GETBUILDPACKS+'/'+this.catalogService.getCurrentCatalogNumber()).subscribe(data => {
       try {
-      this.buildpack =  data['list'][0];
-      var pathHeader = this.buildpack.thumbImgPath.lastIndexOf("/");
-      var pathEnd = this.buildpack.thumbImgPath.length;
-      var fileName = this.buildpack.thumbImgPath.substring(pathHeader + 1, pathEnd);
-      this.catalogService.getImg(CATALOGURLConstant.GETIMG+fileName).subscribe(data => {
+        this.buildpack =  data['list'][0];
+        var pathHeader = this.buildpack.thumbImgPath.lastIndexOf("/");
+        var pathEnd = this.buildpack.thumbImgPath.length;
+        var fileName = this.buildpack.thumbImgPath.substring(pathHeader + 1, pathEnd);
+        this.catalogService.getImg(CATALOGURLConstant.GETIMG+fileName).subscribe(data => {
 
           let reader = new FileReader();
           reader.addEventListener("load", () => {
@@ -195,8 +195,8 @@ export class CatalogDevelopmentComponent implements OnInit {
             reader.readAsDataURL(data);
           }
         }, error => {
-        this.buildpack.img = '../../../assets/resources/images/catalog/catalog_3.png';
-      });
+          this.buildpack.img = '../../../assets/resources/images/catalog/catalog_3.png';
+        });
       }catch(e){
         this.buildpack.img = '../../../assets/resources/images/catalog/catalog_3.png';
       }},error => {
@@ -251,17 +251,17 @@ export class CatalogDevelopmentComponent implements OnInit {
           this.org = _org;
         }
       });
-        this.catalogService.getSpacelist(this.org.guid).subscribe(data => {
-          data['spaceList']['resources'].forEach(res => {
-            const _space = new Space(res['metadata'], res['entity'], null);
-            this.spaces.push(_space);
-            if(_space.name === this.spacename){
-              this.space = _space;
-              this.getAppNames();
-            } });
-        },error => {
-          this.errorMsg(error);
-        });
+      this.catalogService.getSpacelist(this.org.guid).subscribe(data => {
+        data['spaceList']['resources'].forEach(res => {
+          const _space = new Space(res['metadata'], res['entity'], null);
+          this.spaces.push(_space);
+          if(_space.name === this.spacename){
+            this.space = _space;
+            this.getAppNames();
+          } });
+      },error => {
+        this.errorMsg(error);
+      });
     },error => {
       this.errorMsg(error);
     });
@@ -391,12 +391,12 @@ export class CatalogDevelopmentComponent implements OnInit {
   nameCheck() {
     this.namecheck = CATALOGURLConstant.OK;
     if(!isNullOrUndefined(this.appnames)){
-    this.appnames.forEach(name => {
-      if(name === this.appname){
-        this.namecheck = CATALOGURLConstant.NO;
-        return;
-      }
-    });
+      this.appnames.forEach(name => {
+        if(name === this.appname){
+          this.namecheck = CATALOGURLConstant.NO;
+          return;
+        }
+      });
     }
   }
 

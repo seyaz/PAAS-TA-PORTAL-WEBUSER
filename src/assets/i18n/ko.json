@@ -391,7 +391,9 @@
       "buildPackSusses": "빌드팩 생성을 성공했습니다.",
       "buildPackError": "빌드팩 생성을 실패했습니다.",
       "serviceSusses": "서비스 생성을 성공했습니다.",
-      "serviceError": "서비스 생성을 실패했습니다."
+      "serviceError": "서비스 생성을 실패했습니다.",
+      "appUploadSusses": "앱 생성을 성공했습니다.",
+      "appUploadError": "앱 생성을 실패했습니다."
     }
   },
   "orgMain": {

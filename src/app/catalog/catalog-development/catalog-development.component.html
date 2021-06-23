@@ -139,7 +139,6 @@
                   <div *ngIf="(namecheck === -1 && appname.length > 0)" style="position:absolute; left:0;"><p class="red text-left login_red"><i class="fas fa-exclamation-circle"></i> {{ 'catalog.contants.createFalseApp' | translate }}</p></div>
                 </th>
               </tr>
-              <!--2021 / 06/ 04 앱 업로드 추가 (upload)-->
               <tr>
                 <th colspan="3">
                   <p>{{ 'catalog.appDevelopment.appFile' | translate }}</p>
@@ -147,12 +146,11 @@
               </tr>
               <tr>
                 <th colspan="2" style="position:relative;">
-                  <!-- 앱 업로드-->
-                  <input name="appfile" type="text" placeholder="{{ 'catalog.contants.appFile' | translate }}" readonly="readonly" maxlength="50"/>
-                  <div style="position:absolute; left:0;"><p class="red text-left login_red"><!-- {{ 'catalog.contants.createFalseApp' | translate }}--></p></div>
+                  <input id="appFile" name="appFile" type="text" placeholder="{{ 'catalog.contants.appFile' | translate }}" readonly="readonly" maxlength="50"/>
+                  <div style="position:absolute; left:0;"><p class="red text-left login_red"></p></div>
                 </th>
                 <th colspan="1">
-                  <input hidden type="file" name="uploadfile"/>
+                  <input type="file" id="uploadFile" name="uploadFile" (change)="onAppChanged($event)">
                 </th>
               <tr>
                 <th colspan="2">

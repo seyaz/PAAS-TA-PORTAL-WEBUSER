@@ -1,7 +1,10 @@
+// @ts-ignore
 import { Injectable } from '@angular/core';
+// @ts-ignore
 import {NGXLogger} from "ngx-logger";
 import {CommonService} from "../../common/common.service";
 import {CATALOGURLConstant} from "../common/catalog.constant";
+
 import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 import {isUndefined} from "util";
 declare var $: any;
@@ -292,6 +295,24 @@ export class CatalogService {
 
   upload(){
     return this.common.doGet('/commonapi/v2/app/uploadsfile', this.common.getToken()).map((res: Response) => {
+      return res;
+    });
+  }
+
+  //앱 업로드 (Post)
+  postStorage(param: any) {
+    return this.common.doFilePost('/storageapi/v2/swift/', param, '').map((res: any) => {
+      return res;
+    });
+  }
+  appRegistration(url : string, param : any){
+    return this.common.doFilePost(url,param, this.common.getToken()).map((res: any) => {
+      return res;
+    });
+  }
+  // Get app
+  getApp(url: string) {
+    return this.common.doStorageGet(url, null).map((res: any) => {
       return res;
     });
   }

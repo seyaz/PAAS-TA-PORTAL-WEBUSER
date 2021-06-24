@@ -266,6 +266,11 @@ export class CatalogService {
     });
   }
 
+  postApp2(url: string, param: any) {
+    return this.common.doPost2(url, param, this.common.getToken()).map((res: any) => {
+      return res;
+    });
+  }
 
   postHistroy(url : string, param : any){
     return this.common.doCommonPost(url,param).map((res: Response) => {

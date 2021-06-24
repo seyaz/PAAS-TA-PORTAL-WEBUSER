@@ -122,6 +122,17 @@ export class CommonService {
     });
   }
 
+  doPost2(url: string, body: any, token: string) {
+    if (token == null) {
+      token = '';
+    }
+    this.fileheaders = new HttpHeaders();
+    this.fileheaders.set('Content-Type', 'multipart/form-data');
+    return this.http.post(url, body, {
+      headers: this.fileheaders.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
+    });
+  }
+
   doPostExternal(url: string, body: any, token: string) {
     if (token == null) {
       token = '';
@@ -148,7 +159,7 @@ export class CommonService {
     this.fileheaders = new HttpHeaders();
     this.fileheaders.set('Content-Type', 'multipart/form-data');
     return this.http.post(url, body, {
-      headers: this.fileheaders.set('cf-Authorization', token).set('Authorization', this.getAuthorization())
+      headers: this.fileheaders.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 
@@ -159,7 +170,7 @@ export class CommonService {
     this.fileheaders = new HttpHeaders();
     this.fileheaders.set('Content-Type', 'multipart/form-data');
     return this.http.post(url, body, {
-      headers: this.fileheaders.set('cf-Authorization', token).set('Authorization', this.getAuthorization())
+      headers: this.fileheaders.set('cf-Authorization', token).set('Authorization','Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 
@@ -183,7 +194,7 @@ export class CommonService {
       token = '';
     }
     return this.http.put(url, body, {
-      headers: this.headers.set('cf-Authorization', token).set('Authorization', this.getAuthorization())
+      headers: this.headers.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 
@@ -201,7 +212,7 @@ export class CommonService {
       token = '';
     }
     return this.http.put(url, params, {
-      headers: this.headers.set('cf-Authorization', token).set('Authorization', authorization)
+      headers: this.headers.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 
@@ -223,7 +234,7 @@ export class CommonService {
     }
     return this.http.delete(url, {
       params: body,
-      headers: this.headers.set('cf-Authorization', token).set('Authorization', authorization)
+      headers: this.headers.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 
@@ -233,7 +244,7 @@ export class CommonService {
       token = '';
     }
     return this.http.delete(url, {
-      headers: this.headers.set('cf-Authorization', token).set('Authorization', this.getAuthorization())
+      headers: this.headers.set('cf-Authorization', token).set('Authorization', 'Basic YWRtaW46b3BlbnBhYXN0YQ==')
     });
   }
 

@@ -107,7 +107,7 @@
       <ng-container *ngFor='let userRole of orgsDetailEntities.userRoles.user_roles; let j = index'>
         <ng-container *ngIf="userRole.user_email!== null">
           <tr>
-            <td id="user_{{userRole.user_email}}_{{sltSpaceGuid}}"><input type="hidden" id="userName" value="{{userRole.user_email}}">{{userRole.user_email}}</td>
+            <td id="user_{{userRole.user_email}}_{{sltSpaceGuid}}">{{userRole.user_email}}</td>
             <td id="role_{{userRole.user_email}}_{{sltSpaceGuid}}"><!--role + spaceid를 가져와서 + 한다-->
               <label *ngIf="userRole.roles.indexOf('OrgManager') > -1">OrgManager({{ 'orgMain.orgAdmin' | translate }})&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <label *ngIf="userRole.roles.indexOf('BillingManager') > -1">BillingManager({{ 'orgMain.orgBillingManager' | translate }})&nbsp;&nbsp;&nbsp;&nbsp;</label>

@@ -3,11 +3,11 @@
     <table>
       <caption>
         {{ 'orgMain.space' | translate }}<span>{{orgsDetailEntities.space.resources.length}}</span>
-<!--        <div class="pull-right">-->
-<!--          <button class="btns6 colors4" data-toggle="modal" (click)="showPopSpaceCreateClick(orgsDetailGuid)">-->
-<!--            <i class="fas fa-plus"></i> {{ 'orgMain.createSpace' | translate }}-->
-<!--          </button>-->
-<!--        </div>-->
+        <!--        <div class="pull-right">-->
+        <!--          <button class="btns6 colors4" data-toggle="modal" (click)="showPopSpaceCreateClick(orgsDetailGuid)">-->
+        <!--            <i class="fas fa-plus"></i> {{ 'orgMain.createSpace' | translate }}-->
+        <!--          </button>-->
+        <!--        </div>-->
       </caption>
       <colgroup>
         <col style=''>
@@ -17,12 +17,14 @@
       <tbody>
       <ng-container *ngFor='let space of orgsDetailEntities.space.resources'>
         <tr>
-          <td (click)="getUserSpaceRoles2(orgsDetailEntities, space.metadata.guid, orgsDetailName)" ><i style="font-style: normal;margin-left: 5px;">{{space.entity.name}}</i></td>
-<!--          <th>-->
-<!--            <i class="fas fa-edit"></i>-->
-<!--          </th>-->
-<!--          <th (click)="getUserSpaceRoles(orgsDetailEntities, space.metadata.guid, space.entity.name)"><i class="fas fa-file" style="color: #409ab2"></i></th>-->
-<!--          <th style="width: 30px" data-toggle="modal" (click)="showPopDeleteSpaceClick(orgsDetailGuid, space.metadata.guid, space.entity.name)"><i class="fas fa-trash-alt"></i></th>-->
+          <td (click)="getUserSpaceRoles2(orgsDetailEntities, space.metadata.guid, orgsDetailName, space.entity.name)" ><input id="getSpaceGuid" type="hidden" value = "{{space.metadata.guid}}">
+            <i id="{{space.metadata.guid}}" style="font-style: normal;margin-left: 5px;">{{space.entity.name}}</i></td>
+
+          <!--          <th>-->
+          <!--            <i class="fas fa-edit"></i>-->
+          <!--          </th>-->
+          <!--          <th (click)="getUserSpaceRoles(orgsDetailEntities, space.metadata.guid, space.entity.name)"><i class="fas fa-file" style="color: #409ab2"></i></th>-->
+          <!--          <th style="width: 30px" data-toggle="modal" (click)="showPopDeleteSpaceClick(orgsDetailGuid, space.metadata.guid, space.entity.name)"><i class="fas fa-trash-alt"></i></th>-->
         </tr>
         <tr class="on">
           <td colspan="4">
@@ -47,11 +49,11 @@
     <table id="domain_{{orgsDetailIndex}}">
       <caption>
         {{ 'orgMain.domain' | translate }}<span>0</span>
-<!--        <div class="pull-right">-->
-<!--          <button class="btns6 colors4" (click)="showPopAddDomainClick(orgsDetailGuid)">-->
-<!--            <i class="fas fa-plus"></i> {{ 'orgMain.addDomain' | translate }}-->
-<!--          </button>-->
-<!--        </div>-->
+        <!--        <div class="pull-right">-->
+        <!--          <button class="btns6 colors4" (click)="showPopAddDomainClick(orgsDetailGuid)">-->
+        <!--            <i class="fas fa-plus"></i> {{ 'orgMain.addDomain' | translate }}-->
+        <!--          </button>-->
+        <!--        </div>-->
       </caption>
       <colgroup>
         <col style=''>
@@ -101,11 +103,12 @@
       </thead>
       <tbody>
 
+      <!--조직 / / 사용자 이름 + 역할설정-->
       <ng-container *ngFor='let userRole of orgsDetailEntities.userRoles.user_roles; let j = index'>
-        <ng-container *ngIf="userRole.user_email !== null">
+        <ng-container *ngIf="userRole.user_email!== null">
           <tr>
-            <td id="user_{{userRole.user_email}}">{{userRole.user_email}}</td>
-            <td id="role_{{userRole.user_email}}">
+            <td id="user_{{userRole.user_email}}_{{sltSpaceGuid}}"><input type="hidden" id="userName" value="{{userRole.user_email}}">{{userRole.user_email}}</td>
+            <td id="role_{{userRole.user_email}}_{{sltSpaceGuid}}"><!--role + spaceid를 가져와서 + 한다-->
               <label *ngIf="userRole.roles.indexOf('OrgManager') > -1">OrgManager({{ 'orgMain.orgAdmin' | translate }})&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <label *ngIf="userRole.roles.indexOf('BillingManager') > -1">BillingManager({{ 'orgMain.orgBillingManager' | translate }})&nbsp;&nbsp;&nbsp;&nbsp;</label>
               <label *ngIf="userRole.roles.indexOf('OrgAuditor') > -1">OrgAuditor({{ 'orgMain.orgObserver' | translate }})&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -139,7 +142,7 @@
               <input id="check6_{{orgsDetailIndex}}_{{j}}" type="hidden" [checked]="userRole.roles.indexOf('SpaceDeveloper') > -1" (click)="showMemberSetOrgRole(userRole, orgsDetailEntities.userRoles.user_roles, orgsDetailGuid, 'SpaceAuditor','check6_'+orgsDetailIndex+'_'+j)"/>
               <label for="check6_{{orgsDetailIndex}}_{{j}}">SpaceAuditor({{ 'orgMain.spaceAuditor' | translate }})</label>
             </td>-->
-<!--            <th><button class="btns4 colors8" (click)="showMemberCancel(userRole, orgsDetailEntities.userRoles.user_roles, orgsDetailGuid)">{{ 'orgMain.cancelMember' | translate }}</button></th>-->
+            <!--            <th><button class="btns4 colors8" (click)="showMemberCancel(userRole, orgsDetailEntities.userRoles.user_roles, orgsDetailGuid)">{{ 'orgMain.cancelMember' | translate }}</button></th>-->
           </tr>
         </ng-container>
       </ng-container>
@@ -160,8 +163,8 @@
               <input id="check6_{{orgsDetailIndex}}_{{k}}" type="checkbox" [checked]="getinviteOrgRole(inviteUser.role).oa"/>
               <label for="check6_{{orgsDetailIndex}}_{{k}}">OrgAuditor({{ 'orgMain.orgObserver' | translate }})</label>
             </td>
-<!--            <th><button class="btns4 colors8" (click)="showInviteCancel(inviteUser)">{{ 'orgMain.inviteCancel' | translate }}</button></th>-->
-<!--            <th><button class="btns4 colors9" (click)="showUserReInvite(inviteUser)">{{ 'orgMain.inviteReSend' | translate }}</button></th>-->
+            <!--            <th><button class="btns4 colors8" (click)="showInviteCancel(inviteUser)">{{ 'orgMain.inviteCancel' | translate }}</button></th>-->
+            <!--            <th><button class="btns4 colors9" (click)="showUserReInvite(inviteUser)">{{ 'orgMain.inviteReSend' | translate }}</button></th>-->
           </tr>
         </ng-container>
       </ng-container>

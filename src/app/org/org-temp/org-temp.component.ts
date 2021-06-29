@@ -51,6 +51,8 @@ export class OrgTempComponent implements OnInit, AfterViewChecked {
   public userName: Array<string> = [];
   public translateEntities: any = [];
   public invite_name: string = '';
+  public spaceGuid: string;
+  public user_name: string;
 
   constructor(private translate: TranslateService, private orgMainService: OrgMainService, private common: CommonService, private log: NGXLogger) {
     this.common.isLoading = false;
@@ -131,23 +133,26 @@ export class OrgTempComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  getUserSpaceRoles2(item: any, spaceid: string, orgname: string) {
-    $("label[name=space_" +orgname+"]").remove();
-    this.common.isLoading = true;
+  getUserSpaceRoles2(item: any, spaceid: string, orgname: string, name: any) {
+    this.user_name = $("#userName").val();
+    this.spaceGuid = $("#getSpaceGuid").val();
     this.sltSpaceGuid = spaceid;
+    $("label[name='space_" +orgname+"']").remove();
+    $("label[name='space_role']").remove();
+    this.common.isLoading = true;
+
     this.orgMainService.getUserSpaceRoles2(this.sltSpaceGuid).subscribe(data => {
       data.result.userRoles.user_roles.forEach(function (role, index) {
-        if (role.user_email != null ) {
-          if(role.roles.indexOf('SpaceManager') > -1){
-            $("#role_" + role.user_email).append("<label name='space_"+orgname+"'>SpaceManager(공간 관리자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
+        if (role.user_email != null) {
+          if (role.roles.indexOf('SpaceManager') > -1) {
+            $("#role_" + role.user_email + "_" + spaceid).append("<label name='space_role'>SpaceManager(공간 관리자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
           }
-          if(role.roles.indexOf('SpaceDeveloper') > -1){
-            $("#role_" + role.user_email).append("<label name='space_"+orgname+"'>SpaceDeveloper(공간 개발자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
+          if (role.roles.indexOf('SpaceDeveloper') > -1) {
+            $("#role_" + role.user_email + "_" + spaceid).append("<label name='space_role'>SpaceDeveloper(공간 개발자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
           }
-          if(role.roles.indexOf('SpaceAuditor') > -1){
-            $("#role_" + role.user_email).append("<label name='space_"+orgname+"'>SpaceAuditor(공간 감사자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
+          if (role.roles.indexOf('SpaceAuditor') > -1) {
+            $("#role_" + role.user_email +"_" + spaceid).append("<label name='space_role'>SpaceAuditor(공간 감사자)&nbsp;&nbsp;&nbsp;&nbsp;</label>");
           }
-
         }
       });
     }, error => {

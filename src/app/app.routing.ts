@@ -30,6 +30,7 @@ import {ResetComponent} from "./external/reset/reset.component";
 import {InviteOrgComponent} from "./external/invite-org/invite-org.component";
 import {QuantityMainComponent} from "./quantity/quantity-main/quantity-main.component";
 import {OrgProduceComponent} from "./org/org-produce/org-produce.component";
+import {DocumentComponent} from "./document/document.component";
 
 /*
 * Route 모듈 설정
@@ -54,6 +55,7 @@ const routes: Routes = [
   {path: 'catalogdetail', component: CatalogDetailComponent, canActivate: [AuthGuard]},
   {path: 'catalogdevelopment', component: CatalogDevelopmentComponent, canActivate: [AuthGuard]},
   {path: 'catalogservice', component: CatalogServiceComponent, canActivate: [AuthGuard]},
+  {path: 'document', component: DocumentComponent},
   {path: 'logout', component: LogoutComponent},
   {path: 'dashMain', component: DashMainComponent, canActivate: [AuthGuard]},
   {path: 'appMain', component: AppMainComponent, canActivate: [AuthGuard]},
@@ -65,7 +67,7 @@ const routes: Routes = [
   {path: 'authreset', component: ResetComponent},
   {path: 'inviteorg', component: InviteOrgComponent},
   {path: 'error', component: ErrorComponent},
-  {path: '**', component: ErrorComponent }
+  {path: '**', component: ErrorComponent },
 ];
 
 export const RoutingModule: ModuleWithProviders = RouterModule.forRoot(routes);

@@ -37,6 +37,7 @@ import {ExternalModule} from "./external/external.module";
 import {SharedModule} from './shared/shared.module';
 import {UsermgmtModule} from "./usermgmt/usermgmt.module";
 import {UsermgmtService} from "./usermgmt/usermgmt.service";
+import {DocumentComponent} from "./document/document.component";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: HttpClient) {
     CallbackComponent,
     LogoutComponent,
     ErrorComponent,
+    DocumentComponent,
   ],
   imports: [
     IndexModule,

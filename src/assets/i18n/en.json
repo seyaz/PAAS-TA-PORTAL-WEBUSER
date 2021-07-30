@@ -666,6 +666,7 @@
   "dashboard": {
     "titleApp": "Application",
     "titleServices": "Service",
+    "titleMonitoring": "Monitoring",
     "createdOrganizationName": "Created Organization Name",
     "spaceName": "Space Name",
     "auota": "Quota",

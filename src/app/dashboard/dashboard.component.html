@@ -57,7 +57,7 @@
                       </div>
                   </div>
               </div>
-              <!-- 할당량 끝 -->
+              <-- 할당량 끝 -->
         <!-- CF -->
         <div class="col-in col-d1" id="mgnB30">
           <ul class="colright_btn">
@@ -157,16 +157,19 @@
               <li name="tab02" class="monitor_tabs_right" (click)="dashTabClick('dashTab_2')" >{{'dashboard.titleServices'
                 | translate}}
               </li>
+              <li name="tab03" class="monitor_tabs_right" (click)="dashTabClick('dashTab_3')" >{{'dashboard.titleMonitoring'
+                | translate}}
+              </li>
             </ul>
           </div>
           <ng-container *ngIf="caas_on_off">
             <div class="tab_space_lft">
               <div class="space_title03">CONTAINER SERVICE</div>
               <ul>
-                <li name="tab03" class="monitor_tabs_right" (click)="dashTabClick('dashTab_3')">Deployments</li>
-                <li name="tab04" class="monitor_tabs_right" (click)="dashTabClick('dashTab_4')">Pods</li>
-                <li name="tab05" class="monitor_tabs_right" (click)="dashTabClick('dashTab_5')">Replica Sets</li>
-                <li name="tab06" class="monitor_tabs_right" (click)="dashTabClick('dashTab_6')">Pvc</li>
+                <li name="tab04" class="monitor_tabs_right" (click)="dashTabClick('dashTab_4')">Deployments</li>
+                <li name="tab05" class="monitor_tabs_right" (click)="dashTabClick('dashTab_5')">Pods</li>
+                <li name="tab06" class="monitor_tabs_right" (click)="dashTabClick('dashTab_6')">Replica Sets</li>
+                <li name="tab07" class="monitor_tabs_right" (click)="dashTabClick('dashTab_7')">Pvc</li>
               </ul>
             </div>
           </ng-container>
@@ -532,6 +535,33 @@
         </div>
         <div id="dashTab_3" class="monitor_content03 row two_line two_view new_view clearfix">
           <ul class="maT30 space_list ">
+            <ng-container>
+              <li>
+                <div class="sortable_wrap">
+                  <!-- 서비스 영역 시작 -->
+                  <div class="space_pop_container">
+                    <div class="app_title">
+                      <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: -webkit-fill-available"></span>
+                    </div>
+                    <div class="app_per clearfix">
+                      <ul>
+                        <ng-container>
+                          <li>
+                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: -webkit-fill-available"></div>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <!-- 애플리케이션 영역 끝 -->
+              </li>
+            </ng-container>
+          </ul>
+        </div> <!-- monitoring deployments -->
+        <div id="dashTab_4" class="monitor_content03 row two_line two_view new_view clearfix">
+          <ul class="maT30 space_list ">
             <ng-container *ngFor="let deployment of caas_Deployments;  let i = index">
               <li>
                 <div class="sortable_wrap">
@@ -567,7 +597,7 @@
             </ng-container>
           </ul>
         </div> <!-- caas deployments -->
-        <div id="dashTab_4" class="monitor_content04 row two_line two_view new_view clearfix">
+        <div id="dashTab_5" class="monitor_content04 row two_line two_view new_view clearfix">
           <ul class="maT30 space_list ">
 
             <ng-container *ngFor="let pod of caas_Pods;  let i = index">
@@ -607,7 +637,7 @@
             </ng-container>
           </ul>
         </div> <!-- caas pods -->
-        <div id="dashTab_5" class="monitor_content05 row two_line two_view new_view clearfix">
+        <div id="dashTab_6" class="monitor_content05 row two_line two_view new_view clearfix">
           <ul class="maT30 space_list ">
 
             <ng-container *ngFor="let replicaSets of caas_ReplicaSets">
@@ -645,7 +675,7 @@
             </ng-container>
           </ul>
         </div> <!-- caas deployments -->
-        <div id="dashTab_6" class="monitor_content06 row two_line two_view new_view clearfix">
+        <div id="dashTab_7" class="monitor_content06 row two_line two_view new_view clearfix">
           <ul class="maT30 space_list ">
 
             <ng-container *ngFor="let Pvc of caas_Pvc">

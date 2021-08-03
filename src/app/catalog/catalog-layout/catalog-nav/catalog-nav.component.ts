@@ -53,8 +53,7 @@ export class CatalogNavComponent implements OnInit {
       this.catalogService.classname = '#nav_third';
     }
     this.router.navigate(['catalog']);
-    this.catalogService.viewPacks(false, true, false);
-
+    this.catalogService.viewPacks(false, true, false); //보여질 pack
     if(!isNullOrUndefined(value)) {
       this.catalogService.buildPackfilter = value;
       this.catalogService.navView = value;
@@ -67,7 +66,6 @@ export class CatalogNavComponent implements OnInit {
     this.catalogService.buildPackFilter();
     this.classNavSetting(number);
     this.navStyle(number);
-
   }
 
   viewServicePack(value, number){
@@ -90,7 +88,17 @@ export class CatalogNavComponent implements OnInit {
     this.catalogService.servicePackFilter();
     this.classNavSetting(number);
     this.navStyle(number);
+}
 
+  viewDocument(value, number){
+    if(this.router.url !== '/document'){
+      this.catalogService.check = false;
+    }
+    this.router.navigate(['document']);
+    this.catalogService.viewPacks(false, false, false); //보여질 pack
+
+    this.classNavSetting(number);
+    this.navStyle(number);
   }
 
   navSearch(){

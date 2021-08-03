@@ -3,9 +3,10 @@ import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NGXLogger} from "ngx-logger";
 import {isNullOrUndefined} from "util";
-import {$} from "protractor";
 import {DocumentService} from "./document.service";
 import {DOCUMENTURLConstant} from "./common/document.constant";
+declare var $: any;
+declare var jQuery: any;
 
 const appConfig = require('assets/resources/env/config.json');
 
@@ -31,11 +32,23 @@ export class DocumentComponent implements OnInit {
 
   ngOnInit() {
     this.navInit();
+    this.doLayout()
     this.buildInit();
   }
 
   navInit() {
 
+  }
+
+  doLayout() {
+    $(document).ready(() => {
+      //TODO 임시로...
+      $.getScript("../../assets/resources/js/common2.js")
+        .done(function (script, textStatus) {
+        })
+        .fail(function (jqxhr, settings, exception) {
+        });
+    });
   }
 
   buildInit() {

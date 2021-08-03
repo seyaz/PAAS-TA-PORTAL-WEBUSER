@@ -19,6 +19,7 @@ export class TopComponent implements OnInit {
   @Input('cursorId') cursorId: string;
   @Input('app-view') isAppView: Boolean;
   @Input('catalog-view') isCatalogView: Boolean;
+  @Input('document-view') isDocumentView: Boolean;
 
   location: string;
   orgName: string;
@@ -33,7 +34,7 @@ export class TopComponent implements OnInit {
   translateEntities : any;
   allMenuCursorIds: string[] = [
     'cur_dashboard', 'cur_dashboard_app', 'cur_catalog', 'cur_paasta-doc',
-    'cur_usermgmt', 'cur_org', 'cur_org2', 'cur_quantity', 'cur_login',
+    'cur_usermgmt', 'cur_org', 'cur_org2', 'cur_quantity', 'cur_login','cur_document',
   ];
 
   constructor(private translate: TranslateService, private common: CommonService,
@@ -42,6 +43,8 @@ export class TopComponent implements OnInit {
       this.isAppView = false;
     if (this.isCatalogView == null)
       this.isCatalogView = false;
+    if (this.isDocumentView == null)
+      this.isDocumentView = false;
   }
 
   ngOnInit() {
@@ -169,6 +172,9 @@ export class TopComponent implements OnInit {
     return notis;
   }
 
+  get isDocument() {
+    return this.cursorId === 'cur_document';
+  }
   public alertMsg(msg: string) {
     window.alert(msg);
   }

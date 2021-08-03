@@ -206,7 +206,7 @@ export class CatalogDetailComponent implements OnInit {
     });
   }
 
-  buildAndServiceInit(){
+  buildAndServiceInit(){ //서비스를 클릭하면 서비스팩에 대한 정보를 가져온다 (NONE일시 가져올수없음)
     this.catalogService.CatalogDetailInit(this.catalogService.getCurrentCatalogNumber()).subscribe(data => {
       this.template = data['Starter'];
       this.apptemplate.push(data['Buildpack']);

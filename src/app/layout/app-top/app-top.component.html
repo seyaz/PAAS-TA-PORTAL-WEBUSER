@@ -172,4 +172,16 @@
   <ng-template #emptyMenu>
 
   </ng-template>
+  <ng-container *ngIf="isDocument;">
+    <div class="header_bottom">
+      <p class="tit">Document</p>
+      <span class="nav_toggle"><!-- 180724 수정 -->
+                <input type="checkbox" id="checkbox-1" name="" class="navcheck" value="1">
+                <label for="checkbox-1"></label>
+            </span>
+      <ul class="content_dev">
+        <li>{{catalogName}}</li>  <!--임시-->
+      </ul>
+    </div>
+  </ng-container>
 </header>

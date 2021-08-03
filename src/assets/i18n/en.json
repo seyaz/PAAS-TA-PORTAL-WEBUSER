@@ -666,7 +666,7 @@
   "dashboard": {
     "titleApp": "Application",
     "titleServices": "Service",
-    "titleMonitoring": "Monitoring",
+    "titleVMMonitoring": "VM Resource Status",
     "createdOrganizationName": "Created Organization Name",
     "spaceName": "Space Name",
     "auota": "Quota",

@@ -1509,6 +1509,12 @@ body.error_b{background:#f0f2f2;}
 .cf_Instances {background-color:#5599f2}
 .cf_Memory {background-color:#ad6de8}
 .cf_Storage {background-color:#4d627b}
+.vm_Hosts {background-color:#f26f18}
+.vm_Vms {background-color:#ec866f}
+.vm_Datastores {background-color:#f0a141}
+.vm_Cpu {background-color:#e66b6b}
+.vm_Memory {background-color:#ad6de8}
+.vm_Storage {background-color:#4d627b}
 .K8S_Pods {background-color:#f26f18}
 .K8S_Deployments {background-color:#ec866f}
 .K8S_ReplicaSets {background-color:#f0a141}
@@ -1516,6 +1522,11 @@ body.error_b{background:#f0f2f2;}
 .K8S_Memory {background-color:#ad6de8}
 .K8S_Storage {background-color:#4d627b}
 
+/* 210803 수정 */
+.parent {width: 80%; margin: 10px auto;}
+.cpu_Usage {border: 1px solid #b3b3b3; background:#fff; float: left; width:30%; height:405px; box-sizing: border-box;}
+.mem_Usage {border: 1px solid #b3b3b3; background:#fff; float: left; margin-left: 5%; height:405px; width:30%; box-sizing: border-box;}
+.disk_Usage {border: 1px solid #b3b3b3; background:#fff; float: right; width:30%; height:405px; box-sizing: border-box; }
 
 @media all and (max-width: 990px) {
   .colorchip ul li {width:calc(33.3% - 25px); height:140px; float:left; margin:0 30px 30px 0px}

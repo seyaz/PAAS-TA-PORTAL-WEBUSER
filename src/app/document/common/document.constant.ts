@@ -13,7 +13,7 @@ export enum DOCUMENTURLConstant {
   GETBUILDPACKS_Y = '/commonapi/v2/Y/developpacks',
   GETSERVICEPACKS_Y = '/commonapi/v2/Y/servicepacks',
   GETSTARTERPACKS = '/commonapi/v2/starterpacks',
-  GETBUILDPACKS = '/commonapi/v2/developpacks',
+  GETDEVELOPPACKS = '/commonapi/v2/developpacks',
   GETSERVICEPACKS = '/commonapi/v2/servicepacks',
   GETSEARCH = '/commonapi/v2/packs',
 

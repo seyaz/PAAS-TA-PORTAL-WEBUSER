@@ -32,10 +32,8 @@
                       <dd>{{servicepack.summary}}
                       </dd>
                       <dt>
-                        <a  href="{{servicepack.docFileUrl}}" target="_blank">
-                        <button class="btns2 btns2_1 colors4">{{ 'catalog.service.viewDocument' | translate }}
+                        <button class="btns2 btns2_1 colors4" [routerLink]="['/document']">{{ 'catalog.service.viewDocument' | translate }}
                         </button>
-                          </a>
                       </dt>
                     </dl>
                   </div>
@@ -54,7 +52,7 @@
             </dl>
           </div>
         </div>
-        <div class="col-md-6"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
+        <div class="col-md-6" id="serviceForm"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
           <div class="services_wrap" id="produceService">
             <table class="services_t">
               <caption>{{ 'catalog.service.createService' | translate }}</caption>

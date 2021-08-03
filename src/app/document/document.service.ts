@@ -1,168 +1,217 @@
-import {Injectable} from "@angular/core";
-import {CommonService} from "../common/common.service";
+
+import { Injectable } from '@angular/core';
 import {NGXLogger} from "ngx-logger";
-import {Domain} from "../model/domain";
-import {CatalogService} from "../catalog/main/catalog.service";
-import {HttpClient} from "@angular/common/http";
-import {Jsonp} from "@angular/http";
+
+
+import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
+import {isUndefined} from "util";
+import {CommonService} from "../common/common.service";
+declare var $: any;
 
 
 declare var require: any;
 let appConfig = require('assets/resources/env/config.json');
 
 @Injectable()
-export class DashboardService {
+export class DocumentService {
 
   apiversion = appConfig['apiversion'];
 
-  constructor(private commonService: CommonService, private catalogService: CatalogService, private http: HttpClient, private log: NGXLogger, private jsonp: Jsonp) {
+  buildpacks: Array<any> = [];
+  starterpacks: Array<any> = [];
+  recentpacks: Array<any> = [];
+  servicepacks: Array<any> = [];
+  lasttime: number;
+  check: boolean = true;
+  viewstartpack: boolean = true;
+  viewbuildpack: boolean = true;
+  viewservicepack: boolean = true;
+
+  viewstarterpacks: any = [];
+  viewbuildpacks: any = [];
+  viewservicepacks: any = [];
+
+
+  buildPackfilter: string = '';
+  servicePackfilter: string = '';
+  first: string = 'cur';
+  classname: string;
+  navview: string;
+  translateEntities: any;
+  autoSearch: boolean = false;
+
+  constructor(private common: CommonService, private log: NGXLogger, private translate: TranslateService) {
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.translateEntities = event.translations.document;
+    });
+    this.translate.get('document').subscribe((res: string) => {
+      this.translateEntities = res;
+    });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL+"/spaces/{spaceid}/summary"}, method = RequestMethod.GET)
-  getAppSummary(spaceid: string) {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/spaces/' + spaceid + '/summarylist', this.commonService.getToken()).map((res: any) => {
+  viewPacks(value, value2, value3) {
+    this.viewstartpack = value;
+    this.viewbuildpack = value2;
+    this.viewservicepack = value3;
+    if (this.viewstartpack) {
+      this.viewstarterpacks;
+    }
+    if (this.viewbuildpack) {
+      this.viewbuildpacks;
+    }
+    if (this.viewservicepack) {
+      this.viewservicepacks;
+    }
+  }
+
+  buildPackFilter() {
+    if (this.buildPackfilter !== '') {
+      this.viewbuildpacks = this.buildpacks.filter(data => {
+        if (data.classification === this.buildPackfilter) {
+          return data;
+        }
+      });
+    } else {
+      this.viewbuildpacks = this.buildpacks;
+    }
+  }
+
+  set navView(value) {
+    this.navview = value;
+  }
+
+
+  get navView() {
+    if (!isUndefined(this.translateEntities)) {
+      if (!isUndefined(this.navview)) {
+        return this.translateEntities.nav[this.navview];
+      }
+      return this.translateEntities.nav.viewAll;
+    }
+    return '';
+  }
+
+  servicePackFilter() {
+    if (this.servicePackfilter !== '') {
+      this.viewservicepacks = this.servicepacks.filter(data => {
+        if (data.classification === this.servicePackfilter) {
+          return data;
+        }
+      });
+    } else {
+      this.viewservicepacks = this.servicepacks;
+    }
+  }
+
+  isLoading(value) {
+    this.common.isLoading = value;
+  }
+
+  alertMessage(value, result) {
+    this.common.alertMessage(value, result);
+  }
+
+  getUserId() {
+    return this.common.getUserid();
+  }
+
+  getOrgName() {
+    return this.common.getCurrentOrgName();
+  }
+
+  getSpaceName() {
+    return this.common.getCurrentSpaceName();
+  }
+
+  getCurrentCatalogNumber() {
+    return this.common.getCurrentCatalogNumber();
+  }
+
+  getUserid(): string {
+    return this.common.getUserid();
+  }
+
+  getRecentPacks(url: string) {
+    return this.common.doGet(url, "token").map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL + "/apps/{guid}/rename"}, method = RequestMethod.PUT)
-  renameApp(params: any) {
-    return this.commonService.doPut('/portalapi/' + this.apiversion + '/apps/' + params.guid + '/rename', params, this.commonService.getToken()).map((res: any) => {
+  getRoutes(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Array<string>) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL +"/apps"}, method = RequestMethod.DELETE)
-  delApp(params: any) {
-    return this.commonService.doDelete('/portalapi/' + this.apiversion + '/apps/' + params.guid, null, this.commonService.getToken()).map((res: any) => {
+  getDevelopPacks(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V3_URL + "/apps/startApp"}, method = RequestMethod.POST)
-  startApp(params: any) {
-    return this.commonService.doPost('/portalapi/' + this.apiversion + '/apps/startApp', params, '').map((res: any) => {
+  getServicePacks(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL + "/service/{guid}/rename"}, method = RequestMethod.PUT)
-  renameInstance(params: any) {
-    return this.commonService.doPut('/portalapi/' + this.apiversion + '/service/' + params.guid + '/rename', params, this.commonService.getToken()).map((res: any) => {
+  getSearchPack(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL + "/service/{guid}"}, method = RequestMethod.DELETE)
-  delInstance(params: any) {
-    return this.commonService.doDelete('/portalapi/' + this.apiversion + '/service/' + params.guid, null, this.commonService.getToken()).map((res: any) => {
+  getOrglist() {
+    return this.common.doGet('/portalapi/' + this.apiversion + '/orgs', this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  getBinding(guid: string) {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/service/' + guid + '/binding', this.commonService.getToken()).map((res: any) => {
-      return res;
-    })
-  }
-
-// @RequestMapping(value = {Constants.V2_URL + "/service/userprovidedserviceinstances/{guid}"}, method = RequestMethod.GET)
-  userProvidedInfo(guid: string) {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/service/userprovidedserviceinstances/' + guid, this.commonService.getToken()).map((res: any) => {
+  getSpacelist(orgid: string) {
+    return this.common.doGet('/portalapi/' + this.apiversion + '/orgs/' + orgid + '/spaces', this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL + "/service/userprovidedserviceinstances"}, method = RequestMethod.POST)
-  createUserProvided(params: any) {
-    return this.commonService.doPost('/portalapi/' + this.apiversion + '/service/userprovidedserviceinstances', params, this.commonService.getToken()).map((res: any) => {
+
+  getRouteCheck(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @RequestMapping(value = {Constants.V2_URL + "/service/userprovidedserviceinstances/{guid}"}, method = RequestMethod.PUT)
-  updateUserProvided(params: any) {
-    return this.commonService.doPut('/portalapi/' + this.apiversion + '/service/userprovidedserviceinstances/' + params.guid, params, this.commonService.getToken()).map((res: any) => {
+  getServiceInstance(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  getServicePacks() {
-    return this.commonService.doGet('/commonapi/v2/servicepacks', this.commonService.getToken()).map((res: any) => {
+
+  getImg(url: string) {
+    return this.common.doStorageGet(url, null).map((res: any) => {
       return res;
-    })
+    });
   }
 
+
+  upload() {
+    return this.common.doGet('/commonapi/v2/app/uploadsfile', this.common.getToken()).map((res: Response) => {
+      return res;
+    });
+  }
+
+  // 2021-07-30 빌드팩 정보를 가져온다
   getBuildPacks() {
-    return this.commonService.doGet('/commonapi/v2/developpacks', this.commonService.getToken()).map((res: any) => {
-      return res;
-    })
-  }
-
-  // @GetMapping(V2_URL + "/orgs")
-  getOrgList() {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/orgs', this.commonService.getToken()).map((res: any) => {
+    return this.common.doGet('/portalapi/' + this.apiversion + '/buildpacks', this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  // @GetMapping(V2_URL + "/orgs/{orgId}/spaces")
-  getOrgSpaceList(orgId: string) {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/orgs/' + orgId + '/spaces', this.commonService.getToken()).map((res: any) => {
-      return res['spaceList'];
-    });
-  }
-
-  // @GetMapping(V2_URL + "/orgs/{orgId}/summary")
-  getOrgSummary(orgId: string) {
-    return this.commonService.doGet('/portalapi/' + this.apiversion + '/orgs/' + orgId + '/summary', this.commonService.getToken()).map((res: any) => {
+  // 2021-07-30 developpack 정보를 가져온다.
+  getDevelopPackList() {
+    return this.common.doGet('/commonapi/v2/developpacks' , this.common.getToken()).map((res: Response) => {
       return res;
     });
   }
 
-  RecentInit(data: any) {
-    this.catalogService.recentpacks = [];
-    this.catalogService.recentpacks = data['list'];
-  }
-
-  getCodeMax(groudid: string) {
-    return this.commonService.doGet('/commonapi/v2/' + groudid + '/codedetail', this.commonService.getToken()).map((res: any) => {
-      return res;
-    });
-  }
-
-  getCaasCommonUser(){
-    return this.commonService.doGetCaas(":3334/users").map((res: any) => {
-      return res;
-    });
-  }
-
-  getCaasAPI(rest: string){
-    return this.commonService.doGetCaas(":3333/" + rest).map((res: any) => {
-      return res;
-    });
-  }
-
-}//
-
-export class Service {
-  servicePlan: string;
-  boundAppCount: string;
-  serviceLabel: string;
-  servicePlanName: string;
-  spaceName: string;
-  orgName: string;
-  summary: string;
-  newName: string;
-  name: string;
-  serviceName: string;
-  dashboardUrl: string;
-  dashboardUseYn: string;
-  newServiceInstanceName: string;
-  serviceInstanceName: string;
-  credentialsStr: string;
-  classification: string;
-  syslogDrainUrl: string;
-  docFileUrl: string;
-  type: string;
 }

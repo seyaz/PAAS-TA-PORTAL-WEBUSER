@@ -1,5 +1,5 @@
 <div class="wrap dashboard">
-  <app-app-top [cursorId]="'cur_catalog'" ></app-app-top>
+  <app-app-top [cursorId]="'cur_catalog'"></app-app-top>
   <app-catalog-nav></app-catalog-nav>
   <div class="contain" *ngIf="servicepack">
     <div class="content development_wrap">
@@ -54,8 +54,8 @@
             </dl>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="services_wrap">
+        <div class="col-md-6"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
+          <div class="services_wrap" id="produceService">
             <table class="services_t">
               <caption>{{ 'catalog.service.createService' | translate }}</caption>
               <colgroup>
@@ -219,10 +219,10 @@
                 </tbody>
               </table>
             </div>
-          </div>
-          <div class="cWrap_btn">
+          </div> <!--서비스 생성 wrap 끝나는 부분-->
+          <div class="cWrap_btn" id="serviceBtn">
             <button class="btns2 btns2_1 colors4" id="createService" (click)="createService()">{{ 'catalog.service.produce' | translate }}</button>
-            <button class="btns2 btns2_1 colors5" [routerLink]="['/catalog']">{{ 'catalog.service.cancel' | translate }}</button>
+            <button class="btns2 btns2_1 colors5" id="cancelService"[routerLink]="['/catalog']">{{ 'catalog.service.cancel' | translate }}</button>
           </div>
         </div>
       </div><!-- row one_line -->

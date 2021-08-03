@@ -178,7 +178,10 @@ export class CatalogServiceComponent implements OnInit {
         if (data) {
           reader.readAsDataURL(data);
         }
-
+        if(this.servicepack.servicePackName == "NONE"){ //서비스팩이 none이면 삭제
+          $("#produceService").remove();
+          $("#serviceBtn").remove();
+        }
       }, error => {
         this.servicepack.thumbImgPath = 'assets/resources/images/catalog/catalog_3.png';
       });
@@ -187,19 +190,17 @@ export class CatalogServiceComponent implements OnInit {
       }
       this.serviceParameterSetting(this.servicepack.parameter, 'parameter');
       this.serviceParameterSetting(this.servicepack.appBindParameter, 'appBindParameter');
-      this.serviceplan = new Array<ServicePlan>();
+      this.serviceplan = new Array<ServicePlan>(); //cc -> service-> pinpoint , redis  / None
       this.catalogService.getServicePlan('/portalapi/'+this.apiversion+'/catalogs/serviceplan/' + this.servicepack.servicePackName).subscribe(data => {
-        data['resources'].forEach(a => {
+        data['resources'].forEach(a => { //서비스 NONE > 서비스 생성부분 삭제
           this.serviceplan.push(new ServicePlan(a['entity'], a['metadata']));
         })
         this.plan = this.serviceplan[0];
       }, error => {
-        this.errorMsg(this.translateEntities.service.notServicePlan);
-        this.router.navigate(['catalog']);
+        $("#produceService").remove();
+        $("#serviceBtn").remove();
       });
-    },error => {
-     this.router.navigate(['catalog']);
-    });
+     });
   }
 
   serviceAmountSetting(value){
@@ -305,14 +306,16 @@ export class CatalogServiceComponent implements OnInit {
   }
 
   serviceNameCheck() {
-    this.pattenTest();
-    this.namecheck = CATALOGURLConstant.OK;
-    this.servicenamelist.some(name => {
-      if (name === this.servicename) {
-        this.namecheck = CATALOGURLConstant.NO;
-        return true;
-      }
-    });
+    if($("#servicename").val()!=null) { //서비스네임이 있는경우 체크
+      this.pattenTest();
+      this.namecheck = CATALOGURLConstant.OK;
+      this.servicenamelist.some(name => {
+        if (name === this.servicename) {
+          this.namecheck = CATALOGURLConstant.NO;
+          return true;
+        }
+      })
+    };
   }
 
   serviceParameterSetting(value, key) {

@@ -35,13 +35,11 @@ export class DocumentComponent implements OnInit {
   }
 
   navInit() {
-   console.log("navInit")
+
   }
 
   buildInit() {
     if (isNullOrUndefined(this.documentService.getDevelopPackList().subscribe(data => {
-      console.log("getbuildpacks=" + JSON.stringify(data))
-
       this.developpack = JSON.stringify(data)
       this.developpacklist = JSON.parse(this.developpack)
 
@@ -51,7 +49,6 @@ export class DocumentComponent implements OnInit {
    }
     }))) {
       this.router.navigate(['document']);
-      console.log("getCurrentCatalogNumber")
     }
   }
 

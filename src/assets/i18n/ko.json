@@ -674,7 +674,7 @@
   "dashboard":{
     "titleApp" : "애플리케이션",
     "titleServices" : "서비스",
-    "titleMonitoring": "모니터링",
+    "titleVMMonitoring": "VM 자원현황",
     "createdOrganizationName" : "생성된 조직명",
     "spaceName" : "해당 공간명",
     "auota" : "할당량",

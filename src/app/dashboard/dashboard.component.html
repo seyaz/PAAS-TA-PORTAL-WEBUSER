@@ -157,7 +157,7 @@
               <li name="tab02" class="monitor_tabs_right" (click)="dashTabClick('dashTab_2')" >{{'dashboard.titleServices'
                 | translate}}
               </li>
-              <li name="tab03" class="monitor_tabs_right" (click)="dashTabClick('dashTab_3')" >{{'dashboard.titleMonitoring'
+              <li name="tab03" class="monitor_tabs_right" (click)="dashTabClick('dashTab_3')" >{{'dashboard.titleVMMonitoring'
                 | translate}}
               </li>
             </ul>
@@ -533,33 +533,62 @@
             <!-- 애플리케이션 영역 이동 끝 -->
           </ul>
         </div>
+        <!-- monitoring deployments -->
         <div id="dashTab_3" class="monitor_content03 row two_line two_view new_view clearfix">
-          <ul class="maT30 space_list ">
-            <ng-container>
-              <li>
-                <div class="sortable_wrap">
-                  <!-- 서비스 영역 시작 -->
-                  <div class="space_pop_container">
-                    <div class="app_title">
-                      <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: -webkit-fill-available"></span>
-                    </div>
-                    <div class="app_per clearfix">
-                      <ul>
-                        <ng-container>
-                          <li>
-                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: -webkit-fill-available"></div>
-                          </li>
-                        </ng-container>
-                      </ul>
-                    </div>
-                    <div class="clear"></div>
+          <!-- Overview-->
+          <ul class="maT30 space_list">
+            <div class="colorchip mgn030">
+              <h1 class="headTH2">Overview</h1>
+              <ul class="clearfix">
+                <li>
+                  <div class="vm_Hosts">
+                    <p>{{app_started()}} months</p>Hosts
                   </div>
-                </div>
-                <!-- 애플리케이션 영역 끝 -->
-              </li>
-            </ng-container>
+                </li>
+                <li>
+                  <div class="vm_Vms">
+                    <p>{{app_stoped()}}</p>VMs
+                  </div>
+                </li>
+                <li>
+                  <div class="vm_Datastores">
+                    <p>{{app_stoped()}}</p> Datastores
+                  </div>
+                </li>
+                <li>
+                  <div class="vm_Cpu">
+                    <p>{{app_instances()}}%</p>CPU
+                  </div>
+                </li>
+                <li>
+                  <div class="vm_Memory">
+                    <p>{{(app_memory_quota()/1024).toFixed(1)}}%</p>MEM
+                  </div>
+                </li>
+                <li>
+                  <div class="vm_Storage">
+                    <p>{{(app_disk_quota()/1024).toFixed(1)}}%</p>Storage Latency
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- Cluster Utilization-->
+            <div class="colorchip mgn030">
+              <h1 class="headTH2">Cluster Utilization</h1>
+              <div class="cpu_Usage">
+                <p></p>CPU Usage
+              </div>
+              <div class="mem_Usage">
+                <p></p>MEM Usage
+              </div>
+              <div class="disk_Usage">
+                <p></p>Disk Usage
+              </div>
+            </div>
+            <!-- Cluster Utilization-->
           </ul>
-        </div> <!-- monitoring deployments -->
+        </div>
+        <!-- monitoring deployments -->
         <div id="dashTab_4" class="monitor_content03 row two_line two_view new_view clearfix">
           <ul class="maT30 space_list ">
             <ng-container *ngFor="let deployment of caas_Deployments;  let i = index">

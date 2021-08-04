@@ -52,7 +52,7 @@
             </dl>
           </div>
         </div>
-        <div class="col-md-6" id="serviceForm"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
+        <div *ngIf="this.servicepack.servicePackName!=='NONE'" class="col-md-6" id="serviceForm"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
           <div class="services_wrap" id="produceService">
             <table class="services_t">
               <caption>{{ 'catalog.service.createService' | translate }}</caption>

@@ -50,8 +50,6 @@ export class CatalogServiceComponent implements OnInit {
   servicename:string = '';
 
 
-
-
   constructor(private translate: TranslateService, private router : Router, private route:ActivatedRoute, private catalogService:CatalogService, private log:NGXLogger) {
     this.translate.get('catalog').subscribe((res: string) => {
       this.translateEntities = res;
@@ -178,30 +176,32 @@ export class CatalogServiceComponent implements OnInit {
         if (data) {
           reader.readAsDataURL(data);
         }
-        if(this.servicepack.servicePackName == "NONE"){ //서비스팩이 none이면 삭제
-          $("#produceService").remove();
-          $("#serviceBtn").remove();
-        }
       }, error => {
         this.servicepack.thumbImgPath = 'assets/resources/images/catalog/catalog_3.png';
       });
       } catch(e){
         this.servicepack.thumbImgPath = 'assets/resources/images/catalog/catalog_3.png';
       }
-      this.serviceParameterSetting(this.servicepack.parameter, 'parameter');
-      this.serviceParameterSetting(this.servicepack.appBindParameter, 'appBindParameter');
+      this.serviceParameterSetting(this.servicepack.parameter, 'parameter'); //파라미터 셋팅
+      this.serviceParameterSetting(this.servicepack.appBindParameter, 'appBindParameter'); //파라미터 셋팅
       this.serviceplan = new Array<ServicePlan>(); //cc -> service-> pinpoint , redis  / None
       this.catalogService.getServicePlan('/portalapi/'+this.apiversion+'/catalogs/serviceplan/' + this.servicepack.servicePackName).subscribe(data => {
-        data['resources'].forEach(a => { //서비스 NONE > 서비스 생성부분 삭제
+        data['resources'].forEach(a => {
           this.serviceplan.push(new ServicePlan(a['entity'], a['metadata']));
         })
         this.plan = this.serviceplan[0];
       }, error => {
-        $("#produceService").remove();
-        $("#serviceBtn").remove();
+        this.errorMsg(this.translateEntities.service.notServicePlan);
+        this.router.navigate(['catalog']);
+        // NONE일시 화면 비우기
+        // $("#produceService").remove();
+        // $("#createService").remove();
       });
-     });
+    },error => {
+      this.router.navigate(['catalog']);
+    });
   }
+
 
   serviceAmountSetting(value){
     try{

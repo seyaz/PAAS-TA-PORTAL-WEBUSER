@@ -182,23 +182,19 @@ export class CatalogServiceComponent implements OnInit {
       } catch(e){
         this.servicepack.thumbImgPath = 'assets/resources/images/catalog/catalog_3.png';
       }
-      this.serviceParameterSetting(this.servicepack.parameter, 'parameter'); //파라미터 셋팅
-      this.serviceParameterSetting(this.servicepack.appBindParameter, 'appBindParameter'); //파라미터 셋팅
+      this.serviceParameterSetting(this.servicepack.parameter, 'parameter');
+      this.serviceParameterSetting(this.servicepack.appBindParameter, 'appBindParameter');
       this.serviceplan = new Array<ServicePlan>(); //cc -> service-> pinpoint , redis  / None
-      this.catalogService.getServicePlan('/portalapi/'+this.apiversion+'/catalogs/serviceplan/' + this.servicepack.servicePackName).subscribe(data => {
-        data['resources'].forEach(a => {
-          this.serviceplan.push(new ServicePlan(a['entity'], a['metadata']));
-        })
-        this.plan = this.serviceplan[0];
-      }, error => {
-        this.errorMsg(this.translateEntities.service.notServicePlan);
-        this.router.navigate(['catalog']);
-        // NONE일시 화면 비우기
-        // $("#produceService").remove();
-        // $("#createService").remove();
-      });
-    },error => {
-      this.router.navigate(['catalog']);
+      if(this.servicepack.servicePackName!="NONE") {
+        this.catalogService.getServicePlan('/portalapi/' + this.apiversion + '/catalogs/serviceplan/' + this.servicepack.servicePackName).subscribe(data => {
+          data['resources'].forEach(a => {
+            this.serviceplan.push(new ServicePlan(a['entity'], a['metadata']));
+          })
+          this.plan = this.serviceplan[0];
+        }, error => {
+          this.errorMsg(this.translateEntities.service.notServicePlan);
+        });
+      }
     });
   }
 

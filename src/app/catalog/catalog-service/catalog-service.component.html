@@ -52,9 +52,15 @@
             </dl>
           </div>
         </div>
-        <div *ngIf="this.servicepack.servicePackName!=='NONE'" class="col-md-6" id="serviceForm"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
-          <div class="services_wrap" id="produceService">
-            <table class="services_t">
+        <div class="col-md-6" id="serviceForm"> <!--오른쪽,하단 서비스 부분이 시작되는 부분-->
+          <div class="services_wrap">
+           <table class="services_n"  *ngIf="this.servicepack.servicePackName=='NONE'">
+             <tr>공백</tr>
+             <tr>공백</tr>
+             <tr>공백</tr>
+             <tr>공백</tr>
+           </table>
+            <table class="services_t" *ngIf="this.servicepack.servicePackName!=='NONE'">
               <caption>{{ 'catalog.service.createService' | translate }}</caption>
               <colgroup>
                 <col style="width:33%;">
@@ -173,7 +179,7 @@
               </ng-container>
               </tbody>
             </table>
-            <div class="services_bottom maT20">
+            <div class="services_bottom maT20" *ngIf="this.servicepack.servicePackName!=='NONE'">
               <h4>{{ 'catalog.service.serviceUsePriceGuide' | translate }} </h4>
               <table class="line_tables">
                 <colgroup>
@@ -218,9 +224,9 @@
               </table>
             </div>
           </div> <!--서비스 생성 wrap 끝나는 부분-->
-          <div class="cWrap_btn" id="serviceBtn">
-            <button class="btns2 btns2_1 colors4" id="createService" (click)="createService()">{{ 'catalog.service.produce' | translate }}</button>
-            <button class="btns2 btns2_1 colors5" id="cancelService"[routerLink]="['/catalog']">{{ 'catalog.service.cancel' | translate }}</button>
+          <div class="cWrap_btn" *ngIf="this.servicepack.servicePackName!=='NONE'" id="serviceBtn">
+            <button class="btns2 btns2_1 colors4" (click)="createService()">{{ 'catalog.service.produce' | translate }}</button>
+            <button class="btns2 btns2_1 colors5" [routerLink]="['/catalog']">{{ 'catalog.service.cancel' | translate }}</button>
           </div>
         </div>
       </div><!-- row one_line -->

@@ -7,7 +7,7 @@ declare var jQuery: any;
 @Component({
   selector: 'app-document-nav',
   templateUrl: './document-nav.component.html',
-  styleUrls: ['./document-nav.component.css']
+  styleUrls: ['../../document.component.css']
 })
 export class DocumentNavComponent implements OnInit {
   translateEntities : any;

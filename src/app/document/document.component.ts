@@ -8,6 +8,7 @@ import {DOCUMENTURLConstant} from "./common/document.constant";
 declare var $: any;
 declare var jQuery: any;
 
+declare var require: any;
 const appConfig = require('assets/resources/env/config.json');
 
 @Component({

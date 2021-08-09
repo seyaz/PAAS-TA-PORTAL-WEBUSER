@@ -94,7 +94,7 @@ export class CatalogComponent implements OnInit {
 
   goDevelopMent(build : any) {
     this.catalogService.setCurrentCatalogNumber(build.no);
-    this.router.navigate(['catalogdevelopment']);
+    this.router.navigate(['catalogdevelopment']); //catalogdevelopment에 연결한다.
   }
 
   goService(service : any) {
@@ -189,7 +189,7 @@ export class CatalogComponent implements OnInit {
 
   }
 
-  BuildInit(data : any) {
+  BuildInit(data : any) { //빌드팩 조회제공
     data.forEach(a => {
       a = this.jsonParse(a);
     });
@@ -218,7 +218,7 @@ export class CatalogComponent implements OnInit {
     this.catalogService.viewbuildpacks = this.catalogService.buildpacks;
   }
 
-  ServiceInit(data : any) {
+  ServiceInit(data : any) { //서비스 조회 제공
     data.forEach(a => {
       a = this.jsonParse(a);
     });

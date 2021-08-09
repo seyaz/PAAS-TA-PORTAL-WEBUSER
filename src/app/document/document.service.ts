@@ -1,8 +1,5 @@
-
 import { Injectable } from '@angular/core';
 import {NGXLogger} from "ngx-logger";
-
-
 import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 import {isUndefined} from "util";
 import {CommonService} from "../common/common.service";
@@ -49,6 +46,7 @@ export class DocumentService {
     });
   }
 
+  /*servicepack, buildpack을 화면에 보여준다*/
   viewPacks(value, value2, value3) {
     this.viewstartpack = value;
     this.viewbuildpack = value2;
@@ -63,6 +61,7 @@ export class DocumentService {
       this.viewservicepacks;
     }
   }
+
 
   buildPackFilter() {
     if (this.buildPackfilter !== '') {
@@ -111,73 +110,10 @@ export class DocumentService {
     this.common.alertMessage(value, result);
   }
 
-  getUserId() {
-    return this.common.getUserid();
-  }
-
-  getOrgName() {
-    return this.common.getCurrentOrgName();
-  }
-
-  getSpaceName() {
-    return this.common.getCurrentSpaceName();
-  }
+  /*catalogNumber를 가져온다*/
 
   getCurrentCatalogNumber() {
     return this.common.getCurrentCatalogNumber();
-  }
-
-  getUserid(): string {
-    return this.common.getUserid();
-  }
-
-  getRecentPacks(url: string) {
-    return this.common.doGet(url, "token").map((res: Response) => {
-      return res;
-    });
-  }
-
-  getRoutes(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Array<string>) => {
-      return res;
-    });
-  }
-
-  getDevelopPacks(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-  getServicePacks(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-  getSearchPack(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-  getOrglist() {
-    return this.common.doGet('/portalapi/' + this.apiversion + '/orgs', this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-  getSpacelist(orgid: string) {
-    return this.common.doGet('/portalapi/' + this.apiversion + '/orgs/' + orgid + '/spaces', this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-
-  getRouteCheck(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
-      return res;
-    });
   }
 
   getServiceInstance(url: string) {

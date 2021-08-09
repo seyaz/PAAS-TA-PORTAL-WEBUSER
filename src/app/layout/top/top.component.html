@@ -6,7 +6,7 @@
   <ul class="gnb clearfix">
     <li *ngIf="isLogin" id="cur_dashboard" ><a [routerLink]="['/dashboard']">{{ 'common.top.main.linkTextDashboard' | translate }}</a></li>
     <li id="cur_catalog" ><a [routerLink]="['/catalog']" (click)="catalogInit()">{{ 'common.top.main.linkTextCatalog' | translate }}</a></li>
- <li id="cur_paasta-doc"><a [routerLink]="['/document']"> {{ 'common.top.main.linkTextDocument' | translate }}</a></li>
+    <li id="cur_paasta-doc"><a [routerLink]="['/document']"> {{ 'common.top.main.linkTextDocument' | translate }}</a></li>
   </ul>
   <ul class="right_nav">
     <li *ngIf="isLogin"><!-- <a href="#" class="fas fa-user"></a> -->
@@ -45,32 +45,32 @@
       </div>
     </li>
 
-<!--    <li *ngIf="isLogin && isMonitoring">
-      <div class="btn-group">
-        <button href="#" class="dropdown-toggle bell" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          &lt;!&ndash;<span></span>&ndash;&gt;
-        </button>
-        <div id="bell" class="dropdown-menu">
-          <div class="">
-            <span class="dot"></span>
-            &lt;!&ndash;<p class="">Notifications</p>&ndash;&gt;
+    <!--    <li *ngIf="isLogin && isMonitoring">
+          <div class="btn-group">
+            <button href="#" class="dropdown-toggle bell" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              &lt;!&ndash;<span></span>&ndash;&gt;
+            </button>
+            <div id="bell" class="dropdown-menu">
+              <div class="">
+                <span class="dot"></span>
+                &lt;!&ndash;<p class="">Notifications</p>&ndash;&gt;
+              </div>
+              <div>
+                <ul class="">
+                  &lt;!&ndash;<ng-container *ngFor="let noti of notifications">&ndash;&gt;
+                  &lt;!&ndash;<li>&ndash;&gt;
+                  &lt;!&ndash;<a href="javascript:void(0)">{{noti}}</a><span>&ndash;&gt;
+                  &lt;!&ndash;<i class="fas fa-times-circle"></i></span></li>&ndash;&gt;
+                  &lt;!&ndash;</ng-container>&ndash;&gt;
+                  &lt;!&ndash;
+                  <li><a href="#">파스타 공지사항</a><span><i class="fas fa-times-circle"></i></span></li>
+                  <li><a href="#">파스타 공지사항</a><span><i class="fas fa-times-circle"></i></span></li>
+                  &ndash;&gt;
+                </ul>
+              </div>
+            </div>
           </div>
-          <div>
-            <ul class="">
-              &lt;!&ndash;<ng-container *ngFor="let noti of notifications">&ndash;&gt;
-              &lt;!&ndash;<li>&ndash;&gt;
-              &lt;!&ndash;<a href="javascript:void(0)">{{noti}}</a><span>&ndash;&gt;
-              &lt;!&ndash;<i class="fas fa-times-circle"></i></span></li>&ndash;&gt;
-              &lt;!&ndash;</ng-container>&ndash;&gt;
-              &lt;!&ndash;
-              <li><a href="#">파스타 공지사항</a><span><i class="fas fa-times-circle"></i></span></li>
-              <li><a href="#">파스타 공지사항</a><span><i class="fas fa-times-circle"></i></span></li>
-              &ndash;&gt;
-            </ul>
-          </div>
-        </div>
-      </div>
-    </li>-->
+        </li>-->
 
     <li *ngIf="!isLogin" style="width: 75px"><a [routerLink]="['/login']">{{'common.top.main.login' | translate}}</a></li>
     <li>
@@ -131,7 +131,7 @@
 
   </ng-template>
 
-  <ng-container *ngIf="isDocument;">
+  <ng-container *ngIf="isDocument">
     <div class="header_bottom">
       <p class="tit">Document</p>
       <span class="nav_toggle"><!-- 180724 수정 -->
@@ -139,7 +139,7 @@
                 <label for="checkbox-1"></label>
             </span>
       <ul class="content_dev">
-        <li>{{catalogName}}</li>  <!--임시-->
+        <li>{{catalogName}}</li>
       </ul>
     </div>
   </ng-container>

@@ -1,4 +1,6 @@
+// @ts-ignore
 import { Component, OnInit, Input } from '@angular/core';
+// @ts-ignore
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {CommonService} from "../../common/common.service";
 

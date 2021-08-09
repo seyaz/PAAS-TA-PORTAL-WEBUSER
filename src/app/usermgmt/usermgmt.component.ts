@@ -100,7 +100,7 @@ export class UsermgmtComponent implements OnInit {
     const file = event.target.files[0];
     if (isNullOrUndefined(file)) {
       return;
-    }
+    } debugger;
     this.fileToUpload = file;
     $('#photo').fadeIn('fast').attr('src', URL.createObjectURL(event.target.files[0]));
     $('#onUploadBtn').show();

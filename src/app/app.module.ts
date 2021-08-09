@@ -23,7 +23,6 @@ import {CallbackComponent} from './callback/callback.component';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {LogoutComponent} from './logout/logout.component';
 import {DashboardService} from './dashboard/dashboard.service';
-import {JsonpModule} from '@angular/http';
 import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
 import {CommonService} from './common/common.service';
 import {DashModule} from './dash/dash.module';
@@ -41,6 +40,13 @@ import {DocumentComponent} from "./document/document.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DocumentService} from "./document/document.service";
 import {DocumentNavComponent} from "./document/document-layout/document-nav/document-nav.component";
+import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from "ngx-markdown"
+import {JsonpModule} from '@angular/http';
+
+import 'prismjs';
+import 'prismjs/components/prism-typescript.min.js';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
+import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
 
 
 
@@ -48,7 +54,15 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
 }
 
-@NgModule({
+function markedOptionsFactory(): MarkedOptions {
+  return {
+    renderer: Object.assign(
+      new MarkedRenderer(),
+    ),
+  };
+}
+
+  @NgModule({
   declarations: [
     AppComponent,
     CfAppComponent,
@@ -81,6 +95,7 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    JsonpModule,
     BrowserModule.withServerTransition({appId: 'serverApp'}),
     LoadingModule.forRoot({
       animationType: ANIMATION_TYPES.chasingDots,
@@ -103,7 +118,22 @@ export function createTranslateLoader(http: HttpClient) {
       //serverLoggingUrl: '/ps/logs',
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR
-    }), JsonpModule
+    }),
+    MarkdownModule.forRoot({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          tables: true,
+          breaks: false,
+          pedantic: false,
+          sanitize: false,
+          smartLists: true,
+          smartypants: false,
+        },
+      },
+    }), //마크다운 추가
   ],
   providers: [
     AuthGuard,
@@ -113,9 +143,11 @@ export function createTranslateLoader(http: HttpClient) {
     UsermgmtService,
     CatalogService,
     DocumentService,
+    MarkdownService,
   ],
   bootstrap: [AppComponent],
   exports: [],
 })
 export class AppModule {
 }
+

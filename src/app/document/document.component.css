@@ -8,34 +8,7 @@
 /*  font-size: .875rem;*/
 /*}*/
 
-/*ol {
-  display: block !important;
-  margin-block-start: 1em !important;
-  margin-block-end: 1em !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 0px !important;
-  padding-inline-start: 40px !important;
-}*/
-
-.document-ol{
-  list-style: circle !important;
-  list-style-position: initial !important;
-  list-style-image: initial !important;
-  list-style-type: circle !important;
-}
-/*ul {
-  list-style: circle !important;
-  list-style-position: initial !important;
-  list-style-image: initial !important;
-  list-style-type: circle !important;
-}*/
-.document-ul{
-  list-style: circle !important;
-  list-style-position: initial !important;
-  list-style-image: initial !important;
-  list-style-type: circle !important;
-}
-
+/*style="all:unset"*/
 .variable-binding,
 .variable-textarea {
   width: 49%;
@@ -43,6 +16,14 @@
   list-style-position: initial !important;
   list-style-image: initial !important;
   list-style-type: decimal !important;
+}
+
+.wrap dashboard li{
+  list-style: circle !important;
+  list-style-position: initial !important;
+  list-style-image: initial !important;
+  list-style-type: decimal !important;
+  margin-bottom: 0px;
 }
 
 .variable-textarea {
@@ -72,11 +53,6 @@ h1 a:hover {
   text-decoration: underline;
 }
 
-blockquote {
-  border-left: 3px solid rgba(0, 0, 0, 0.21);
-  padding-left: 12px;
-  color: rgba(0, 0, 0, 0.54);
-}
 body {
   color: #272822;
   font-size: 15px;
@@ -186,18 +162,11 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-::marker {
-  unicode-bidi: isolate !important;
-  font-variant-numeric: tabular-nums !important;
-  text-transform: none !important;
-  text-indent: 0px !important;
-  text-align: start !important;
-  text-align-last: start !important;
+.variable-binding li{
+  list-style: circle !important;
+  list-style-position: initial !important;
+  list-style-image: initial !important;
+  list-style-type: decimal !important;
+  margin-bottom: 0px;
 }
-
-li {
-  display: list-item !important;
-  text-align: -webkit-match-parent !important;
-}
-
 

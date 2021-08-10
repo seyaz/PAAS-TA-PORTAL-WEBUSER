@@ -80,15 +80,15 @@ export class DocumentService {
   }
 
 
-  get navView() {
-    if (!isUndefined(this.translateEntities)) {
-      if (!isUndefined(this.navview)) {
-        return this.translateEntities.nav[this.navview];
-      }
-      return this.translateEntities.nav.viewAll;
-    }
-    return '';
-  }
+  // get navView() {
+  //   if (!isUndefined(this.translateEntities)) {
+  //     if (!isUndefined(this.navview)) {
+  //       return this.translateEntities.nav[this.navview];
+  //     }
+  //     return this.translateEntities.nav.viewAll;
+  //   }
+  //   return '';
+  // }
 
   servicePackFilter() {
     if (this.servicePackfilter !== '') {
@@ -116,25 +116,6 @@ export class DocumentService {
     return this.common.getCurrentCatalogNumber();
   }
 
-  getServiceInstance(url: string) {
-    return this.common.doGet(url, this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
-
-
-  getImg(url: string) {
-    return this.common.doStorageGet(url, null).map((res: any) => {
-      return res;
-    });
-  }
-
-
-  upload() {
-    return this.common.doGet('/commonapi/v2/app/uploadsfile', this.common.getToken()).map((res: Response) => {
-      return res;
-    });
-  }
 
   // 2021-07-30 빌드팩 정보를 가져온다
   getBuildPacks() {
@@ -143,11 +124,28 @@ export class DocumentService {
     });
   }
 
-  // 2021-07-30 developpack 정보를 가져온다.
-  getDevelopPackList() {
-    return this.common.doGet('/commonapi/v2/developpacks' , this.common.getToken()).map((res: Response) => {
+
+  //이미지 정보를 불러온다.
+  getImg(url: string) {
+    return this.common.doGet(url, this.common.getToken()).map((res: any) => {
       return res;
     });
   }
 
+  //가이드 리스트를 가져온다
+
+  getGuides(url: string){
+    return this.common.doGet( url, this.common.getToken()).map((res: Response) => {
+          return res;
+        });
+      }
+
+
+ //가이드를 가져온다.
+
+  getGuide(url:string){
+    return this.common.doGet(url, this.common.getToken()).map((res: any) => {
+          return res;
+        });
+      }
 }

@@ -1,19 +1,21 @@
-<link rel='stylesheet' type='text/css' href="document.component.css">
-<script>
-</script>
-
 <div class="wrap dashboard">
   <app-app-top [cursorId]="'cur_document'"></app-app-top>
   <app-document-nav></app-document-nav>
   <div class="contain">
-    <h6>
-      angular@{{ angularVersion }} | ngx-markdown@{{ ngxMarkdownVersion }}
-    </h6>
-    <br>
+<!--    <h6>-->
+<!--      angular@{{ angularVersion }} | ngx-markdown@{{ ngxMarkdownVersion }}-->
+<!--    </h6>-->
+<!--    <br>-->
+    <div class="cWrap_line maT30">
     <textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
-    <markdown class="variable-binding" [data]="markdown"></markdown>
+
+<!--  어드민에 등록되어 있는 markdown 데이터-->
+    <markdown class="variable-binding" [data]="markdown">
+    </markdown>
     <!-- to load from remote URL -->
   </div>
-  <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
+    <div id="guidelist">
+    </div>
+    <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
 </div>
-
+</div>

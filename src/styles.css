@@ -1,33 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
 
-pre[class*="language-"] {
+/* You can add global styles to this file, and also import other style files */
+
+
+#document-div pre[class*="language-"] {
   padding: 1em;
   margin: .5em 0;
   overflow: auto;
   border-radius: 0.3em;
 }
 
-dl, ol, ul {
+#document-div dl, ol, ul {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-li {
+#document-div li {
   display: list-item !important;
   text-align: -webkit-match-parent;
 }
-ol {
+#document-div ol {
   list-style-type: decimal !important;
 }
-ol ul{
+#document-div ol ul{
   list-style-type: circle;
   margin-block-start: 0px;
   margin-block-end: 0px;
   padding-inline-start: 40px;
 }
 
-ol {
+#document-div ol {
   display: block;
   list-style-type: decimal;
   margin-block-start: 1em;
@@ -37,7 +40,7 @@ ol {
   padding-inline-start: 40px;
 }
 
-ul {
+#document-div ul {
   display: block;
   /*list-style-type: disc;*/
   /*margin-block-start: 1em;*/
@@ -47,13 +50,13 @@ ul {
 }
 
 
-body {
+#document-div body {
   color: #272822;
   font-size: 15px;
   padding: 8px 16px;
 }
 
-body {
+#document-div body {
   margin: 0;
   font-weight: 400;
   line-height: 1.5;
@@ -61,27 +64,27 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-h1 a {
+#document-div h1 a {
   text-decoration: none;
 }
 
-h1 a:hover {
+#document-div h1 a:hover {
   opacity: 0.87;
   text-decoration: underline;
 }
 
-blockquote {
+#document-div blockquote {
   border-left: 3px solid rgba(0,0,0,0.21);
   padding: 0px 0px 0px 12px;
   color: rgba(0,0,0,0.54);
 }
 
-p {
+#document-div p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-p {
+#document-div p {
   display: block;
   margin-block-start: 1em;
   margin-block-end: 1em;
@@ -89,7 +92,7 @@ p {
   margin-inline-end: 0px;
 }
 
-:root {
+#document-div :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -116,7 +119,7 @@ p {
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
 }
 
-::marker {
+#document-div ::marker {
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
   text-transform: none;
@@ -125,6 +128,16 @@ p {
   text-align-last: start !important;
 }
 
-*, ::after, ::before {
+#document-div *, ::after, ::before {
   box-sizing: border-box;
 }
+
+#document-div .col-in-bg dt ul li {
+  display: inline-block !important;
+}
+
+#document-div *, ::after, ::before {
+  box-sizing: border-box;
+}
+
+

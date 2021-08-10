@@ -3,25 +3,33 @@
   <app-document-nav></app-document-nav>
 
   <div class="contain" id="document-div">
-    <div *ngFor="let guide of this.guidelist">
-      <tr>
-        <td id="{{guide.name}}"(click)="doGetGuide($event)">{{guide.name}}</td>
-        <td>{{guide.gubun}}</td>
-        <td>{{guide.gubun2}}</td>
-      </tr>
+    <div class="content document_wrap">
+      <div class="row one_line maT30">
+        <div class="col-md-6">
+          <div>
+            <div *ngFor="let guide of this.guidelist">
+              <tr>
+                <td id="{{guide.name}}" (click)="doGetGuide($event)" style="cursor: pointer">{{guide.name}}</td>
+                <td>{{guide.gubun}}</td>
+                <td>{{guide.gubun2}}</td>
+              </tr>
+            </div>
+            <!--    <h6>-->
+            <!--      angular@{{ angularVersion }} | ngx-markdown@{{ ngxMarkdownVersion }}-->
+            <!--    </h6>-->
+            <!--    <br>-->
+            <textarea class="variable-textarea" [(ngModel)]="markdown"
+                      style="display:none;  height: 100px; width: 100px;"></textarea>
+            <!--  어드민에 등록되어 있는 markdown 데이터-->
+            <markdown class="variable-binding" [data]="markdown">
+            </markdown>
+            <!-- to load from remote URL -->
+          </div>
+        </div>
+      </div>
     </div>
-<!--    <h6>-->
-<!--      angular@{{ angularVersion }} | ngx-markdown@{{ ngxMarkdownVersion }}-->
-<!--    </h6>-->
-<!--    <br>-->
-    <div class="cWrap_line maT30">
-    <textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
-
-<!--  어드민에 등록되어 있는 markdown 데이터-->
-    <markdown class="variable-binding" [data]="markdown">
-    </markdown>
-    <!-- to load from remote URL -->
-  </div>
     <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
+  </div>
 </div>
-</div>
+
+

@@ -11,6 +11,7 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
 import "prismjs/components/prism-css.min.js";
 import {MarkdownModuleConfig, MarkdownService} from "ngx-markdown";
+import {Organization} from "../model/organization";
 
 
 
@@ -27,24 +28,22 @@ declare var jQuery: any;
 
 export class DocumentComponent implements OnInit {
 
-  public guidname : string; //가이드 이름
-  public guidId : string; //가이드 이름-> 아이디
-  guides : Array<any> = new Array<any>();
-  guidelist : any = [];
-  guidelist2 : any =[];
-  guidelist3 : any =[];
-  guidelistname: string;
-  guidelistsummary: string;
-  guidelistdivision: string;
-  getguide : any;
-  division : string;//가이드 gubun
-  summary : string; // 가이드 gubun2
-  markdown : any;
-  imgno : string;
-  imgname : string;
-  imgdivision : string;
-  imgpath : string;
-  imgsummary : string;
+  public guidename : string; //가이드 이름
+  public guideId : string; //가이드 이름-> 아이디
+  public guides : Array<any> = new Array<any>();
+  public guidelist : Array<any> = new Array<any>();
+  public guidelistname: string;
+  public guidelistsummary: string;
+  public guidelistdivision: string;
+  public getguide : any;
+  public division : string;//가이드 gubun
+  public summary : string; // 가이드 gubun2
+  public markdown : any;
+  public imgno : string;
+  public imgname : string;
+  public imgdivision : string;
+  public imgpath : string;
+  public imgsummary : string;
 
 
   documentcontant = DOCUMENTURLConstant;
@@ -79,7 +78,6 @@ const language = 'typescript';
   ngOnInit() {
     this.doLayout()
     this.doGetGuideList()
-    this.doGetGuide()
     this.getGuideImg()
   }
 
@@ -98,19 +96,18 @@ const language = 'typescript';
     this.documentService.getGuides('/commonapi/v2/guides').subscribe(data => {
       this.guides.push(data)
       this.guidelist = this.guides['0']['data']
-      this.guidelist2 = JSON.stringify(this.guidelist)
-      this.guidelist3 = JSON.parse(this.guidelist2)
       console.log(this.guidelist)
       console.log(this.guidelist['0'])
 
+
       // for(var i = 0; i < this.guidelist.length; i++) {
-        Object.keys(this.guidelist).forEach(key=>{
-            const guidObj = this.guidelist[key];
-            this.guidelistname = guidObj['name']
-            this.guidelistsummary = guidObj['gubun']
-            this.guidelistdivision =guidObj['gubun2']
-            $("#guidelist").append('<tr id='+this.guidelistname+'><td> '+ this.guidelistname +' '+ this.guidelistsummary +' '+ this.guidelistdivision +' </td></tr>');
-        })
+      //   Object.keys(this.guidelist).forEach(key=>{
+      //       const guidObj = this.guidelist[key];
+      //       this.guidelistname = guidObj['name']
+      //       this.guidelistsummary = guidObj['gubun']
+      //       this.guidelistdivision =guidObj['gubun2']
+      //       $("#guidelist").append('<tr id='+this.guidelistname+'><td> '+ this.guidelistname +' '+ this.guidelistsummary +' '+ this.guidelistdivision +' </td></tr>');
+      //   })
       // }
     }, error => {
      // 에러처리 해야할것
@@ -120,14 +117,14 @@ const language = 'typescript';
 
   searchIndex(){
 
-
   }
 
   // 가이드를 가져온다.
-  doGetGuide(){
-    this.guidname = 'test' //임시로 확인 ,,, 나중에 클릭을 통해 값 가져오기
-    this.guidId = this.guidname.toString()
-    this.documentService.getGuide('/commonapi/v2/guides/'+this.guidId).subscribe(data=>{
+  doGetGuide(event){
+    const targetId = event.target.id
+    this.guidename = targetId
+    this.guideId = this.guidename.toString()
+    this.documentService.getGuide('/commonapi/v2/guides/'+ this.guidename ).subscribe(data=>{
       if(data['RESULT']==DOCUMENTURLConstant.SUCCESS){
        this.division = data.data['gubun'];
        this.summary = data.data['gubun2'];

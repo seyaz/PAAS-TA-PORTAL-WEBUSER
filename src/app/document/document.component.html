@@ -1,7 +1,15 @@
 <div class="wrap dashboard">
   <app-app-top [cursorId]="'cur_document'"></app-app-top>
   <app-document-nav></app-document-nav>
-  <div class="contain">
+
+  <div class="contain" id="document-div">
+    <div *ngFor="let guide of this.guidelist">
+      <tr>
+        <td id="{{guide.name}}"(click)="doGetGuide($event)">{{guide.name}}</td>
+        <td>{{guide.gubun}}</td>
+        <td>{{guide.gubun2}}</td>
+      </tr>
+    </div>
 <!--    <h6>-->
 <!--      angular@{{ angularVersion }} | ngx-markdown@{{ ngxMarkdownVersion }}-->
 <!--    </h6>-->
@@ -14,8 +22,6 @@
     </markdown>
     <!-- to load from remote URL -->
   </div>
-    <div id="guidelist">
-    </div>
     <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
 </div>
 </div>

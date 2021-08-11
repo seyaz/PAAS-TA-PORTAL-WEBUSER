@@ -47,6 +47,7 @@ import 'prismjs';
 import 'prismjs/components/prism-typescript.min.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
+import {DocumentModule} from "./document/document.module";
 
 
 
@@ -79,8 +80,8 @@ function markedOptionsFactory(): MarkedOptions {
     CallbackComponent,
     LogoutComponent,
     ErrorComponent,
-    DocumentComponent,
-    DocumentNavComponent,
+    // DocumentComponent,
+    // DocumentNavComponent,
   ],
   imports: [
     IndexModule,
@@ -95,6 +96,7 @@ function markedOptionsFactory(): MarkedOptions {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    DocumentModule,
     JsonpModule,
     BrowserModule.withServerTransition({appId: 'serverApp'}),
     LoadingModule.forRoot({

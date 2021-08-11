@@ -21,7 +21,7 @@ export class DocumentNavComponent implements OnInit {
 
   viewMain(number) {
     this.router.navigate(['document']);
-    this.documentService.viewPacks(true, true, true);
+    this.documentService.viewPacks(true, true);
     this.navStyle(number);
     this.classNavSetting(number);
     this.documentService.navView = 'viewAll';
@@ -37,7 +37,7 @@ export class DocumentNavComponent implements OnInit {
       this.documentService.classname = '#nav_second';
     }
     this.router.navigate(['document']);
-    this.documentService.viewPacks(true, false, false);
+    this.documentService.viewPacks(true, false,);
     this.navStyle(number);
     this.classNavSetting(number);
     if(number === 2){
@@ -51,7 +51,7 @@ export class DocumentNavComponent implements OnInit {
       this.documentService.classname = '#nav_third';
     }
     this.router.navigate(['document']);
-    this.documentService.viewPacks(false, true, false); //보여질 pack
+    this.documentService.viewPacks(false, true); //보여질 pack
     if(!isNullOrUndefined(value)) {
       this.documentService.buildPackfilter = value;
       this.documentService.navView = value;
@@ -72,7 +72,7 @@ export class DocumentNavComponent implements OnInit {
       this.documentService.classname = '#nav_fourth';
     }
     this.router.navigate(['document']);
-    this.documentService.viewPacks(false, false, true);
+    this.documentService.viewPacks(false, false);
     if(!isNullOrUndefined(value)) {
       this.documentService.servicePackfilter = value;
 
@@ -93,7 +93,7 @@ export class DocumentNavComponent implements OnInit {
       this.documentService.check = false;
     }
     this.router.navigate(['document']);
-    this.documentService.viewPacks(false, false, false); //보여질 pack
+    this.documentService.viewPacks(false, false); //보여질 pack
 
     this.classNavSetting(number);
     this.navStyle(number);

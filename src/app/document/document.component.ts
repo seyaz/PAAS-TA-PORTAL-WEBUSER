@@ -47,6 +47,7 @@ export class DocumentComponent implements OnInit {
   guideimgs: Array<any> = new Array<any>();
   imgs: any;
   imgform: string;
+  markdownimg: string;
 
   documentcontant = DOCUMENTURLConstant;
 
@@ -89,10 +90,6 @@ export class DocumentComponent implements OnInit {
   }
 
 
-  searchIndex() {
-
-  }
-
   // 가이드를 가져온다.
   doGetGuide(event) {
     const targetId = event.target.id
@@ -112,10 +109,8 @@ export class DocumentComponent implements OnInit {
 
 // 가이드 이미지를 불러온다.
   getGuideImg() {
-    console.log(this.summary) //gubun2가 같으면 이미지를 가져온다.
-
+    $("#guideImg").empty()
     this.documentService.getGuide('/commonapi/v2/guide_images').subscribe(data => {
-     console.log(data['data'])
       for (var i = 0; i < data['data'].length; i++){
         if(this.summary == data['data'][i]['gubun2']){
           this.imgno = data['data'][i]['id']
@@ -125,7 +120,7 @@ export class DocumentComponent implements OnInit {
             this.imgpath = data.data['url']
             this.imgsummary = data.data['gubun2']
             var src = this.imgpath
-            $("#guideImg").append('<img src="'+src+'"/>')
+            $("#guideImg").append('<img src="'+src+'"/>') //나중에 아이콘으로 추가할 것
           })
         }
       }
@@ -140,8 +135,6 @@ export class DocumentComponent implements OnInit {
           this.imgs = JSON.stringify(data)
           this.guideimgs = JSON.parse(String(this.imgs))
           this.imgform = this.guideimgs['data']
-          console.log(this.imgform)
-
         }
       }
     )
@@ -151,6 +144,16 @@ export class DocumentComponent implements OnInit {
   errorMsg(value: any) {
     this.documentService.alertMessage(value, false);
     this.documentService.isLoading(false);
+  }
+
+  goBuildPackGuide(build : any) {
+    this.documentService.setCurrentBuildPackGuideName(build.name)
+    this.router.navigate(['documentdevelopment']); //catalogdevelopment에 연결한다.
+  }
+
+  goService(service : any) {
+    this.documentService.setCurrentServiceGuideName(service.name)
+    this.router.navigate(['documentservice']);
   }
 }
 

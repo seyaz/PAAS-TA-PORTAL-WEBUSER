@@ -14,19 +14,15 @@ export class DocumentService {
 
   apiversion = appConfig['apiversion'];
 
-  buildpacks: Array<any> = [];
-  starterpacks: Array<any> = [];
-  recentpacks: Array<any> = [];
-  servicepacks: Array<any> = [];
+  buildpacksguide: Array<any> = [];
+  servicepacksguide: Array<any> = [];
   lasttime: number;
   check: boolean = true;
-  viewstartpack: boolean = true;
-  viewbuildpack: boolean = true;
-  viewservicepack: boolean = true;
+  viewbuildpackguide: boolean = true;
+  viewservicepackguide: boolean = true;
 
-  viewstarterpacks: any = [];
-  viewbuildpacks: any = [];
-  viewservicepacks: any = [];
+  viewbuildpacksguide: any = [];
+  viewservicepacksguide: any = [];
 
 
   buildPackfilter: string = '';
@@ -35,7 +31,7 @@ export class DocumentService {
   classname: string;
   navview: string;
   translateEntities: any;
-  autoSearch: boolean = false;
+
 
   constructor(private common: CommonService, private log: NGXLogger, private translate: TranslateService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -47,31 +43,27 @@ export class DocumentService {
   }
 
   /*servicepack, buildpack을 화면에 보여준다*/
-  viewPacks(value, value2, value3) {
-    this.viewstartpack = value;
-    this.viewbuildpack = value2;
-    this.viewservicepack = value3;
-    if (this.viewstartpack) {
-      this.viewstarterpacks;
+  viewPacks(value, value2) {
+    this.viewbuildpackguide = value;
+    this.viewservicepackguide = value2;
+    if (this.viewbuildpackguide) {
+      this.viewbuildpacksguide;
     }
-    if (this.viewbuildpack) {
-      this.viewbuildpacks;
-    }
-    if (this.viewservicepack) {
-      this.viewservicepacks;
+    if (this.viewservicepackguide) {
+      this.viewservicepacksguide;
     }
   }
 
 
   buildPackFilter() {
     if (this.buildPackfilter !== '') {
-      this.viewbuildpacks = this.buildpacks.filter(data => {
+      this.viewbuildpacksguide = this.buildpacksguide.filter(data => {
         if (data.classification === this.buildPackfilter) {
           return data;
         }
       });
     } else {
-      this.viewbuildpacks = this.buildpacks;
+      this.viewbuildpacksguide = this.buildpacksguide;
     }
   }
 
@@ -92,13 +84,13 @@ export class DocumentService {
 
   servicePackFilter() {
     if (this.servicePackfilter !== '') {
-      this.viewservicepacks = this.servicepacks.filter(data => {
+      this.viewservicepacksguide = this.servicepacksguide.filter(data => {
         if (data.classification === this.servicePackfilter) {
           return data;
         }
       });
     } else {
-      this.viewservicepacks = this.servicepacks;
+      this.viewservicepacksguide = this.servicepacksguide;
     }
   }
 
@@ -148,4 +140,25 @@ export class DocumentService {
           return res;
         });
       }
+
+
+
+
+  /*2021-08-11 추가*/
+  setCurrentBuildPackGuideName(name) {
+   this.common.setCurrentBuildPackGuideName(name);
+  }
+
+  getCurrentBuildPackGuideName(){
+    return this.common.getCurrentBuildPackGuideName()
+  }
+
+  setCurrentServiceGuideName(name) {
+    this.common.setCurrentServiceGuideName(name);
+  }
+
+  getCurrentServiceGuideName(){
+    return this.common.getCurrentServiceGuideName()
+  }
+
 }

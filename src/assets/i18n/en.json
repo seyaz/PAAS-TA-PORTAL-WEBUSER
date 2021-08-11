@@ -739,7 +739,14 @@
     "external": {
       "systemerror" : "A system error has occurred. Please try again."
 
+    },
+    "document" : {
+      "serviceGuide" : "Service Guide",
+      "buildpackGuide" : "Buildepack Guide",
+      "userGuide" : "User guide",
+      "buildpack_system" : "System App Development",
+      "buildpack_custom" : "User App Development",
+      "guideFail": "No guide information found."
     }
-
   }
 }

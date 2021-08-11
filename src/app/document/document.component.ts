@@ -27,22 +27,26 @@ declare var jQuery: any;
 
 export class DocumentComponent implements OnInit {
 
-  public guidename: string; //가이드 이름
-  public guideId: string; //가이드 이름-> 아이디
-  public guides: Array<any> = new Array<any>();
-  public guidelist: Array<any> = new Array<any>();
-  public guidelistname: string;
-  public guidelistsummary: string;
-  public guidelistdivision: string;
-  public getguide: any;
-  public division: string;//가이드 gubun
-  public summary: string; // 가이드 gubun2
-  public markdown: any;
-  public imgno: string;
-  public imgname: string;
-  public imgdivision: string;
-  public imgpath: string;
-  public imgsummary: string;
+  guidename: string; //가이드 이름
+  guideId: string; //가이드 이름-> 아이디
+  guides: Array<any> = new Array<any>();
+  guidelist: Array<any> = new Array<any>();
+  guidelistname: string;
+  guidelistsummary: string;
+  guidelistdivision: string;
+  getguide: any;
+  division: string;//가이드 gubun
+  summary: string; // 가이드 gubun2
+  markdown: any;
+  imgno: string;
+  imgname: string;
+  imgdivision: string;
+  imgpath: string;
+  imgsummary: string;
+  translateEntities: any = [];
+  guideimgs: Array<any> = new Array<any>();
+  imgs: any;
+  imgform: string;
 
   documentcontant = DOCUMENTURLConstant;
 
@@ -52,7 +56,6 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
     this.doLayout()
     this.doGetGuideList()
-    this.getGuideImg()
   }
 
   doLayout() {
@@ -72,7 +75,6 @@ export class DocumentComponent implements OnInit {
       this.guidelist = this.guides['0']['data']
       console.log(this.guidelist)
       console.log(this.guidelist['0'])
-
       // for(var i = 0; i < this.guidelist.length; i++) {
       //   Object.keys(this.guidelist).forEach(key=>{
       //       const guidObj = this.guidelist[key];
@@ -83,7 +85,6 @@ export class DocumentComponent implements OnInit {
       //   })
       // }
     }, error => {
-      // 에러처리 해야할것
     });
   }
 
@@ -102,15 +103,46 @@ export class DocumentComponent implements OnInit {
         this.division = data.data['gubun'];
         this.summary = data.data['gubun2'];
         this.markdown = data.data['markdown'];
+        this.getGuideImg()
+      } else {
+        this.errorMsg(this.translateEntities.document.guideFail);
       }
     })
   }
 
 // 가이드 이미지를 불러온다.
   getGuideImg() {
-    this.imgno = '10' //임시 확인
-    this.documentService.getGuide('/commonapi/v2/guide_images/' + this.imgno).subscribe(data => {
-        console.log(data)
+    console.log(this.summary) //gubun2가 같으면 이미지를 가져온다.
+
+    this.documentService.getGuide('/commonapi/v2/guide_images').subscribe(data => {
+     console.log(data['data'])
+      for (var i = 0; i < data['data'].length; i++){
+        if(this.summary == data['data'][i]['gubun2']){
+          this.imgno = data['data'][i]['id']
+          this.documentService.getGuide('/commonapi/v2/guide_images/' + this.imgno).subscribe(data => {
+            this.imgname = data.data.name
+            this.imgdivision = data.data['gubun']
+            this.imgpath = data.data['url']
+            this.imgsummary = data.data['gubun2']
+            var src = this.imgpath
+            $("#guideImg").append('<img src="'+src+'"/>')
+          })
+        }
+      }
+    })
+  }
+
+
+  // 가이드 이미지를 리스트 불러온다.
+  getGuideImgs() {
+    this.documentService.getGuide('/commonapi/v2/guide_images').subscribe(data => {
+        if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
+          this.imgs = JSON.stringify(data)
+          this.guideimgs = JSON.parse(String(this.imgs))
+          this.imgform = this.guideimgs['data']
+          console.log(this.imgform)
+
+        }
       }
     )
   }

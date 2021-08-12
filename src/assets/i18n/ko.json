@@ -279,12 +279,12 @@
       "service_rdbms": "관계형 데이터베이스",
       "service_monitoring": "어플리케이션 모니터링",
       "dev_ops": "개발 지원 도구",
-      "org_name" : "생성된 조직명",
-      "space_name" : "해당 공간명",
-      "not_bind_start" : "연결없이 시작",
-      "service_guide" : "서비스 온라인 가이드",
+      "org_name": "생성된 조직명",
+      "space_name": "해당 공간명",
+      "not_bind_start": "연결없이 시작",
+      "service_guide": "서비스 온라인 가이드",
       "buildpack_guide": "빌드팩 온라인 가이드",
-      "document" : "문서"
+      "document": "문서"
     },
     "main": {
       "recentWork": "최근작업",
@@ -384,7 +384,7 @@
       "inputAppName": "앱 이름을 입력하여 주십시오.",
       "inputHostName": "호스트를 입력하여 주십시오.",
       "inputService": "서비스 이름을 입력하여 주십시오.",
-      "appFile" : "업로드할 파일을 선택해 주세요."
+      "appFile": "업로드할 파일을 선택해 주세요."
     },
     "result": {
       "appNameError": "현재 입력한 앱 이름으로 생성할 수 없습니다.",
@@ -419,19 +419,19 @@
     "orgAdmin": "조직 관리자",
     "orgBillingManager": "조직 결제 관리자",
     "orgObserver": "조직 참관인",
-    "spaceManager" : "공간 관리자",
-    "spaceDeveloper" : "공간 개발자",
-    "spaceAuditor" : " 공간 감사자",
+    "spaceManager": "공간 관리자",
+    "spaceDeveloper": "공간 개발자",
+    "spaceAuditor": " 공간 감사자",
     "orgAdminDocs": "사용자 초대 및 관리, 계획 선택 및 변경, 지출 한도 설정 할 수 있습니다.",
     "orgBillingManagerDocs": "조직 결제 계정 및 결제 정보 생성 및 관리 할 수 있습니다.",
     "orgObserverDocs": "조직 정보 및 보고서에 대한 읽기 전용 액세스를 할 수 있습니다.",
-    "spaceManagerDocs" : "사용자 초대 및 관리, 특정 공간에 대한 기능 활성화 할 수 있습니다.",
-    "spaceDeveloperDocs" : "앱 및 서비스를 생성 및 관리하고 로그 및 보고서를 볼 수 있습니다.",
-    "spaceAuditorDocs" : "해당 공간의 로그, 보고서 및 설정을 볼 수 있습니다.",
+    "spaceManagerDocs": "사용자 초대 및 관리, 특정 공간에 대한 기능 활성화 할 수 있습니다.",
+    "spaceDeveloperDocs": "앱 및 서비스를 생성 및 관리하고 로그 및 보고서를 볼 수 있습니다.",
+    "spaceAuditorDocs": "해당 공간의 로그, 보고서 및 설정을 볼 수 있습니다.",
     "cancelMember": "맴버 취소",
     "orgDocs": "역할 설명",
     "inviteReSend": "초대 재전송",
-    "inviteCancel" : "초대 취소",
+    "inviteCancel": "초대 취소",
     "quota": "할당량",
     "select": "선택",
     "serviceName": "서비스명",
@@ -506,8 +506,8 @@
       "layerpop4": {
         "title": "사용자 초대",
         "explanation": "* 콤마를 사용하여 이메일 주소를 계속 추가 할 수 있습니다.",
-        "succeed" : "* 사용자 에게 초대메세지를 보낼 수 있습니다.",
-        "unSucceed" : "* 이메일에 해당하는 사용자가 없습니다.",
+        "succeed": "* 사용자 에게 초대메세지를 보낼 수 있습니다.",
+        "unSucceed": "* 이메일에 해당하는 사용자가 없습니다.",
         "org": "조직",
         "assignedOrg": "할당된 조직",
         "orgAdmin": "조직 관리자",
@@ -547,7 +547,7 @@
       "memberCancelFail2": "ORG에 멤버가 없는 관계로 멤버취소를 할 수 없습니다. ORG를 삭제하세요.",
       "sendEmailSuccess": "사용자를 초대완료 하였습니다.",
       "sendEmailFail": "사용자 초대가 실패 하였습니다.",
-      "checkEmail" : "사용자 초대 이메일을 확인하시길 바랍니다."
+      "checkEmail": "사용자 초대 이메일을 확인하시길 바랍니다."
     }
   },
   "orgProduce": {
@@ -595,40 +595,40 @@
     }
   },
   "usermgmt": {
-    "myAccount" : "내 계정",
-    "explan" : {
-      "check1" : "영문,숫자를 혼합하여 6~20자 이내 공백 미포함 입력만 가능합니다.",
-      "check2" : "11 자 이하의 숫자 입력만 가능합니다.",
-      "check3" : "15 자 이하의 숫자와 영문 입력만 가능합니다.",
-      "check4" : "256 자 이하만 가능합니다.",
-      "check5" : "입력한 비밀 번호와 다릅니다.",
-      "check6" : "한글, 영문, 숫자만 입력만 가능합니다.",
-      "check7" : "비밀번호 변경은 담당자에게 요청하세요."
+    "myAccount": "내 계정",
+    "explan": {
+      "check1": "영문,숫자를 혼합하여 6~20자 이내 공백 미포함 입력만 가능합니다.",
+      "check2": "11 자 이하의 숫자 입력만 가능합니다.",
+      "check3": "15 자 이하의 숫자와 영문 입력만 가능합니다.",
+      "check4": "256 자 이하만 가능합니다.",
+      "check5": "입력한 비밀 번호와 다릅니다.",
+      "check6": "한글, 영문, 숫자만 입력만 가능합니다.",
+      "check7": "비밀번호 변경은 담당자에게 요청하세요."
     },
-    "placeholder" : {
-      "password" : "비밀번호를 입력하세요."
+    "placeholder": {
+      "password": "비밀번호를 입력하세요."
     },
-    "button" :{
-      "change" : "변경하기",
-      "delete" : "삭제",
-      "cancel" : "취소",
-      "photoRegistration" : "사진등록"
+    "button": {
+      "change": "변경하기",
+      "delete": "삭제",
+      "cancel": "취소",
+      "photoRegistration": "사진등록"
     },
     "loginInfo": {
       "loginInfo": "로그인 정보",
       "email": "ID",
       "changePassword": {
-        "changePassword" : "비밀번호 변경",
+        "changePassword": "비밀번호 변경",
         "currentPassword": "현재 비밀번호",
         "newPassword": "새 비밀번호",
         "newPasswordConfirmation": "새 비밀번호 확인"
       }
     },
     "userInfo": {
-      "userInfo" : "사용자 정보",
-      "name" :{
-        "name" : "이름",
-        "changeName":"변경할 이름"
+      "userInfo": "사용자 정보",
+      "name": {
+        "name": "이름",
+        "changeName": "변경할 이름"
       },
       "phoneNumber": {
         "phoneNumber": "전화번호",
@@ -643,16 +643,15 @@
         "newAddress": "새 주소"
       }
     },
-    "myOrg":{
-      "myOrg" : "나의 조직",
-      "orgWithdrawal":"조직 탈퇴",
+    "myOrg": {
+      "myOrg": "나의 조직",
+      "orgWithdrawal": "조직 탈퇴",
       "explan1": "해당 조직명이 없습니다.",
       "explan2": "조직을 탈퇴하면 되돌릴 수 없습니다.",
       "explan2-2": "를 탈퇴하시겠습니까?"
-
     },
     "deleteAccount": {
-      "deleteAccount":"계정 삭제",
+      "deleteAccount": "계정 삭제",
       "explan": "계정 삭제를 선택 하면 모든 조직과 공간이 삭제 되며 되돌릴 수 없습니다.",
       "explan-2": "를 삭제하시겠습니까?"
     },
@@ -660,76 +659,75 @@
       "ChangeSuccess": "변경 되었습니다.",
       "ChangeSuccessFail": "재 입력 하세요.",
       "passwordSuccess": "성공적으로 변경되었습니다.",
-      "sameAsPasswordFail" : "현재 비밀번호와 동일합니다.",
+      "sameAsPasswordFail": "현재 비밀번호와 동일합니다.",
       "passwordFailNotFound": "비밀번호 변경에 실패하였습니다.",
       "newPasswordFail": "새 비밀번호를 다시 입력하세요.",
       "passwordFail": "비밀번호를 다시 입력하세요.",
       "orgDeleteSuccess": "조직탈퇴 완료 되었습니다.",
-      "orgDeleteFeedback" : "계정 삭제 전 모든 조직 및 공간 제거하세요.",
+      "orgDeleteFeedback": "계정 삭제 전 모든 조직 및 공간 제거하세요.",
       "orgDeleteFail": "조직 탈퇴 실패 하였습니다.",
       "accountDelete": "계정삭제가 실패 하였습니다.",
       "accountDeleteSuccess": "계정삭제가 완료 되었습니다.",
       "memberCancelFail2": "ORG에 멤버가 없는 관계로 멤버취소를 할 수 없습니다. ORG를 삭제하세요.",
       "accountDeleteFail": "조직 탈퇴 실패 하였습니다."
     }
-
   },
-  "dashboard":{
-    "titleApp" : "애플리케이션",
-    "titleServices" : "서비스",
+  "dashboard": {
+    "titleApp": "애플리케이션",
+    "titleServices": "서비스",
     "titleVMMonitoring": "VM 자원현황",
-    "createdOrganizationName" : "생성된 조직명",
-    "spaceName" : "해당 공간명",
-    "auota" : "할당량",
-    "organizationManagement" : "조직관리",
-    "catalog" : "카탈로그",
-    "region" :{
-      "korea" : "대한민국",
-      "usa" : "미국"
+    "createdOrganizationName": "생성된 조직명",
+    "spaceName": "해당 공간명",
+    "auota": "할당량",
+    "organizationManagement": "조직관리",
+    "catalog": "카탈로그",
+    "region": {
+      "korea": "대한민국",
+      "usa": "미국"
     },
-    "explan" : {
-      "dashboardMsg1" : "대시보드가 비어 있습니다.",
-      "dashboardMsg2" : "조직 및 공간이 생성되지 않았습니다.",
-      "dashboardMsg3" : "로 이동하여 조직 및 공간을 생성하십시오.",
-      "appMsg1":"생성한 앱이 없습니다. 앱 생성을 클릭하여 작성하거나",
-      "appMsg2":"를 찾아보십시오.",
-      "servicesMsg1":"생성한 서비스가 없습니다. 서비스 생성을 클릭하여 작성하거나",
+    "explan": {
+      "dashboardMsg1": "대시보드가 비어 있습니다.",
+      "dashboardMsg2": "조직 및 공간이 생성되지 않았습니다.",
+      "dashboardMsg3": "로 이동하여 조직 및 공간을 생성하십시오.",
+      "appMsg1": "생성한 앱이 없습니다. 앱 생성을 클릭하여 작성하거나",
+      "appMsg2": "를 찾아보십시오.",
+      "servicesMsg1": "생성한 서비스가 없습니다. 서비스 생성을 클릭하여 작성하거나",
       "servicesMsg2": "를 찾아보십시오.",
-      "executionMsg1" : "App {{selectedName}} 을 정지하시겠습니까?",
-      "executionMsg2" : "App {{selectedName}} 을 시작하시겠습니까?"
+      "executionMsg1": "App {{selectedName}} 을 정지하시겠습니까?",
+      "executionMsg2": "App {{selectedName}} 을 시작하시겠습니까?"
     },
-    "button" :{
-      "create" : "생성",
-      "change" : "변경",
-      "delete" : "삭제",
-      "cancel" : "취소"
+    "button": {
+      "create": "생성",
+      "change": "변경",
+      "delete": "삭제",
+      "cancel": "취소"
     },
-    "app" : {
-      "instance":"인스턴스",
-      "disk":"디스크",
-      "memory":"메모리",
-      "changeAppMame":"앱 이름 변경",
-      "execution":"실행",
-      "stop":"정지",
-      "delete":"삭제",
-      "deleteApp" : "앱 삭제",
-      "explan1":  "앱을 삭제하면 되돌릴 수 없습니다.",
+    "app": {
+      "instance": "인스턴스",
+      "disk": "디스크",
+      "memory": "메모리",
+      "changeAppMame": "앱 이름 변경",
+      "execution": "실행",
+      "stop": "정지",
+      "delete": "삭제",
+      "deleteApp": "앱 삭제",
+      "explan1": "앱을 삭제하면 되돌릴 수 없습니다.",
       "explan2": "를 삭제하시겠습니까?",
-      "placeholder":"변경할 앱 이름을 입력하세요."
+      "placeholder": "변경할 앱 이름을 입력하세요."
     },
-    "service" : {
-      "connectApp":"연결 앱",
-      "serviceName":"서비스 명",
-      "changeServiceName":"서비스 명 변경",
-      "updateService":"서비스 수정",
-      "deleteService":"서비스 삭제",
-      "providedServices":"제공서비스",
-      "dashboard":"대시보드",
-      "userProvidedCreate":"User Provided 생성",
-      "explan1":  "서비스를 삭제하면 되돌릴 수 없습니다.",
+    "service": {
+      "connectApp": "연결 앱",
+      "serviceName": "서비스 명",
+      "changeServiceName": "서비스 명 변경",
+      "updateService": "서비스 수정",
+      "deleteService": "서비스 삭제",
+      "providedServices": "제공서비스",
+      "dashboard": "대시보드",
+      "userProvidedCreate": "User Provided 생성",
+      "explan1": "서비스를 삭제하면 되돌릴 수 없습니다.",
       "explan2": "를 삭제하시겠습니까?",
-      "placeholder":"변경할 서비스 이름을 입력하세요.",
-      "isNotSame" : "모든 값을 입력하세요."
+      "placeholder": "변경할 서비스 이름을 입력하세요.",
+      "isNotSame": "모든 값을 입력하세요."
     },
     "alertLayer": {
       "changeSuccess": "변경 완료되었습니다.",
@@ -747,16 +745,23 @@
       "bindingService": "이 서비스는 현재 어플리케이션과 연결되어있는 상태입니다. 연결 해제를 해야 삭제가 가능합니다."
     },
     "external": {
-      "systemerror" : "시스템 에러가 발생하였습니다. 다시 시도 바랍니다."
-
-    },
-    "document" : {
-      "serviceGuide" : "서비스 가이드",
-      "buildpackGuide" : "빌드팩 가이드",
+      "systemerror": "시스템 에러가 발생하였습니다. 다시 시도 바랍니다."
+    }
+  },
+  "document": {
+    "guide" : {
+      "serviceGuide" : "앱 서비스",
+      "buildpackGuide" : "앱 개발환경",
       "userGuide" : "사용자 가이드",
       "buildpack_system": "시스템 앱 개발환경",
       "buildpack_custom": "사용자 앱 개발환경",
       "guideFail": "가이드 정보를 찾을 수 없습니다."
+    },
+    "userguide": {
+
     }
   }
 }
+
+
+

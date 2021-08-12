@@ -74,8 +74,6 @@ export class DocumentComponent implements OnInit {
     this.documentService.getGuides('/commonapi/v2/guides').subscribe(data => {
       this.guides.push(data)
       this.guidelist = this.guides['0']['data']
-      console.log(this.guidelist)
-      console.log(this.guidelist['0'])
       // for(var i = 0; i < this.guidelist.length; i++) {
       //   Object.keys(this.guidelist).forEach(key=>{
       //       const guidObj = this.guidelist[key];
@@ -146,14 +144,5 @@ export class DocumentComponent implements OnInit {
     this.documentService.isLoading(false);
   }
 
-  goBuildPackGuide(build : any) {
-    this.documentService.setCurrentBuildPackGuideName(build.name)
-    this.router.navigate(['documentdevelopment']); //catalogdevelopment에 연결한다.
-  }
-
-  goService(service : any) {
-    this.documentService.setCurrentServiceGuideName(service.name)
-    this.router.navigate(['documentservice']);
-  }
 }
 

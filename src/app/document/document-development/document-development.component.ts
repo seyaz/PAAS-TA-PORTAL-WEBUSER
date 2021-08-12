@@ -5,6 +5,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DocumentService} from "../document.service";
 import {NGXLogger} from "ngx-logger";
 import {MarkdownService} from "ngx-markdown";
+import "../css/bootstrap.min.css";
+import "../css/components/prism-css.min.js";
+import "../css/plugins/line-numbers/prism-line-numbers.js";
+import "../css/plugins/line-highlight/prism-line-highlight.js";
+import "../css/components/prism.js";
+import "../css/components/prism-typescript.min.js";
 
 declare var $: any;
 declare var jQuery: any;
@@ -42,7 +48,6 @@ export class DocumentDevelopmentComponent implements OnInit {
   imgform: string;
   markdownimg: string;
   buildpackdevelop: string;
-
   documentcontant = DOCUMENTURLConstant;
 
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
@@ -62,6 +67,8 @@ export class DocumentDevelopmentComponent implements OnInit {
         });
     });
   }
+
+
 
   //등록된 가이드 리스트를 가져온다.
   doGetGuideList() {

@@ -5,6 +5,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DocumentService} from "../document.service";
 import {NGXLogger} from "ngx-logger";
 import {MarkdownService} from "ngx-markdown";
+import "../css/bootstrap.min.css";
+import "../css/components/prism-css.min.js";
+import "../css/plugins/line-numbers/prism-line-numbers.js";
+import "../css/plugins/line-highlight/prism-line-highlight.js";
+import "../css/components/prism.js";
+import "../css/components/prism-typescript.min.js";
+
 
 declare var $: any;
 declare var jQuery: any;

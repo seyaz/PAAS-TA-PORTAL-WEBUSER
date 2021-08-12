@@ -13,6 +13,7 @@ import {DocumentService} from "./document.service";
 import {DocumentNavComponent} from "./document-layout/document-nav/document-nav.component";
 import {MarkdownModule, MarkdownService, MarkedOptions} from "ngx-markdown";
 import {HttpClient} from "@angular/common/http";
+import {DocumentUserComponent} from "./document-user/document-user.component";
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import {HttpClient} from "@angular/common/http";
     DocumentServiceComponent,
     DocumentDevelopmentComponent,
     DocumentNavComponent,
+    DocumentUserComponent,
 
   ],
   providers: [

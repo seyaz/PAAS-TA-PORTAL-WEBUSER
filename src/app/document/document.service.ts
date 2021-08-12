@@ -41,31 +41,31 @@ export class DocumentService {
       this.translateEntities = res;
     });
   }
+  //
+  // /*servicepack, buildpack을 화면에 보여준다*/
+  // viewPacks(value, value2, value3) {
+  //   this.viewbuildpackguide = value;
+  //   this.viewservicepackguide = value2;
+  //   if (this.viewbuildpackguide) {
+  //     this.viewbuildpacksguide;
+  //   }
+  //   if (this.viewservicepackguide) {
+  //     this.viewservicepacksguide;
+  //   }
+  // }
 
-  /*servicepack, buildpack을 화면에 보여준다*/
-  viewPacks(value, value2) {
-    this.viewbuildpackguide = value;
-    this.viewservicepackguide = value2;
-    if (this.viewbuildpackguide) {
-      this.viewbuildpacksguide;
-    }
-    if (this.viewservicepackguide) {
-      this.viewservicepacksguide;
-    }
-  }
-
-
-  buildPackFilter() {
-    if (this.buildPackfilter !== '') {
-      this.viewbuildpacksguide = this.buildpacksguide.filter(data => {
-        if (data.classification === this.buildPackfilter) {
-          return data;
-        }
-      });
-    } else {
-      this.viewbuildpacksguide = this.buildpacksguide;
-    }
-  }
+  //
+  // buildPackFilter() {
+  //   if (this.buildPackfilter !== '') {
+  //     this.viewbuildpacksguide = this.buildpacksguide.filter(data => {
+  //       if (data.classification === this.buildPackfilter) {
+  //         return data;
+  //       }
+  //     });
+  //   } else {
+  //     this.viewbuildpacksguide = this.buildpacksguide;
+  //   }
+  // }
 
   set navView(value) {
     this.navview = value;
@@ -102,11 +102,10 @@ export class DocumentService {
     this.common.alertMessage(value, result);
   }
 
-  /*catalogNumber를 가져온다*/
-
-  getCurrentCatalogNumber() {
-    return this.common.getCurrentCatalogNumber();
-  }
+  // /*catalogNumber를 가져온다*/
+  // getCurrentCatalogNumber() {
+  //   return this.common.getCurrentCatalogNumber();
+  // }
 
 
   // 2021-07-30 빌드팩 정보를 가져온다
@@ -125,7 +124,6 @@ export class DocumentService {
   }
 
   //가이드 리스트를 가져온다
-
   getGuides(url: string){
     return this.common.doGet( url, this.common.getToken()).map((res: Response) => {
           return res;
@@ -134,31 +132,11 @@ export class DocumentService {
 
 
  //가이드를 가져온다.
-
   getGuide(url:string){
     return this.common.doGet(url, this.common.getToken()).map((res: any) => {
           return res;
         });
       }
 
-
-
-
-  /*2021-08-11 추가*/
-  setCurrentBuildPackGuideName(name) {
-   this.common.setCurrentBuildPackGuideName(name);
-  }
-
-  getCurrentBuildPackGuideName(){
-    return this.common.getCurrentBuildPackGuideName()
-  }
-
-  setCurrentServiceGuideName(name) {
-    this.common.setCurrentServiceGuideName(name);
-  }
-
-  getCurrentServiceGuideName(){
-    return this.common.getCurrentServiceGuideName()
-  }
 
 }

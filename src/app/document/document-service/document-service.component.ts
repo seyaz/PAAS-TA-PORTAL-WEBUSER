@@ -94,6 +94,8 @@ export class DocumentServiceComponent implements OnInit {
     const targetId = event.target.id
     this.guidename = targetId
     this.guideId = this.guidename.toString()
+    //name값을 받아 라우팅을 한다.
+    this.router.navigate(['/documentservice'],{queryParams:{ service_name: this.guidename}})
     this.documentService.getGuide('/commonapi/v2/guides/' + this.guidename).subscribe(data => {
       if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
         this.division = data.data['gubun'];

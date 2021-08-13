@@ -1,11 +1,11 @@
 <head>
-  <link rel="stylesheet" type="text/html" href="/document/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/html" href="/document/css/themes/prism.css">
-  <link rel="stylesheet "type="text/html" href="/document/css/themes/prism-okaidia.css">
-  <script src='/document/css/components/prism-css.min.js'></script>
-  <script src='/document/css/plugins/line-numbers/prism-line-numbers.js'></script>
-  <script src='/document/css/plugins/line-highlight/prism-line-highlight.js'></script>
-  <script src='/document/css/components/prism.js'></script>
+  <script src='../document/css/components/prism-css.min.js'></script>
+  <script src='../document/css/plugins/line-numbers/prism-line-numbers.js'></script>
+  <script src='../document/css/plugins/line-highlight/prism-line-highlight.js'></script>
+  <script src='../document/css/components/prism.js'></script>
+  <script src='../document/css/bootstrap.min.css'></script>
+  <script src='../document/css/css/themes/prism.css"'></script>
+  <script src='../document/css/themes/prism-okaidia.css'></script>
 </head>
 <div class="wrap dashboard">
   <app-app-top [cursorId]="'cur_document'"></app-app-top>
@@ -15,22 +15,21 @@
     <div class="content document_wrap">
       <div class="row one_line maT30">
         <div class="col-md-6">
-          <div>
-            <div *ngFor="let guide of this.guidelist">
-              <tr *ngIf="guide.gubun == this.buildpackdevelop">
-                <td id="{{guide.name}}" (click)="doGetBuild($event)" style="cursor: pointer">
-                  {{guide.gubun2}}</td>
-                <!--                <td>{{guide.gubun}}</td>-->
+          <div *ngFor="let guide of this.guidelist">
+            <tr *ngIf="guide.gubun == this.buildpackdevelop">
+              <td id="{{guide.name}}" (click)="doGetBuild($event)" style="cursor: pointer">
+                {{guide.gubun2}}
+                <!--                <td>{{guide.gubun}}</td> -->
                 <!--                <td>{{guide.gubun2}}</td>-->
-                <td id="guideImg"></td>
-              </tr>
-            </div>
-            <textarea class="variable-textarea" style="display: none" [(ngModel)]="markdown"></textarea>
-            <!--  어드민에 등록되어 있는 markdown 데이터-->
-            <markdown class="variable-binding" [data]="markdown">
-            </markdown>
-            <!-- to load from remote URL -->
+              <td id="guideImg"></td>
+            </tr>
           </div>
+          <textarea class="variable-textarea" style="display: none" [(ngModel)]="markdown"></textarea>
+          <!--  어드민에 등록되어 있는 markdown 데이터-->
+          <markdown class="variable-binding" [data]="markdown">
+          </markdown>
+          <!-- to load from remote URL -->
+
         </div>
       </div>
     </div>

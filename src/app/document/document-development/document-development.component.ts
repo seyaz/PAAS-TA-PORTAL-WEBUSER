@@ -11,6 +11,7 @@ import "../css/plugins/line-numbers/prism-line-numbers.js";
 import "../css/plugins/line-highlight/prism-line-highlight.js";
 import "../css/components/prism.js";
 import "../css/components/prism-typescript.min.js";
+import {isNullOrUndefined} from "util";
 
 declare var $: any;
 declare var jQuery: any;
@@ -49,15 +50,27 @@ export class DocumentDevelopmentComponent implements OnInit {
   markdownimg: string;
   buildpackdevelop: string;
   documentcontant = DOCUMENTURLConstant;
-  paramsOne : string;
+  paramsOne: string;
 
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
-   this.paramsOne = route.snapshot.params['build_name'];
+    this.paramsOne = route.snapshot.params['build_name'];
   }
 
   ngOnInit() {
     this.doLayout()
     this.doGetGuideList()
+    if (!isNullOrUndefined(this.route.snapshot.queryParams['buildpack_name'])) {
+      this.documentService.getGuide('/commonapi/v2/guides/' + this.route.snapshot.queryParams['buildpack_name']).subscribe(data => {
+        if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
+          this.division = data.data['gubun'];
+          this.summary = data.data['gubun2'];
+          this.markdown = data.data['markdown'];
+          this.getGuideImg()
+        } else {
+          this.errorMsg(this.translateEntities.document.guideFail);
+        }
+      })
+    }
   }
 
   doLayout() {
@@ -69,7 +82,6 @@ export class DocumentDevelopmentComponent implements OnInit {
         });
     });
   }
-
 
 
   //등록된 가이드 리스트를 가져온다.
@@ -99,7 +111,7 @@ export class DocumentDevelopmentComponent implements OnInit {
     this.guidename = targetId
     this.guideId = this.guidename.toString()
     //name값을 받아 라우팅을 한다.
-    this.router.navigate(['/documentdevelopment'],{queryParams:{ buildpack_name: this.guidename}})
+    this.router.navigate(['/documentdevelopment'], {queryParams: {buildpack_name: this.guidename}})
     this.documentService.getGuide('/commonapi/v2/guides/' + this.guidename).subscribe(data => {
       if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
         this.division = data.data['gubun'];

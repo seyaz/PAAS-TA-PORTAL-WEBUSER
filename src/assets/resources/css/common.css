@@ -1565,7 +1565,6 @@ body.error_b{background:#f0f2f2;}
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
 #document-div li {
   display: list-item !important;
   text-align: -webkit-match-parent;
@@ -1579,7 +1578,6 @@ body.error_b{background:#f0f2f2;}
   margin-block-end: 0px;
   padding-inline-start: 40px;
 }
-
 #document-div ol {
   display: block;
   list-style-type: decimal;
@@ -1589,7 +1587,6 @@ body.error_b{background:#f0f2f2;}
   margin-inline-end: 0px;
   padding-inline-start: 40px;
 }
-
 #document-div ul {
   display: block;
   /*list-style-type: disc;*/
@@ -1598,14 +1595,11 @@ body.error_b{background:#f0f2f2;}
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
-
-
 #document-div body {
   color: #272822;
   font-size: 15px;
   padding: 8px 16px;
 }
-
 #document-div body {
   margin: 0;
   font-weight: 400;
@@ -1613,27 +1607,22 @@ body.error_b{background:#f0f2f2;}
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
-
 #document-div h1 a {
   text-decoration: none;
 }
-
 #document-div h1 a:hover {
   opacity: 0.87;
   text-decoration: underline;
 }
-
 #document-div blockquote {
   border-left: 3px solid rgba(0,0,0,0.21);
   padding: 0px 0px 0px 12px;
   color: rgba(0,0,0,0.54);
 }
-
 #document-div p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
 #document-div p {
   display: block;
   margin-block-start: 1em;
@@ -1641,7 +1630,6 @@ body.error_b{background:#f0f2f2;}
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
-
 #document-div :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -1668,7 +1656,6 @@ body.error_b{background:#f0f2f2;}
   --bs-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
 }
-
 #document-div ::marker {
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
@@ -1677,16 +1664,346 @@ body.error_b{background:#f0f2f2;}
   text-align: start !important;
   text-align-last: start !important;
 }
-
 #document-div *, ::after, ::before {
   box-sizing: border-box;
 }
-
 #document-div .col-in-bg dt ul li {
   display: inline-block !important;
 }
-
 #document-div *, ::after, ::before {
   box-sizing: border-box;
 }
 /* 210811 추가 끝 */
+
+/*20210812추가*/
+#document-div pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+#document-div .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em; /* Same as .prism’s padding-top */
+
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+
+  pointer-events: none;
+
+  line-height: inherit;
+  white-space: pre;
+}
+@media print {
+  #document-div .line-highlight {
+    /*
+     * This will prevent browsers from replacing the background color with white.
+     * It's necessary because the element is layered on top of the displayed code.
+     */
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+#document-div .line-highlight:before,
+.line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+#document-div .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}
+#document-div .line-numbers .line-highlight:before,
+.line-numbers .line-highlight:after {
+  content: none;
+}
+#document-div pre[id].linkable-line-numbers span.line-numbers-rows {
+  pointer-events: all;
+}
+#document-div pre[id].linkable-line-numbers span.line-numbers-rows > span:before {
+  cursor: pointer;
+}
+#document-div pre[id].linkable-line-numbers span.line-numbers-rows > span:hover:before {
+  background-color: rgba(128, 128, 128, .2);
+}
+#document-div pre[class*="language-"].line-numbers {
+  position: relative;
+  padding-left: 3.8em;
+  counter-reset: linenumber;
+}
+#document-div pre[class*="language-"].line-numbers > code {
+  position: relative;
+  white-space: inherit;
+}
+#document-div .line-numbers .line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  font-size: 100%;
+  left: -3.8em;
+  width: 3em; /* works for line-numbers below 1000 lines */
+  letter-spacing: -1px;
+  border-right: 1px solid #999;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+}
+#document-div .line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+}
+#document-div .line-numbers-rows > span:before {
+  content: counter(linenumber);
+  color: #999;
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+}
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+#document-div code[class*="language-"],
+pre[class*="language-"] {
+  color: black;
+  background: none;
+  text-shadow: 0 1px white;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+#document-div pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+#document-div pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+@media print {
+  #document-div code[class*="language-"],
+  pre[class*="language-"] {
+    text-shadow: none;
+  }
+}
+/* Code blocks */
+#document-div pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+}
+#document-div :not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #f5f2f0;
+}
+/* Inline code */
+#document-div :not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+#document-div .token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray;
+}
+#document-div .token.punctuation {
+  color: #999;
+}
+#document-div .token.namespace {
+  opacity: .7;
+}
+#document-div .token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #990055;
+}
+#document-div .token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #690;
+}
+#document-div .token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+  /* This background color was intended by the author of this theme. */
+  background: hsla(0, 0%, 100%, .5);
+}
+#document-div .token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #07a;
+}
+#document-div .token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+#document-div .token.regex,
+.token.important,
+.token.variable {
+  color: #e90;
+}
+#document-div .token.important,
+.token.bold {
+  font-weight: bold;
+}
+#document-div .token.italic {
+  font-style: italic;
+}
+#document-div .token.entity {
+  cursor: help;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+#document-div code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  background: none;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+/* Code blocks */
+#document-div pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+#document-div :not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #272822;
+}
+/* Inline code */
+#document-div :not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+#document-div .token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #8292a2;
+}
+#document-div .token.punctuation {
+  color: #f8f8f2;
+}
+#document-div .token.namespace {
+  opacity: .7;
+}
+#document-div .token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f92672;
+}
+#document-div .token.boolean,
+.token.number {
+  color: #ae81ff;
+}
+#document-div .token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #a6e22e;
+}
+#document-div .token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #f8f8f2;
+}
+#document-div .token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #e6db74;
+}
+#document-div .token.keyword {
+  color: #66d9ef;
+}
+#document-div .token.regex,
+.token.important {
+  color: #fd971f;
+}
+#document-div .token.important,
+.token.bold {
+  font-weight: bold;
+}
+#document-div .token.italic {
+  font-style: italic;
+}
+#document-div .token.entity {
+  cursor: help;
+}
+
+/*20210812 수정끝*/

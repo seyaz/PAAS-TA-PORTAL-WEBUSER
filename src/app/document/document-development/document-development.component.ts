@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {DOCUMENTURLConstant} from "../common/document.constant";
 import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, Routes} from "@angular/router";
 import {DocumentService} from "../document.service";
 import {NGXLogger} from "ngx-logger";
 import {MarkdownService} from "ngx-markdown";
@@ -49,8 +49,10 @@ export class DocumentDevelopmentComponent implements OnInit {
   markdownimg: string;
   buildpackdevelop: string;
   documentcontant = DOCUMENTURLConstant;
+  paramsOne : string;
 
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
+   this.paramsOne = route.snapshot.params['build_name'];
   }
 
   ngOnInit() {
@@ -96,6 +98,8 @@ export class DocumentDevelopmentComponent implements OnInit {
     const targetId = event.target.id
     this.guidename = targetId
     this.guideId = this.guidename.toString()
+    //name값을 받아 라우팅을 한다.
+    this.router.navigate(['/documentdevelopment'],{queryParams:{ buildpack_name: this.guidename}})
     this.documentService.getGuide('/commonapi/v2/guides/' + this.guidename).subscribe(data => {
       if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
         this.division = data.data['gubun'];

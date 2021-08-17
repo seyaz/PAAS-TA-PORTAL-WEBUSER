@@ -40,7 +40,7 @@
 
 .variable-binding {
   display: block;
-  float: right;
+  /*float: right;*/
 }
 
 h1 a {

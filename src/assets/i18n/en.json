@@ -748,7 +748,8 @@
       "userGuide": "User guide",
       "buildpack_system": "System App Development",
       "buildpack_custom": "User App Development",
-      "guideFail": "No guide information found."
+      "guideFail": "No guide information found.",
+      "appServiceGuide" : "App Service Guide"
     },
     "userguide": {
     }

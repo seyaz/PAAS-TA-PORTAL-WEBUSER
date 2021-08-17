@@ -1,0 +1,29 @@
+<head>
+  <script src='../document/css/components/prism-css.min.js'></script>
+  <script src='../document/css/plugins/line-numbers/prism-line-numbers.js'></script>
+  <script src='../document/css/plugins/line-highlight/prism-line-highlight.js'></script>
+  <script src='../document/css/components/prism.js'></script>
+  <script src='../document/css/bootstrap.min.css'></script>
+  <script src='../document/css/css/themes/prism.css"'></script>
+  <script src='../document/css/themes/prism-okaidia.css'></script>
+</head>
+<div class="wrap dashboard">
+  <app-app-top [cursorId]="'cur_document'"></app-app-top>
+  <app-document-nav></app-document-nav>
+
+  <div class="contain" id="document-div">
+    <div class="content document_wrap">
+      <div class="row one_line maT30">
+        <div class="col-md-6">
+          <div>
+            <div><a [routerLink]="['/documentdevelopment']">{{ 'document.guide.buildpackGuide' | translate }}</a></div>
+            <div><a [routerLink]="['/documentservice']">{{ 'document.guide.serviceGuide' | translate }}</a></div>
+            <div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
+  </div>
+</div>

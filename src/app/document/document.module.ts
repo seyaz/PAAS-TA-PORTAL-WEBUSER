@@ -14,6 +14,8 @@ import {DocumentNavComponent} from "./document-layout/document-nav/document-nav.
 import {MarkdownModule, MarkdownService, MarkedOptions} from "ngx-markdown";
 import {HttpClient} from "@angular/common/http";
 import {DocumentUserComponent} from "./document-user/document-user.component";
+import {DocumentAppComponent} from "./document-app/document-app.component";
+
 
 @NgModule({
   imports: [
@@ -44,6 +46,7 @@ import {DocumentUserComponent} from "./document-user/document-user.component";
     DocumentDevelopmentComponent,
     DocumentNavComponent,
     DocumentUserComponent,
+    DocumentAppComponent,
 
   ],
   providers: [

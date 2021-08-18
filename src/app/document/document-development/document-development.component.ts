@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {DOCUMENTURLConstant} from "../common/document.constant";
 import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute, Router, Routes} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router, Routes} from "@angular/router";
 import {DocumentService} from "../document.service";
 import {NGXLogger} from "ngx-logger";
 import {MarkdownService} from "ngx-markdown";
@@ -12,6 +12,9 @@ import "../css/plugins/line-highlight/prism-line-highlight.js";
 import "../css/components/prism.js";
 import "../css/components/prism-typescript.min.js";
 import {isNullOrUndefined} from "util";
+import {Location} from "@angular/common";
+import {Subscription} from "rxjs";
+
 
 declare var $: any;
 declare var jQuery: any;
@@ -31,10 +34,6 @@ export class DocumentDevelopmentComponent implements OnInit {
   guideId: string; //가이드 이름-> 아이디
   guides: Array<any> = new Array<any>();
   guidelist: Array<any> = new Array<any>();
-  guidelistname: string;
-  guidelistsummary: string;
-  guidelistdivision: string;
-  getguide: any;
   division: string;//가이드 gubun
   summary: string; // 가이드 gubun2
   markdown: any;
@@ -47,12 +46,13 @@ export class DocumentDevelopmentComponent implements OnInit {
   guideimgs: Array<any> = new Array<any>();
   imgs: any;
   imgform: string;
-  markdownimg: string;
   buildpackdevelop: string;
   documentcontant = DOCUMENTURLConstant;
   paramsOne: string;
 
-  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
+
+  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService
+    , private location: Location) {
     this.paramsOne = route.snapshot.params['build_name'];
   }
 
@@ -163,4 +163,21 @@ export class DocumentDevelopmentComponent implements OnInit {
     this.documentService.isLoading(false);
   }
 
+  goBack() {
+    this.location.back();
+    this.onRefresh();
+  }
+
+  onRefresh() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    let currentUrl = this.router.url + '?';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
+
+    })
+  }
 }
+

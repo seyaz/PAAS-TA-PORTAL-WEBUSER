@@ -10,7 +10,7 @@ import "../css/plugins/line-numbers/prism-line-numbers.js";
 import "../css/plugins/line-highlight/prism-line-highlight.js";
 import "../css/components/prism.js";
 import "../css/components/prism-typescript.min.js";
-
+import {Location} from "@angular/common";
 
 declare var $: any;
 declare var jQuery: any;
@@ -25,12 +25,29 @@ declare var jQuery: any;
 
 export class DocumentUserComponent implements OnInit {
 
-  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
+  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute,
+              private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService, private location: Location) {
   }
 
   ngOnInit() {
 
   }
 
+  goBack() {
+    this.location.back();
+    this.onRefresh();
+  }
+
+  onRefresh() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    let currentUrl = this.router.url + '?';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
+
+    })
+  }
 }
 

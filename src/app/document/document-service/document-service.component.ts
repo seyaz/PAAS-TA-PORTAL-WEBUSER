@@ -12,7 +12,7 @@ import "../css/plugins/line-highlight/prism-line-highlight.js";
 import "../css/components/prism.js";
 import "../css/components/prism-typescript.min.js";
 import {isNullOrUndefined} from "util";
-
+import {Location} from "@angular/common";
 
 declare var $: any;
 declare var jQuery: any;
@@ -30,10 +30,6 @@ export class DocumentServiceComponent implements OnInit {
   guideId: string; //가이드 이름-> 아이디
   guides: Array<any> = new Array<any>();
   guidelist: Array<any> = new Array<any>();
-  guidelistname: string;
-  guidelistsummary: string;
-  guidelistdivision: string;
-  getguide: any;
   division: string;//가이드 gubun
   summary: string; // 가이드 gubun2
   markdown: any;
@@ -46,18 +42,19 @@ export class DocumentServiceComponent implements OnInit {
   guideimgs: Array<any> = new Array<any>();
   imgs: any;
   imgform: string;
-  markdownimg: string;
   servicedevelop: string;
-
+  searchhref: string;
+  pathname: string;
   documentcontant = DOCUMENTURLConstant;
 
-  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
+  constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService,
+              private log: NGXLogger, private markdownService: MarkdownService, private location: Location) {
   }
 
   ngOnInit() {
     this.doLayout()
     this.doGetGuideList()
-    if(!isNullOrUndefined(this.route.snapshot.queryParams['service_name'])){
+    if (!isNullOrUndefined(this.route.snapshot.queryParams['service_name'])) {
       this.documentService.getGuide('/commonapi/v2/guides/' + this.route.snapshot.queryParams['service_name']).subscribe(data => {
         if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
           this.division = data.data['gubun'];
@@ -87,7 +84,6 @@ export class DocumentServiceComponent implements OnInit {
       this.guides.push(data)
       this.guidelist = this.guides['0']['data']
       this.servicedevelop = '앱 서비스';
-
       // for(var i = 0; i < this.guidelist.length; i++) {
       //   Object.keys(this.guidelist).forEach(key=>{
       //       const guidObj = this.guidelist[key];
@@ -104,10 +100,13 @@ export class DocumentServiceComponent implements OnInit {
 
   // 가이드를 가져온다.
   doGetService(event) {
+    this.pathname = window.location.pathname;
+    this.searchhref = window.location.search;
+    console.log("주소=" + this.pathname + this.searchhref)
     const targetId = event.target.id
     this.guidename = targetId
     this.guideId = this.guidename.toString()
-    this.router.navigate(['/documentservice'],{queryParams:{ service_name: this.guidename}})
+    this.router.navigate(['/documentservice'], {queryParams: {service_name: this.guidename}})
     this.documentService.getGuide('/commonapi/v2/guides/' + this.guidename).subscribe(data => {
       if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
         this.division = data.data['gubun'];
@@ -157,5 +156,22 @@ export class DocumentServiceComponent implements OnInit {
   errorMsg(value: any) {
     this.documentService.alertMessage(value, false);
     this.documentService.isLoading(false);
+  }
+
+  goBack() {
+    this.location.back();
+    this.onRefresh();
+  }
+
+  onRefresh() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    let currentUrl = this.router.url + '?';
+    this.router.navigateByUrl(currentUrl).then(() => {
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
+
+    })
   }
 }

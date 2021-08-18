@@ -26,23 +26,11 @@ declare var jQuery: any;
 
 export class DocumentComponent implements OnInit {
 
-  guidename: string; //가이드 이름
-  guideId: string; //가이드 이름-> 아이디
+  location: string;
   guides: Array<any> = new Array<any>();
-  guidelist: Array<any> = new Array<any>();
-  guidelistname: string;
-  guidelistsummary: string;
-  getguide: any;
-  division: string;//가이드 gubun
   summary: string; // 가이드 gubun2
   markdown: any;
-  imgname: string;
-  imgpath: string;
-  imgsummary: string;
   translateEntities: any = [];
-  imgs: any;
-  documentcontant = DOCUMENTURLConstant;
-
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService) {
   }
 
@@ -60,5 +48,6 @@ export class DocumentComponent implements OnInit {
         });
     });
   }
+
 }
 

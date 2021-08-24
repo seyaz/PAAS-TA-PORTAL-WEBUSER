@@ -749,7 +749,13 @@
       "buildpack_system": "System App Development",
       "buildpack_custom": "User App Development",
       "guideFail": "No guide information found.",
-      "appServiceGuide" : "App Service Guide"
+      "appServiceGuide" : "App Service Guide",
+      "serviceGuide_A" : "Service Guide A",
+      "serviceGuide_B" : "Service Guide B",
+      "serviceGuide_C" : "Service Guide C",
+      "installGuide_A" : "Service Install Guide A",
+      "installGuide_B" : "Service Install Guide B",
+      "serviceUseGuide" : "Service Use Guide B"
     },
     "userguide": {
     }

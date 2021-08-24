@@ -18,9 +18,8 @@
           <div>
             <div *ngFor="let guide of this.guidelist">
               <tr *ngIf="guide.gubun == this.servicedevelop">
-                <td id="{{guide.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guide.gubun2}}</td>
-                <!--                <td>{{guide.gubun}}</td>-->
-                <!--                <td>{{guide.gubun2}}</td>-->
+                <td id="{{guide.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guide.name}}</td>
+
                 <td id="guideImg"></td>
               </tr>
             </div>

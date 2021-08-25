@@ -91,15 +91,6 @@ export class DocumentDevelopmentComponent implements OnInit {
       this.guidelist = this.guides['0']['data']
       this.buildpackdevelop = '앱 개발환경';
 
-      // for(var i = 0; i < this.guidelist.length; i++) {
-      //   Object.keys(this.guidelist).forEach(key=>{
-      //       const guidObj = this.guidelist[key];
-      //       this.guidelistname = guidObj['name']
-      //       this.guidelistsummary = guidObj['gubun']
-      //       this.guidelistdivision =guidObj['gubun2']
-      //       $("#guidelist").append('<tr id='+this.guidelistname+'><td> '+ this.guidelistname +' '+ this.guidelistsummary +' '+ this.guidelistdivision +' </td></tr>');
-      //   })
-      // }
     }, error => {
     });
   }

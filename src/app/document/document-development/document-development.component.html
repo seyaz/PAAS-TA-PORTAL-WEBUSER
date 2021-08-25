@@ -18,7 +18,6 @@
           <div *ngFor="let guide of this.guidelist">
             <tr *ngIf="guide.gubun == this.buildpackdevelop">
               <td id="{{guide.name}}" (click)="doGetBuild($event)" style="cursor: pointer">
-                {{guide.name}}
                 <!--                <td>{{guide.gubun}}</td> -->
                 <!--                <td>{{guide.gubun2}}</td>-->
               <td id="guideImg"></td>

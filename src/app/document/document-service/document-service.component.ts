@@ -43,8 +43,6 @@ export class DocumentServiceComponent implements OnInit {
   imgs: any;
   imgform: string;
   servicedevelop: string;
-  searchhref: string;
-  pathname: string;
   documentcontant = DOCUMENTURLConstant;
 
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute, private documentService: DocumentService,
@@ -84,15 +82,6 @@ export class DocumentServiceComponent implements OnInit {
       this.guides.push(data)
       this.guidelist = this.guides['0']['data']
       this.servicedevelop = '앱 서비스';
-      // for(var i = 0; i < this.guidelist.length; i++) {
-      //   Object.keys(this.guidelist).forEach(key=>{
-      //       const guidObj = this.guidelist[key];
-      //       this.guidelistname = guidObj['name']
-      //       this.guidelistsummary = guidObj['gubun']
-      //       this.guidelistdivision =guidObj['gubun2']
-      //       $("#guidelist").append('<tr id='+this.guidelistname+'><td> '+ this.guidelistname +' '+ this.guidelistsummary +' '+ this.guidelistdivision +' </td></tr>');
-      //   })
-      // }
     }, error => {
     });
   }
@@ -100,9 +89,6 @@ export class DocumentServiceComponent implements OnInit {
 
   // 가이드를 가져온다.
   doGetService(event) {
-    this.pathname = window.location.pathname;
-    this.searchhref = window.location.search;
-    console.log("주소=" + this.pathname + this.searchhref)
     const targetId = event.target.id
     this.guidename = targetId
     this.guideId = this.guidename.toString()

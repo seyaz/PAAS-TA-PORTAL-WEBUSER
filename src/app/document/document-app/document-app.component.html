@@ -16,52 +16,60 @@
       <div class="row one_line maT30">
         <div class="col-md-6">
           <div>
-            <div class="serviceguideA" style="font-weight: bold; font-size:3rem">{{ 'document.guide.serviceGuide_A' | translate }}</div>
-            <div class="serviceinstallA" style="font-weight: bold; font-size:2rem">{{ 'document.guide.installGuide_A' | translate }}</div>
-            <div *ngFor="let guideInstallA of this.serviceInstallA">
+            <div class="serviceguideA"><a style="font-weight: bold; font-size:3rem; display: block">{{ 'document.guide.serviceGuide_A' | translate }}</a>
+              <div class="serviceinstallA"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.installGuide_A' | translate }}</a>
+            <div class="viewinstallA" *ngFor="let guideInstallA of this.serviceInstallA">
               <div *ngIf="guideInstallA.gubun2 == this.serviceInstallguideA">
                 <tr>
-                <td id="{{guideInstallA.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guideInstallA.name}}</td>
+                <td class="serviceA" id="{{guideInstallA.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guideInstallA.name}}</td>
                 </tr>
+              </div>
+                </div>
               </div>
             </div>
           </div>
           <br>
-        <div class="serviceguideB" style="font-weight: bold; font-size:3rem">{{ 'document.guide.serviceGuide_B' | translate }}</div>
-          <div class="serviceinstallB" style="font-weight: bold; font-size:2rem">{{ 'document.guide.installGuide_B' | translate }}</div>
-        <div *ngFor="let guideInstallB of this.serviceInstallB">
+          <div class="serviceguideB"><a style="font-weight: bold; font-size:3rem; display: block">{{ 'document.guide.serviceGuide_B' | translate }}</a>
+            <div class="serviceinstallB"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.installGuide_B' | translate }}</a>
+        <div class="viewinstallB" *ngFor="let guideInstallB of this.serviceInstallB">
           <div *ngIf="guideInstallB.gubun2 == this.serviceInstallguideB">
             <tr>
             <td id="{{guideInstallB.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guideInstallB.name}}</td>
             </tr>
           </div>
         </div>
-          <div class="serviceuseB" style="font-weight: bold; font-size:2rem">{{ 'document.guide.serviceUseGuide' | translate }}</div>
-        <div *ngFor="let guideUseB of this.serviceUseB">
+          </div>
+             </div>
+          <div class="serviceuseB"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.serviceUseGuide' | translate }}</a>
+        <div class="viewuseB"*ngFor="let guideUseB of this.serviceUseB">
           <div *ngIf="guideUseB.gubun2 == this.serviceUseguideB">
             <tr>
             <td id="{{guideUseB.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guideUseB.name}}</td>
             </tr>
           </div>
         </div>
+          </div>
         <br>
-        <div class="serviceguideC" style="font-weight: bold; font-size:3rem">{{ 'document.guide.serviceGuide_C' | translate }}</div>
-        <div class="servicesystem" style="font-weight: bold; font-size:2rem">{{ 'document.guide.buildpack_system' | translate }}</div>
-          <div *ngFor="let buildpackSystem of this.system">
+          <div class="serviceguideC"><a style="font-weight: bold; font-size:3rem; display: block">{{ 'document.guide.serviceGuide_C' | translate }}</a>
+            <div class="servicesystem"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.buildpack_system' | translate }}</a>
+          <div class="viewsystem" *ngFor="let buildpackSystem of this.system">
             <div *ngIf="buildpackSystem.gubun2 == this.systemdevelope">
               <tr>
                 <td id="{{buildpackSystem.name}}" (click)="doGetBuild($event)" style="cursor: pointer">{{buildpackSystem.name}}</td>
               </tr>
             </div>
           </div>
-        <div class="servicecustom" style="font-weight: bold; font-size:2rem">{{ 'document.guide.buildpack_custom' | translate }}</div>
-          <div *ngFor="let buildpackCustom of this.custom">
+        </div>
+        </div>
+          <div class="servicecustom"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.buildpack_custom' | translate }}</a>
+          <div class="viewcustom" *ngFor="let buildpackCustom of this.custom">
             <div *ngIf="buildpackCustom.gubun2 == this.customdevelope">
               <tr>
                 <td id="{{buildpackCustom.name}}" (click)="doGetBuild($event)" style="cursor: pointer">{{buildpackCustom.name}}</td>
               </tr>
             </div>
           </div>
+        </div>
 <!--        <div><a [routerLink]="['/documentdevelopment']">{{ 'document.guide.buildpackGuide' | translate }}</a></div>-->
 <!--        <div><a [routerLink]="['/documentservice']">{{ 'document.guide.serviceGuide' | translate }}</a></div>-->
         <div>

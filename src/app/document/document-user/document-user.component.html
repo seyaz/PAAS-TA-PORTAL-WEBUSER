@@ -17,14 +17,15 @@
       <div class="row one_line maT30">
         <div class="col-md-6">
           <div>
-            <h2>사용자 가이드 페이지</h2>
-            <div>
-            </div>
+            <markdown class="variable-binding" [data]="portalguide"></markdown>
           </div>
+          <!-- to load from remote URL -->
         </div>
       </div>
     </div>
+    <div>
     <button class="backBtn"(click)="goBack()">이전의</button>
+    </div>
     <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
   </div>
 </div>

@@ -83,7 +83,7 @@ export class DocumentAppComponent implements OnInit {
           this.markdown = data.data['markdown'];
           this.getGuideImg()
         } else {
-          this.errorMsg(this.translateEntities.document.guideFail);
+          this.documentService.alertMessage("Error", false);
         }
       })
     }
@@ -95,7 +95,7 @@ export class DocumentAppComponent implements OnInit {
           this.markdown = data.data['markdown'];
           this.getGuideImg()
         } else {
-          this.errorMsg(this.translateEntities.document.guideFail);
+          this.documentService.alertMessage("Error", false);
         }
       })
     }
@@ -114,17 +114,15 @@ export class DocumentAppComponent implements OnInit {
   //등록된 가이드 리스트를 가져온다.
   doGetGuideList() {
     this.documentService.getGuides('/commonapi/v2/guides').subscribe(data => {
-      this.guides.push(data)
-      this.guidelist = this.guides['0']['data']
-      this.servicedevelop = '앱 서비스';
-    }, error => {
-    });
-    this.documentService.getGuides('/commonapi/v2/guides').subscribe(data => {
-      this.guides.push(data)
-      this.guidelist = this.guides['0']['data']
-      this.buildpackdevelop = '앱 개발환경';
-    }, error => {
-    });
+        this.guides.push(data)
+        this.guidelist = this.guides['0']['data']
+        this.servicedevelop = '앱 서비스';
+        this.buildpackdevelop = '앱 개발환경';
+
+      },
+
+      error => {
+      });
   }
 
   doGetServiceGuide() {
@@ -153,6 +151,7 @@ export class DocumentAppComponent implements OnInit {
         }
       }
     }, error => {
+      this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
     });
   }
 
@@ -170,7 +169,7 @@ export class DocumentAppComponent implements OnInit {
         this.markdown = data.data['markdown'];
         this.getGuideImg()
       } else {
-        this.errorMsg(this.translateEntities.document.guideFail);
+        this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
       }
     })
   }
@@ -193,6 +192,7 @@ export class DocumentAppComponent implements OnInit {
         }
       }
     }, error => {
+      this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
     });
   }
 

@@ -62,12 +62,16 @@ export class DocumentDevelopmentComponent implements OnInit {
     if (!isNullOrUndefined(this.route.snapshot.queryParams['buildpack_name'])) {
       this.documentService.getGuide('/commonapi/v2/guides/' + this.route.snapshot.queryParams['buildpack_name']).subscribe(data => {
         if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
+          if(data.data['useYn']=='N'){
+            this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
+            return false;
+          }
           this.division = data.data['gubun'];
           this.summary = data.data['gubun2'];
           this.markdown = data.data['markdown'];
           this.getGuideImg()
         } else {
-          this.errorMsg(this.translateEntities.document.guideFail);
+          this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
         }
       })
     }
@@ -90,8 +94,8 @@ export class DocumentDevelopmentComponent implements OnInit {
       this.guides.push(data)
       this.guidelist = this.guides['0']['data']
       this.buildpackdevelop = '앱 개발환경';
-
     }, error => {
+      this.documentService.alertMessage("가이드를 찾을 수 없습니다.", false);
     });
   }
 

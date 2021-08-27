@@ -16,13 +16,6 @@
       <div class="row one_line maT30">
         <div class="col-md-6">
           <div>
-            <div *ngFor="let guide of this.guidelist">
-              <tr *ngIf="guide.gubun == this.servicedevelop">
-                <td id="{{guide.name}}" (click)="doGetService($event)" style="cursor: pointer"></td>
-
-                <td id="guideImg"></td>
-              </tr>
-            </div>
             <textarea class="variable-textarea" style="display: none" [(ngModel)]="markdown"></textarea>
             <!--  어드민에 등록되어 있는 markdown 데이터-->
             <markdown class="variable-binding" [data]="markdown">

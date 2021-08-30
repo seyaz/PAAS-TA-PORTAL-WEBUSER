@@ -11,6 +11,7 @@ import "../css/plugins/line-highlight/prism-line-highlight.js";
 import "../css/components/prism.js";
 import "../css/components/prism-typescript.min.js";
 import {Location} from "@angular/common";
+import {DOCUMENTURLConstant} from "../common/document.constant";
 
 declare var $: any;
 declare var jQuery: any;
@@ -25,12 +26,24 @@ declare var jQuery: any;
 
 export class DocumentUserComponent implements OnInit {
 
+  guidename: string; //가이드 이름
+  guideId: string; //가이드 이름-> 아이디
+  guides: Array<any> = new Array<any>();
+  guidelist: Array<any> = new Array<any>();
+  division: string;//가이드 gubun
+  summary: string; // 가이드 gubun2
+  markdown: any;
+  translateEntities: any = [];
+  guideimgs: Array<any> = new Array<any>();
+  servicedevelop: string;
+  paramsOne:string;
 
   constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute,
               private documentService: DocumentService, private log: NGXLogger, private markdownService: MarkdownService, private location: Location) {
+    this.paramsOne = route.snapshot.params['userguide_name'];
   }
 
-   portalguide ='# PaaS-TA 사용자 포탈 가이드\n' +
+  portalguide = '# PaaS-TA 사용자 포탈 가이드\n' +
     '## 목차\n' +
     '- 1. 문서 개요····························································································································································\n' +
     '   - 1.1. 목적·····················································································································································\n' +
@@ -211,10 +224,11 @@ export class DocumentUserComponent implements OnInit {
     '[user_image33]:../../../assets/resources/images/document/userguide/user_image33.png\n' +
     '[user_image34]:../../../assets/resources/images/document/userguide/user_image34.png\n';
 
+
   ngOnInit() {
-
+    $(".variable-binding").hide();
+    $(".variable-binding-2").hide();
   }
-
 
   goBack() {
     this.location.back();
@@ -232,5 +246,50 @@ export class DocumentUserComponent implements OnInit {
 
     })
   }
+
+  viewGuide(event) {
+    const targetId = event.target.text
+    this.guidename = targetId
+    this.guideId = this.guidename.toString()
+    this.router.navigate(['/documentuser'], {queryParams: {userguide_name: this.guidename}})
+    $(".portal-guide").hide();
+    $(".cf-guide").hide();
+    /*$(".variable-binding").hide();*/
+    if ($(".variable-binding").css("display") == "none") {
+      $(".variable-binding").show();
+      $(".variable-binding-2").hide();
+    } else {
+      $(".variable-binding").hide();
+      $(".variable-binding-2").hide();
+    }
+  }
+
+
+  // 가이드를 가져온다.
+  viewCfGuide(event) {
+    $(".portal-guide").hide();
+    $(".cf-guide").hide();
+    const targetId = event.target.text
+    this.guidename = targetId
+    this.guideId = this.guidename.toString()
+    this.router.navigate(['/documentuser'], {queryParams: {userguide_name: this.guidename}})
+    this.documentService.getGuide('/commonapi/v2/guides/' + this.guidename).subscribe(data => {
+      if (data['RESULT'] == DOCUMENTURLConstant.SUCCESS) {
+        this.division = data.data['gubun'];
+        this.summary = data.data['gubun2'];
+        this.markdown = data.data['markdown'];
+        if ($(".variable-binding-2").css("display") == "none") {
+          $(".variable-binding-2").show();
+          $(".variable-binding").hide();
+        } else {
+          $(".variable-binding-2").hide();
+          $(".variable-binding").hide();
+        }
+      } else {
+        this.documentService.alertMessage("가이드를 찾을 수 없습니다.", false);
+      }
+    })
+  }
 }
+
 

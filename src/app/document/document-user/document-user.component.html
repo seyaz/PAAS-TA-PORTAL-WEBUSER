@@ -16,8 +16,11 @@
     <div class="content document_wrap">
       <div class="row one_line maT30">
         <div class="col-md-6" style="padding-bottom: 120px;">
+          <div class="portal-guide"><a (click)="viewGuide($event)" style="cursor: pointer">{{ 'document.guide.portalUserGuide' | translate }}</a></div>
+          <div class="cf-guide"><a (click)="viewCfGuide($event)" style="cursor: pointer">{{ 'document.guide.cfUserGuide' | translate }}</a></div>
           <div>
             <markdown class="variable-binding" [data]="portalguide"></markdown>
+            <markdown class="variable-binding-2"[data]="markdown"></markdown>
           </div>
           <!-- to load from remote URL -->
         </div>

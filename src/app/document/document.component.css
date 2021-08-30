@@ -10,7 +10,8 @@
 
 /*style="all:unset"*/
 .variable-binding,
-.variable-textarea {
+.variable-textarea,
+.variable-binding-2{
   list-style: circle !important;
   list-style-position: initial !important;
   list-style-image: initial !important;
@@ -38,7 +39,8 @@
   0 2px 3px 1px rgba(0,0,0,.06);
 }
 
-.variable-binding {
+.variable-binding,
+.variable-binding-2{
   display: block;
   /*float: right;*/
 }
@@ -161,7 +163,8 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-.variable-binding li{
+.variable-binding li,
+.variable-binding-2 li{
   list-style: circle !important;
   list-style-position: initial !important;
   list-style-image: initial !important;

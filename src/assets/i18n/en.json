@@ -755,9 +755,9 @@
       "serviceGuide_C" : "Service Guide C",
       "installGuide_A" : "Service Install Guide A",
       "installGuide_B" : "Service Install Guide B",
-      "serviceUseGuide" : "Service Use Guide B"
-    },
-    "userguide": {
+      "serviceUseGuide" : "Service Use Guide B",
+      "portalUserGuide" : "Paas-TA Portal User Guide",
+      "cfUserGuide": "CF CLI User Guide"
     }
   }
 }

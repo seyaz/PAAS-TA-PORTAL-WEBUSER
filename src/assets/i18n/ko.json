@@ -762,9 +762,9 @@
       "serviceGuide_C" : "서비스 가이드 C",
       "installGuide_A" : "서비스 설치 가이드 A",
       "installGuide_B" : "서비스 설치 가이드 B",
-      "serviceUseGuide" : "서비스 사용 가이드 B"
-    },
-    "userguide": {
+      "serviceUseGuide" : "서비스 사용 가이드 B",
+      "portalUserGuide" : "Paas-TA 사용자 포탈 가이드",
+      "cfUserGuide":"CF CLI 사용 가이드"
     }
   }
 }

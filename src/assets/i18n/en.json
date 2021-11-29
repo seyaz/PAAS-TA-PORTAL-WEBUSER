@@ -743,6 +743,7 @@
   },
   "document": {
     "guide": {
+      "usageGuide": "Usage Guide",
       "serviceGuide": "Service Guide",
       "buildpackGuide": "Buildepack Guide",
       "userGuide": "User guide",
@@ -750,14 +751,18 @@
       "buildpack_custom": "User App Development",
       "guideFail": "No guide information found.",
       "appServiceGuide" : "App Service Guide",
-      "serviceGuide_A" : "Service Guide A",
-      "serviceGuide_B" : "Service Guide B",
       "serviceGuide_C" : "Service Guide C",
-      "installGuide_A" : "Service Install Guide A",
-      "installGuide_B" : "Service Install Guide B",
+      "installGuide_A" : "Application Platform Service Guide",
+      "installGuide_B" : "Cloud Development Guide",
       "serviceUseGuide" : "Service Use Guide B",
       "portalUserGuide" : "Paas-TA Portal User Guide",
       "cfUserGuide": "CF CLI User Guide"
+    },
+    "list": {
+      "guide": "Guide",
+      "serviceGuide": "Service Guide",
+      "usageGuide": "Usage Guide",
+      "devGuide": "Dev Guide"
     }
   }
 }

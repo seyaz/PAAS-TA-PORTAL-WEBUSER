@@ -1,0 +1,63 @@
+<head>
+  <script src='../document/css/components/prism-css.min.js'></script>
+  <script src='../document/css/plugins/line-numbers/prism-line-numbers.js'></script>
+  <script src='../document/css/plugins/line-highlight/prism-line-highlight.js'></script>
+  <script src='../document/css/components/prism.js'></script>
+  <script src='../document/css/bootstrap.min.css'></script>
+  <script src='../document/css/css/themes/prism.css"'></script>
+  <script src='../document/css/themes/prism-okaidia.css'></script>
+</head>
+<div class="wrap dashboard">
+  <app-app-top [cursorId]="'cur_document'"></app-app-top>
+  <app-document-nav></app-document-nav>
+  <div class="contain" id="document-div">
+    <div class="content document_wrap">
+      <div class="row one_line maT30">
+<!--        <div class="col-md-12">-->
+<!--          <div class="input-group">-->
+<!--            <div class="input-group-btn">-->
+<!--              <button name="button" class="btn" type="button"><i class="fas fa-search"></i></button>-->
+<!--            </div>-->
+<!--            <input class="form-control" id="document-search" type="text" placeholder="Document Search" (keyup)="Search()"/>-->
+<!--          </div>-->
+<!--        </div>-->
+        <div class="col-md-6" style="padding-bottom: 120px;">
+          <div>
+            <div class="serviceguideA">
+              <a style="font-weight: bold; font-size:3rem; display: block"><img src="/assets/resources/images/favicon.png" alt=""/>&nbsp;{{ 'document.guide.usageGuide' | translate }}</a>
+              <div class="serviceinstallA"><br>
+                <div class="serviceinstallA">
+                  <a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.installGuide_A' | translate }}</a><br>
+                  <div class="viewinstallA" *ngFor="let guideInstallA of this.serviceInstallA">
+                    <div *ngIf="guideInstallA.gubun2 == this.serviceInstallguideA && guideInstallA.useYn == 'Y'">
+                      <tr>
+                        <i class="fas fa-book"></i> &nbsp;&nbsp;
+                        <td class="serviceA" id="{{guideInstallA.name}}" (click)="doGetService($event)" style="cursor: pointer;">{{guideInstallA.name}}</td>
+                      </tr><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="serviceinstallB"><a style="font-weight: bold; font-size:2rem; display: block">{{ 'document.guide.installGuide_B' | translate }}</a><br>
+            <div class="viewinstallB" *ngFor="let guideInstallB of this.serviceInstallB">
+              <div *ngIf="guideInstallB.gubun2 == this.serviceInstallguideB && guideInstallB.useYn == 'Y'">
+                <tr>
+                  <i class="fas fa-book"></i> &nbsp;&nbsp;
+                  <td id="{{guideInstallB.name}}" (click)="doGetService($event)" style="cursor: pointer">{{guideInstallB.name}}</td>
+                </tr><br>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">Copyright © 2018 PaaS-TA. All rights reserved</div>
+  </div>
+</div>
+

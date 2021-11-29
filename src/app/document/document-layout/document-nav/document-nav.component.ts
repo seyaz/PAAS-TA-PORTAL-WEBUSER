@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {isNullOrUndefined, isUndefined} from "util";
 import {DocumentService} from "../../document.service";
+import {DOCUMENTURLConstant} from "../../common/document.constant";
 declare var $: any;
 declare var jQuery: any;
 @Component({
@@ -11,9 +12,17 @@ declare var jQuery: any;
 })
 export class DocumentNavComponent implements OnInit {
   translateEntities : any;
-  constructor(public documentService: DocumentService, public router: Router) {
+  //serviceGuideList : string;
+  serviceGuide: string;
+  catalog : string;
+  summary : string;
+  devGuide: string;
+  guides: Array<any> = new Array<any>();
+  guideEntities : Array<any> = new Array<any>();
+  serviceGuideEntities : Array<any> = new Array<any>();
+  devGuideEntities : Array<any> = new Array<any>();
 
-  }
+  constructor(public documentService: DocumentService, public router: Router) {}
 
   ngOnInit() {
     this.navStyle(1);
@@ -21,90 +30,76 @@ export class DocumentNavComponent implements OnInit {
 
   viewMain(number) {
     this.router.navigate(['document']);
+    this.documentService.navView = 'viewAll';
     this.navStyle(number);
     this.classNavSetting(number);
-    this.documentService.navView = 'viewAll';
-    this.documentService.buildPackfilter = '';
-    //this.documentService.buildPackFilter();
-    this.documentService.servicePackfilter = '';
-    this.documentService.servicePackFilter();
+    // this.documentService.serviceguidefilter = '';
+    // this.documentService.serviceGuideFilter();
+    // this.documentService.devguidefilter = '';
+    // this.documentService.devGuideFilter();
   }
 
-  viewStarterPack(number){
-    if(this.router.url !== '/document'){
+  viewServiceGuide(number) {
+    if (this.router.url !== '/document') {
       this.documentService.check = false;
       this.documentService.classname = '#nav_second';
     }
     this.router.navigate(['document']);
-    //this.documentService.viewPacks(true, false, false);
+    this.documentService.viewPacks(true, false);
     this.navStyle(number);
     this.classNavSetting(number);
-    if(number === 2){
-    this.documentService.navView = 'appTemplate';}
-    else{this.documentService.navView = 'basicType';}
+    if (number === 2) {
+      this.getServiceGuideList();
+    }
   }
 
-  viewBuildPack(value, number){
-    if(this.router.url !== '/document'){
+  viewDevGuide(number) {
+    if (this.router.url !== '/document') {
       this.documentService.check = false;
       this.documentService.classname = '#nav_third';
     }
     this.router.navigate(['document']);
-    //this.documentService.viewPacks(false, true, false); //보여질 pack
-    if(!isNullOrUndefined(value)) {
-      this.documentService.buildPackfilter = value;
-      this.documentService.navView = value;
+    this.documentService.viewPacks(false, true);
+
+    if (number === 4) {
+      this.getDevGuideList();
     }
-    else {
-      this.documentService.buildPackfilter = '';
-      number = 4;
-      this.documentService.navView = 'appDevelopment';
-    }
-   // this.documentService.buildPackFilter();
-    this.classNavSetting(number);
     this.navStyle(number);
-  }
-
-  viewServicePack(value, number){
-    if(this.router.url !== '/document'){
-      this.documentService.check = false;
-      this.documentService.classname = '#nav_fourth';
-    }
-    this.router.navigate(['document']);
-   // this.documentService.viewPacks(false, false, true);
-    if(!isNullOrUndefined(value)) {
-      this.documentService.servicePackfilter = value;
-
-      this.documentService.navView = value;
-  }
-    else{
-      this.documentService.servicePackfilter = '';
-      this.documentService.navView = 'service';
-      number = 7;
-    }
-    this.documentService.servicePackFilter();
     this.classNavSetting(number);
-    this.navStyle(number);
-}
-
-  viewDocument(value, number){
-    if(this.router.url !== '/document'){
-      this.documentService.check = false;
-    }
-    this.router.navigate(['document']);
-    //this.documentService.viewPacks(false, false, false); //보여질 pack
-
-    this.classNavSetting(number);
-    this.navStyle(number);
   }
 
-  navSearch(){
-
+  getServiceGuideList(){
+    this.serviceGuide = '서비스 설치 가이드 A';
+    this.catalog = 'Y';
+    this.documentService.getGuide('/commonapi/v2/guides').subscribe(data => {
+      this.guideEntities = data['data'];
+      for (var i = 0; i < this.guideEntities.length; i++) {
+        if (this.serviceGuide == data['data'][i]['gubun2'] && this.catalog == data['data'][i]['useYn']) {
+          this.serviceGuideEntities = data['data'][i]['name'];
+        }
+      }
+    }, error => {
+      this.documentService.alertMessage("No Data", false);
+    });
   }
 
+  getDevGuideList(){
+    this.devGuide = '서비스 설치 가이드 B';
+    this.catalog = 'Y';
+    this.documentService.getGuide('/commonapi/v2/guides').subscribe(data => {
+      this.guideEntities = data['data'];
+      for (var i = 0; i < this.guideEntities.length; i++) {
+        if (this.devGuide == data['data'][i]['gubun2'] &&  this.catalog == data['data'][i]['useYn']) {
+          this.devGuideEntities = data['data'][i]['name'];
+        }
+      }
+    }, error => {
+      this.documentService.alertMessage("No Data", false);
+    });
+  }
 
   navStyle(number){
-    let max = 13;
+    let max = 5;
     let min = 1;
     for(min; min <= max; min++){
       if(number === min){
@@ -129,15 +124,12 @@ export class DocumentNavComponent implements OnInit {
     $('#nav_first').attr('class','');
     $('#nav_second').attr('class','');
     $('#nav_third ').attr('class','');
-    $('#nav_fourth').attr('class','');
     if(number == 1){
       $('#nav_first').attr('class','cur');
-    } else if(number > 1 && number < 4){
+    } else if(number > 1 && number < 3){
       $('#nav_second').attr('class','cur');
-    } else if(number > 3 && number < 7){
+    } else if(number > 3 && number < 5){
       $('#nav_third ').attr('class','cur');
-    } else {
-      $('#nav_fourth').attr('class','cur');
     }
   }
-  }
+}

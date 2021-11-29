@@ -19,7 +19,7 @@ let appConfig = require('assets/resources/env/config.json');
   templateUrl: './app-main.component.html',
   styleUrls: ['./app-main.component.css'],
 })
-export class AppMainComponent implements OnInit,OnDestroy {
+export class AppMainComponent implements OnInit, OnDestroy {
 
   apiversion = appConfig['apiversion'];
 
@@ -136,13 +136,13 @@ export class AppMainComponent implements OnInit,OnDestroy {
 
   public sltLaaSView: boolean = false;
   public sltLaaSUrl: string = '';
-  public mem_DirectInputClick : boolean = true;
-  public disk_DirectInputClick : boolean= true;
-  public cpu_Chart : any = undefined;
-  public memory_Chart : any = undefined;
-  public diskIO_Chart : any = undefined;
+  public mem_DirectInputClick: boolean = true;
+  public disk_DirectInputClick: boolean = true;
+  public cpu_Chart: any = undefined;
+  public memory_Chart: any = undefined;
+  public diskIO_Chart: any = undefined;
 
-  public interval : any;
+  public interval: any;
   alive = true;
 
   isLodingNums = 0;
@@ -156,7 +156,9 @@ export class AppMainComponent implements OnInit,OnDestroy {
     //     this.ngOnInit();
     //   });
 
-    this.interval = setInterval(() => { this.ngOnInit(); }, 1000 * 60 * 2);
+    this.interval = setInterval(() => {
+      this.ngOnInit();
+    }, 1000 * 60 * 2);
 
     this.translate.get('appMain').subscribe((res: string) => {
       this.translateEntities = res;
@@ -323,14 +325,22 @@ export class AppMainComponent implements OnInit,OnDestroy {
       this.appSummaryGuid = data.guid;
       this.appSummaryState = data.state;
       if (!isNullOrUndefined(data.routes.length) && data.routes.length > 0) {
-        if(data.routes[0].path != null){
+        if (data.routes[0].path != null) {
           this.appSummaryRouteUri = data.routes[0].host + "." + data.routes[0].domain.name + data.routes[0].path;
         } else {
           this.appSummaryRouteUri = data.routes[0].host + "." + data.routes[0].domain.name;
         }
       }
+
       if (data.package_updated_at != null) {
-        this.appSummaryPackageUpdatedAt = data.package_updated_at.replace('T', '  ').replace('Z', ' ');
+        this.appMainService.getAppEvents(guid).subscribe(data => {
+          this.appEventsEntities = data.resources;
+          var appEventsEntitiesFirstValueT = this.appEventsEntities[0].metadata.updated_at;
+          var appPackageUpdatedAt = appEventsEntitiesFirstValueT.replace('T', '  ').replace('Z', ' ');
+          let nomDate = require('moment');
+          var kstDate = nomDate(appPackageUpdatedAt).add(9, 'hours').format('YYYY-MM-DD HH:mm:ss');
+          this.appSummaryPackageUpdatedAt = kstDate;
+        });
       }
 
       if (data.detected_buildpack != null && data.detected_buildpack != "") {
@@ -393,11 +403,11 @@ export class AppMainComponent implements OnInit,OnDestroy {
   initRouteTab() {
     var appRoutes = [];
     $.each(this.appRoutesEntities, function (key, dataobj) {
-    if (dataobj.path != null) {
-      var uri = dataobj.host + "." + dataobj.domain.name + dataobj.path;
-    } else {
-      var uri = dataobj.host + "." + dataobj.domain.name;
-    }
+      if (dataobj.path != null) {
+        var uri = dataobj.host + "." + dataobj.domain.name + dataobj.path;
+      } else {
+        var uri = dataobj.host + "." + dataobj.domain.name;
+      }
       var obj = {
         uri: uri,
         guid: dataobj.guid
@@ -1117,9 +1127,13 @@ export class AppMainComponent implements OnInit,OnDestroy {
           iconClass = "glyphicon glyphicon-arrow-up";
         }
 
+        var utcDate = dataobj.metadata.created_at.replace('T', '  ').replace('Z', '')
+        let nomDate = require('moment');
+        var kstDate = nomDate(utcDate).add(9, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
         var obj = {
           iconClass: iconClass,
-          date: dataobj.metadata.created_at.replace('T', '  ').replace('Z', ''),
+          date: kstDate,
           type: dataobj.entity.type,
           actor_name: dataobj.entity.actor_name,
           requestText: requestText
@@ -1257,14 +1271,14 @@ export class AppMainComponent implements OnInit,OnDestroy {
       this.appAlarmAlarmUseYn = "N";
     }
 
-    if($("#appAutoscalingInstanceMinCnt").val() === "" ||
+    if ($("#appAutoscalingInstanceMinCnt").val() === "" ||
       $("#appAutoscalingInstanceMaxCnt").val() === "" ||
       $("#appAutoscalingCpuMinThreshold").val() === "" ||
       $("#appAutoscalingCpuMaxThreshold").val() === "" ||
       $("#appAutoscalingMemoryMinThreshold").val() === "" ||
       $("#appAutoscalingMemoryMaxThreshold").val() === "" ||
       $("#InstanceIncrementValue").val() === "" ||
-      $("#appAutoscalingMeasureTimeSec").val() === ""){
+      $("#appAutoscalingMeasureTimeSec").val() === "") {
       this.common.alertMessage(this.translateEntities.alertLayer.scalingFail, false);
       return;
     }
@@ -1368,14 +1382,14 @@ export class AppMainComponent implements OnInit,OnDestroy {
       this.appAutoscalingInYn = "N";
     }
 
-    if($("#appAutoscalingInstanceMinCnt").val() === "" ||
+    if ($("#appAutoscalingInstanceMinCnt").val() === "" ||
       $("#appAutoscalingInstanceMaxCnt").val() === "" ||
       $("#appAutoscalingCpuMinThreshold").val() === "" ||
       $("#appAutoscalingCpuMaxThreshold").val() === "" ||
       $("#appAutoscalingMemoryMinThreshold").val() === "" ||
       $("#appAutoscalingMemoryMaxThreshold").val() === "" ||
       $("#InstanceIncrementValue").val() === "" ||
-      $("#appAutoscalingMeasureTimeSec").val() === ""){
+      $("#appAutoscalingMeasureTimeSec").val() === "") {
       this.common.alertMessage(this.translateEntities.alertLayer.scalingFail, false);
       return;
     }
@@ -1660,7 +1674,7 @@ export class AppMainComponent implements OnInit,OnDestroy {
         var key = $("input[id^='serviceParamKey_']:eq(" + i + ")").val();
         var value = $("input[id^='serviceParamVal_']:eq(" + i + ")").val();
 
-        if(key.toUpperCase() === 'APP_GUID'){
+        if (key.toUpperCase() === 'APP_GUID') {
           value = this.appGuid;
         }
 
@@ -1957,7 +1971,7 @@ export class AppMainComponent implements OnInit,OnDestroy {
       return;
     }
     var speedCanvas2 = document.getElementById("speedChart2");
-    if(!isNullOrUndefined(this.memory_Chart)){
+    if (!isNullOrUndefined(this.memory_Chart)) {
       this.memory_Chart.destroy();
     }
 
@@ -2144,7 +2158,7 @@ export class AppMainComponent implements OnInit,OnDestroy {
       return;
     }
     var speedCanvas3 = document.getElementById("speedChart3");
-    if(!isNullOrUndefined(this.diskIO_Chart)){
+    if (!isNullOrUndefined(this.diskIO_Chart)) {
       this.diskIO_Chart.destroy();
     }
 

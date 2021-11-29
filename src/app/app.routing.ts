@@ -34,7 +34,7 @@ import {DocumentComponent} from "./document/document.component";
 import {DocumentServiceComponent} from "./document/document-service/document-service.component";
 import {DocumentDevelopmentComponent} from "./document/document-development/document-development.component";
 import {DocumentUserComponent} from "./document/document-user/document-user.component";
-import {DocumentAppComponent} from "./document/document-app/document-app.component";
+import {DocumentMainComponent} from "./document/document-main/document-main.component";
 
 /*
 * Route 모듈 설정
@@ -59,11 +59,11 @@ const routes: Routes = [
   {path: 'catalogdetail', component: CatalogDetailComponent, canActivate: [AuthGuard]},
   {path: 'catalogdevelopment', component: CatalogDevelopmentComponent, canActivate: [AuthGuard]},
   {path: 'catalogservice', component: CatalogServiceComponent, canActivate: [AuthGuard]},
-  {path: 'document', component: DocumentComponent},
+  {path: 'documentList', component: DocumentComponent},
   {path: 'documentdevelopment', component: DocumentDevelopmentComponent, canActivate: [AuthGuard]},
   {path: 'documentservice', component: DocumentServiceComponent, canActivate: [AuthGuard]},
   {path: 'documentuser', component: DocumentUserComponent, canActivate: [AuthGuard]},
-  {path: 'documentapp', component: DocumentAppComponent, canActivate: [AuthGuard]},
+  {path: 'document', component: DocumentMainComponent, canActivate: [AuthGuard]},
   {path: 'logout', component: LogoutComponent},
   {path: 'dashMain', component: DashMainComponent, canActivate: [AuthGuard]},
   {path: 'appMain', component: AppMainComponent, canActivate: [AuthGuard]},

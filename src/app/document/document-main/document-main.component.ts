@@ -22,12 +22,12 @@ declare var jQuery: any;
 
 @Component({
   selector: 'app-document',
-  templateUrl: './document-app.component.html',
+  templateUrl: './document-main.component.html',
   styleUrls: ['../document.component.css'],
 })
 
-export class DocumentAppComponent implements OnInit {
-
+export class DocumentMainComponent implements OnInit {
+  searchKeyword : string='';
   guidename: string; //가이드 이름
   guideId: string; //가이드 이름-> 아이디
   guides: Array<any> = new Array<any>();
@@ -47,6 +47,7 @@ export class DocumentAppComponent implements OnInit {
   servicedevelop: string;
   serviceInstallguideA: string;
   serviceInstallguideB: string;
+  serviceInstallguideC: string;
   serviceUseguideB: string;
   systemdevelope: string;
   customdevelope: string;
@@ -55,9 +56,11 @@ export class DocumentAppComponent implements OnInit {
   guidegubun2: string;
   servicenameA: string;
   servicenameB: Array<any> = new Array<any>();
+  servicenameC: Array<any> = new Array<any>();
   serviceusenameB: string;
   serviceInstallA: Array<any> = new Array<any>();
   serviceInstallB: Array<any> = new Array<any>();
+  serviceInstallC: Array<any> = new Array<any>();
   serviceUseB: Array<any> = new Array<any>();
   buildpackdevelop: string;
   buildpack_system: string;
@@ -118,9 +121,7 @@ export class DocumentAppComponent implements OnInit {
         this.guidelist = this.guides['0']['data']
         this.servicedevelop = '앱 서비스';
         this.buildpackdevelop = '앱 개발환경';
-
       },
-
       error => {
       });
   }
@@ -128,6 +129,7 @@ export class DocumentAppComponent implements OnInit {
   doGetServiceGuide() {
     this.serviceInstallguideA = '서비스 설치 가이드 A';
     this.serviceInstallguideB = '서비스 설치 가이드 B';
+    this.serviceInstallguideC = '서비스 설치 가이드 C';
     this.serviceUseguideB = '서비스 사용 가이드 B';
     this.documentService.getGuides('/commonapi/v2/guides').subscribe(data => {
       this.guides.push(data)
@@ -144,6 +146,11 @@ export class DocumentAppComponent implements OnInit {
           this.guidegubun2 = this.guides['0']['data'][i]['gubun2'];
           this.servicenameB = this.guides['0']['data'][i]['name'];
         }
+        if (this.guides['0']['data'][i]['gubun2'] == this.serviceInstallguideC) {
+          this.serviceInstallC = this.guides['0']['data']
+          this.guidegubun2 = this.guides['0']['data'][i]['gubun2'];
+          this.servicenameC = this.guides['0']['data'][i]['name'];
+        }
         if (this.guides['0']['data'][i]['gubun2'] == this.serviceUseguideB) {
           this.serviceUseB = this.guides['0']['data']
           this.guidegubun2 = this.guides['0']['data'][i]['gubun2'];
@@ -154,7 +161,6 @@ export class DocumentAppComponent implements OnInit {
       this.documentService.alertMessage("가이드가 존재하지 않습니다.", false);
     });
   }
-
 
   // 가이드를 가져온다.
   doGetService(event) {
@@ -259,6 +265,11 @@ export class DocumentAppComponent implements OnInit {
     this.onRefresh();
   }
 
+  Search()  {
+    this.searchKeyword = $("#document-search").val();
+  }
+
+
   onRefresh() {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -271,4 +282,3 @@ export class DocumentAppComponent implements OnInit {
     })
   }
 }
-

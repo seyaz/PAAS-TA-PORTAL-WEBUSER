@@ -28,7 +28,7 @@
     }
   },
   "/storageapi/*": {
-    "target": "http://172.30.200.29:2225/storageapi",
+    "target": "http://172.30.200.30:2225/storageapi",
     "logLevel": "debug",
     "secure": false,
     "changeOrigin": "true",

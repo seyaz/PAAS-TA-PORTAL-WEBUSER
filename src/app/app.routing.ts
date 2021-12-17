@@ -4,7 +4,7 @@ import {CfAppComponent} from './cf-app/cf-app.component';
 import {CatalogComponent} from './catalog/main/catalog.component';
 import {DomainComponent} from './domain/domain.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {UserComponent} from './user/user.component';
+import {VmComponent} from './vm/vm.component';
 import {UsageComponent} from './usage/usage.component';
 import {ServiceComponent} from './service/service.component';
 import {OrgMainComponent} from './org/org-main/org-main.component';
@@ -36,6 +36,7 @@ import {DocumentDevelopmentComponent} from "./document/document-development/docu
 import {DocumentUserComponent} from "./document/document-user/document-user.component";
 import {DocumentMainComponent} from "./document/document-main/document-main.component";
 
+
 /*
 * Route 모듈 설정
 */
@@ -54,7 +55,7 @@ const routes: Routes = [
   {path: 'orgproduce', component: OrgProduceComponent, canActivate: [AuthGuard]},
   {path: 'service', component: ServiceComponent, canActivate: [AuthGuard]},
   {path: 'usage', component: UsageComponent, canActivate: [AuthGuard]},
-  {path: 'user', component: UserComponent, canActivate: [AuthGuard]},
+  {path: 'vm', component: VmComponent, canActivate: [AuthGuard]},
   {path: 'usermgmt', component: UsermgmtComponent, canActivate: [AuthGuard]},
   {path: 'catalogdetail', component: CatalogDetailComponent, canActivate: [AuthGuard]},
   {path: 'catalogdevelopment', component: CatalogDevelopmentComponent, canActivate: [AuthGuard]},

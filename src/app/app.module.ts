@@ -8,7 +8,6 @@ import {LogComponent} from './log/log.component';
 import {MenuComponent} from './menu/menu.component';
 import {ServiceComponent} from './service/service.component';
 import {UsageComponent} from './usage/usage.component';
-import {UserComponent} from './user/user.component';
 import {CfAppComponent} from './cf-app/cf-app.component';
 import {RoutingModule} from './app.routing';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
@@ -36,6 +35,9 @@ import {ExternalModule} from "./external/external.module";
 import {SharedModule} from './shared/shared.module';
 import {UsermgmtModule} from "./usermgmt/usermgmt.module";
 import {UsermgmtService} from "./usermgmt/usermgmt.service";
+import {VmComponent} from './vm/vm.component';
+import {VmModule} from "./vm/vm.module";
+import {VmService} from "./vm/vm.service"
 import {DocumentComponent} from "./document/document.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DocumentService} from "./document/document.service";
@@ -48,8 +50,6 @@ import 'prismjs/components/prism-typescript.min.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
 import {DocumentModule} from "./document/document.module";
-
-
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -73,7 +73,6 @@ function markedOptionsFactory(): MarkedOptions {
     MenuComponent,
     ServiceComponent,
     UsageComponent,
-    UserComponent,
     TopComponent,
     BottonComponent,
     LeftComponent,
@@ -89,6 +88,7 @@ function markedOptionsFactory(): MarkedOptions {
     OrgModule,
     CatalogModule,
     UsermgmtModule,
+    VmModule,
     FormsModule,
     RoutingModule,
     HttpClientModule,
@@ -143,6 +143,7 @@ function markedOptionsFactory(): MarkedOptions {
     SecurityService,
     DashboardService,
     UsermgmtService,
+    VmService,
     CatalogService,
     DocumentService,
     MarkdownService,

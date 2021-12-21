@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   public appEntities: any;
   public servicesEntities: any;
+  public vmEntities: any;
   public appSummaryEntities: Observable<any[]>;
   public translateEntities: any = [];
 
@@ -107,6 +108,11 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   private caas_loading = false;
   private caas_countdown = 0;
+
+  public sltVmUrl: string = '';
+
+  /*사용자 정보*/
+  public vmNmae: string;
 
   public placeholder = "credentialsStr:{'username':'admin','password':'password';}";
 
@@ -261,6 +267,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     if (type == 'select') {
       this.appEntities = null;
       this.servicesEntities;
+      this.vmEntities;
       this.spaces = [];
       this.currentSpace = null;
     } else if(type === 'first'){
@@ -330,6 +337,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       }
       this.getAppSummary(value);
       this.getOrgSummary();
+      this.getVmSummary(value);
 
     } else {
       /*초기화*/
@@ -340,8 +348,6 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.commonService.isLoading = false;
     }
   }
-
-
 
   getOrgSummary() {
     this.dashboardService.getOrgSummary(this.org.guid).subscribe(data => {
@@ -387,6 +393,26 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.commonService.alertMessage("서버가 불안정합니다.", false);
     });
   }
+
+  getVmSummary(value){
+    let cnt = 0;
+    this.dashboardService.getVmSummary(this.org.guid, value).subscribe(data => {
+      $.each(data.data, function (key, dataobj) {
+        if(dataobj.vmSpaceGuid == value) {
+          data.data[key]['vmNm'] = dataobj.vmNm;
+        }
+       });
+      this.vmEntities = data.data;
+      if (cnt = 0) {
+        this.vmEntities['thumbImgPath'] = '../.. /assets/resources/images/catalog/MONITORING.png';
+      }
+    }, error => {
+      this.commonService.isLoading = false;
+      this.commonService.alertMessage("서버가 불안정합니다.", false);
+    }, () => {
+      this.commonService.isLoading = false;
+    });
+}
 
   thumnail(): void {
     let catalog = this.catalogService;
@@ -984,6 +1010,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.caas_loading = false;
       this.commonService.isLoading = false;
     }
+  }
+
+  showWindowVM(){
+    window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700')
   }
 
   SETTTING_SCRIPTS(){

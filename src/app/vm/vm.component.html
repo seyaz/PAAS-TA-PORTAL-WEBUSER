@@ -1,0 +1,33 @@
+<script src="/assets/resources/js/Chart.js" type="text/javascript"></script>
+<div style="min-height:100%;">
+  <h2 class="headTH2">VM 자원현황 대시보드 &nbsp; <i class="rot fas fa-sync-alt" (click)="refreshClick()"></i></h2>
+  <dl class="col_in1_dl">
+    <dt>
+      <ul>
+        <li>
+          <span class="on_dot BGcolors2"></span> {{ 'appMain.app.organization' | translate }}
+        </li>
+        <li>테스트 조직</li>
+      </ul>
+      <ul>
+        <li><span class="on_dot BGcolors3"></span> {{ 'appMain.app.space' | translate }}
+        </li>
+        <li>테스트 공간</li>
+      </ul>
+    </dt>
+  </dl>
+  <br/><br/><br/>
+  <!--VM 자원현황 대시보드 -->
+  <!--001.CPU -->
+  <div lass="maT30">
+    <canvas #lineCanvasCPU style="height:900vh; width:900vw"></canvas>
+    <hr color="red">
+  </div>
+  <!--001.CPU 끝 -->
+
+  <!--VM 자원현황 대시보드 끝-->
+</div>
+
+
+
+

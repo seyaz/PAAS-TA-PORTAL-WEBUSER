@@ -565,7 +565,7 @@
               <li>
                 <div class="sortable_wrap" style="max-height: 342px">
                   <!-- 애플리케이션 영역 시작 -->
-                  <div class="space_pop_container">
+                  <div class="space_pop_container space_list_small">
                     <div class="space_pop_menu">
                       <div class="app_btn">
                         <button class="btns colors5" (click)='showWindowVM()'> 대시보드 </button>
@@ -579,68 +579,31 @@
                     &nbsp;{{item.vmNm}} </span>
                     </div>
                     <!-- VM 정보 영역 시작 -->
-                    <div class="app_per clearfix">
-                      <ul>
-                        <li>
-                          <div>Cpu Usage </div>
-                          <div>:</div>
-                          <div>{{ (item.memory >= 1024) ? ((item.memory % 1024 == 0 || item.memory % 1024 < 11) ?
-                            (item.memory / 1024).toFixed(0) : (item.memory / 1024).toFixed(2)) : (item.memory) }}
-                            {{(item.memory >= 1024) ? 'GB' : 'MB' }}
-                          </div>
-                          <div class="clear"></div>
-                          <!-- 해당 내역 그래프 -->
-                          <div class="app_graph clearfix">
-                            <div class="space_bar2">
-                              <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                     aria-valuemax="100" [ngStyle]="{'width': '' + item.memPer + '%'}"> </div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- 해당 내역 그래프 끝 -->
-                        </li>
-                        <br>
-                        <li>
-                          <div>Memory Usage</div>
-                          <div>:</div>
-                          <div>{{ (item.disk_quota >= 1024) ? ((item.disk_quota % 1024 == 0 || item.disk_quota % 1024 < 11) ?
-                            (item.disk_quota / 1024).toFixed(0) : (item.disk_quota / 1024).toFixed(2)) : (item.disk_quota) }}
-                            {{(item.disk_quota >= 1024) ? 'GB' : 'MB' }}
-                          </div>
-                          <div class="clear"></div>
-                          <!-- 해당 내역 그래프 -->
-                          <div class="app_graph clearfix">
-                            <div class="space_bar2">
-                              <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                     aria-valuemax="100" [ngStyle]="{'width': '' + item.memPer + '%'}"> </div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- 해당 내역 그래프 끝 -->
-                        </li>
-                        <br>
-                        <li>
-                          <div>Disk Usage</div>
-                          <div>:</div>
-                          <div>{{ (item.memory >= 1024) ? ((item.memory % 1024 == 0 || item.memory % 1024 < 11) ?
-                            (item.memory / 1024).toFixed(0) : (item.memory / 1024).toFixed(2)) : (item.memory) }}
-                            {{(item.memory >= 1024) ? 'GB' : 'MB' }}
-                          </div>
-                          <div class="clear"></div>
-                          <!-- 해당 내역 그래프 -->
-                          <div class="app_graph clearfix">
-                            <div class="space_bar2">
-                              <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                     aria-valuemax="100" [ngStyle]="{'width': '' + item.memPer + '%'}"> </div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- 해당 내역 그래프 끝 -->
-                        </li>
-                      </ul>
+                    <div class="app_graph1 clearfix">
+                      <div>CPU</div>
+                      <div><span>10</span><i>%</i></div>
+                      <div class="space_bar5">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
+                        </div>
+                      </div>
+                      <div>Disk</div>
+                      <div><span>10</span><i>%</i></div>
+                      <div class="space_bar3">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
+                        </div>
+                      </div>
+                      <div>Memory</div>
+                      <div><span>10</span><i>%</i></div>
+                      <div class="space_bar4">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- 애플리케이션 영역 끝 -->

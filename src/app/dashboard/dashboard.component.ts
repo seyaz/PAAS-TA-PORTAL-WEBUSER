@@ -9,8 +9,11 @@ import {Organization} from "../model/organization";
 import {Space} from '../model/space';
 import {AppMainService} from '../dash/app-main/app-main.service';
 import {CatalogService} from '../catalog/main/catalog.service';
+import {VmService} from "../vm/vm.service";
 import {isBoolean, isNullOrUndefined} from "util";
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
+import {replaceNgsp} from "@angular/compiler/src/ml_parser/html_whitespaces";
+
 
 declare var $: any;
 declare var jQuery: any;
@@ -116,8 +119,8 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   public placeholder = "credentialsStr:{'username':'admin','password':'password';}";
 
-  constructor(private translate: TranslateService, private commonService: CommonService, private dashboardService: DashboardService, private log: NGXLogger,
-              private appMainService: AppMainService, private catalogService: CatalogService, private route: ActivatedRoute, private router: Router, private http: HttpClient) {
+  constructor(private translate: TranslateService, private commonService: CommonService, private dashboardService: DashboardService,private appMainService: AppMainService,
+              private catalogService: CatalogService, private vmService: VmService, private route: ActivatedRoute, private router: Router,  private log: NGXLogger, private http: HttpClient) {
 
     if (commonService.getToken() == null) {
       router.navigate(['/']);
@@ -396,10 +399,13 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   getVmSummary(value){
     let cnt = 0;
-    this.dashboardService.getVmSummary(this.org.guid, value).subscribe(data => {
+    this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
       $.each(data.data, function (key, dataobj) {
         if(dataobj.vmSpaceGuid == value) {
           data.data[key]['vmNm'] = dataobj.vmNm;
+          data.data[key]['vmSpaceName'] = dataobj.vmSpaceName;
+          data.data[key]['vmOrgName'] = dataobj.vmOrgName;
+          data.data[key]['vmSpaceGuid'] = dataobj.vmSpaceGuid;
         }
        });
       this.vmEntities = data.data;
@@ -1012,7 +1018,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     }
   }
 
-  showWindowVM(){
+  showWindowVm(){
     window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700')
   }
 

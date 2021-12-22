@@ -10,16 +10,21 @@ let appConfig = require('assets/resources/env/config.json');
 @Injectable()
 export class VmService {
   constructor(
-    private http: HttpClient, private common: CommonService, private logger: NGXLogger, private router: Router) {
+    private http: HttpClient, private commonService: CommonService, private router: Router) {
   }
   apiversion = appConfig['apiversion'];
 
-  vminfo() {
-    return this.common.doGet('/commonapi/' + this.apiversion + '/vm', this.common.getToken()).map((res: any) => {
+  getVm() {
+    return this.commonService.doGet('/commonapi/v2/vm', this.commonService.getToken()).map((res: any) => {
       return res;
-    });
+    })
   }
 
+  getVmSummary(orgId:string, spaceId: string) {
+    return this.commonService.doGet('/commonapi/v2/vm/guid'+"?orgGuid="+orgId+"&spaceGuid="+spaceId, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
 }
 
  export class Vm{

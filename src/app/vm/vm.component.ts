@@ -19,31 +19,27 @@ declare var require: any;
 })
 
 export class VmComponent implements OnInit {
+
+  public isMessage: boolean;
+
   /*query*/
   private jquerySetting: boolean;
   public sltChartInstances: string;
 
   /*vm*/
   public vm: Observable<Vm>;
+  public vmEntities: any;
   public translateEntities: any = [];
 
   /*org sapce*/
-  public currentOrg: string;
-  public orgs: Array<Organization>;
-  public org: Organization;
-  public spaces: Array<Space>;
-  public currentSpace: string;
+  public orgGuid: string = '';
+  public spaceGuid: string = '';
 
   /*vm.component.html*/
   @ViewChild('lineCanvasCPU') lineCanvasCPU: ElementRef;
   public lineChartCPU: any;
 
   constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {;
-    this.org = null;
-    this.orgs = [];
-    this.spaces = [];
-
-    this.currentSpace = '';
   }
 
 
@@ -63,10 +59,33 @@ export class VmComponent implements OnInit {
       });
       this.jquerySetting = false;
     }
+    this.orgGuid = this.commonService.getCurrentOrgGuid();
+    this.spaceGuid = this.commonService.getCurrentSpaceGuid();
+    this.getVmSummary(this.orgGuid, this.spaceGuid);
+  }
+
+  getVmSummary(orgId: string, spaceId: string) {
+    /*
+    * TODO : spaceId를 통한 해당 vm usage 확인
+    *  1. 공간의 이름명 확인.
+    *  2. 공간에 존재하는 vm 을 확인
+    *  3. 해당하는 vm에 대한 usage 그래프 도출
+    * */
+    console.log("orgId: "+ orgId + " spaceId: "+ spaceId);
+    this.vmService.getVmSummary(orgId, spaceId).subscribe(data => {
+      $.each(data.data, function (key, dataobj) {
+        if(dataobj.vmSpaceGuid == spaceId) {
+          data.data[key]['vmNm'] = dataobj.vmNm;
+          data.data[key]['vmSpaceName'] = dataobj.vmSpaceName;
+          data.data[key]['vmOrgName'] = dataobj.vmOrgName;
+        }
+      });
+      this.vmEntities = data.data;
+    },error => {
+      this.commonService.isLoading = false;
+    });
 
     this.lineChartMethod_CPU();
-
-
   }
 
   lineChartMethod_CPU() {
@@ -102,22 +121,8 @@ export class VmComponent implements OnInit {
     });
   }
 
-
   refreshClick(){
     this.ngOnInit();
   }
-
-  public appEntities: any;
-  public servicesEntities: any;
-
-
-
-  /*
-  vmInfo(){
-    this.vmService.vminfo().subscribe(data => {
-      this.log.debug(data);
-    })
-  }
-  */
 
 }

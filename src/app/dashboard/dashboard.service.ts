@@ -136,18 +136,6 @@ export class DashboardService {
     });
   }
 
-  getVm() {
-    return this.commonService.doGet('/commonapi/v2/vm', this.commonService.getToken()).map((res: any) => {
-      return res;
-    })
-  }
-
-  getVmSummary(orgId:string, spaceId: string) {
-    return this.commonService.doGet('/commonapi/v2/vm/guid'+"?orgGuid="+orgId+"&spaceGuid="+spaceId, this.commonService.getToken()).map((res: any) => {
-      return res;
-    })
-  }
-
 }
 
 export class Service {

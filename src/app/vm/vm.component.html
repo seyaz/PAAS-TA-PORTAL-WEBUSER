@@ -6,15 +6,18 @@
       <ul>
         <li><span class="on_dot BGcolors3"></span> {{ 'appMain.app.space' | translate }}
         </li>
-        <li>테스트 공간</li>
+        <li>{{spaceName}}</li>
       </ul>
     </dt>
   </dl>
-  <br/><br/><br/>
   <!--VM 자원현황 대시보드 -->
-  <div lass="maT30">
-    <canvas #lineCanvasCPU style="height:900vh; width:900vw"></canvas>
-    <hr color="red">
+  <div>
+    <ul>
+      <div class="chart_wrap" style="position: relative; height: 200px">
+        <div class="chart_title">Memory</div>
+        <canvas #lineCanvas style="height:10vh; width:20vw"></canvas>
+      </div>
+    </ul>
   </div>
   <!--VM 자원현황 대시보드 끝-->
 </div>

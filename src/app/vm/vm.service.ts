@@ -25,6 +25,19 @@ export class VmService {
       return res;
     })
   }
+
+  getVmSpace(spaceId: string) {
+    return this.commonService.doGet('/commonapi/v2/vm/space/' + spaceId, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringMemUsage(vmName: string, type: String,interval: string, timeGroup: string ) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/mem_usage' +"?vmName="+vmName+"&type="+type+"&interval="+interval+"&timeGroup="+timeGroup, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
 }
 
  export class Vm{

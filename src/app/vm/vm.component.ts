@@ -4,8 +4,6 @@ import {Vm, VmService} from "../vm/vm.service";
 import {HttpClient} from "@angular/common/http";
 import {CommonService} from "../common/common.service";
 import {NGXLogger} from "ngx-logger";
-import {Organization} from "../model/organization";
-import {Space} from "../model/space";
 import {isNullOrUndefined} from "util";
 
 declare var Chart: any;
@@ -25,6 +23,9 @@ export class VmComponent implements OnInit {
   public vmEntities: any;
   public translateEntities: any = [];
 
+  public isMessage: boolean;
+  private jquerySetting: boolean;
+
   public type: string = '';
   public vmName: string = '';
   public interval: string = '';
@@ -33,10 +34,8 @@ export class VmComponent implements OnInit {
   public spaceGuid: string = '';
   public spaceName: string = '';
 
-  public isMessage: boolean;
-  private jquerySetting: boolean;
-
   public sltChartInstances: string;
+  public vmSummaryChartDate: string;
   public sltChartDefaultTimeRange: number;
   public sltChartGroupBy: number;
 
@@ -52,7 +51,6 @@ export class VmComponent implements OnInit {
   constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
     this.vms = new Array<Vm>();
-
     this.vmInit();
   }
 
@@ -92,6 +90,7 @@ export class VmComponent implements OnInit {
     });
   }
 
+
   getVmMonitoring(vmNmae: string) {
     this.type = 'day';
     this.interval = '100';
@@ -104,9 +103,37 @@ export class VmComponent implements OnInit {
       this.cpuValueObject = data.results[0].series[0];
 
       $.each(this.cpuValueObject['values'], function (index, value) {
-        chartDataTime.push(value[0]);
+        let date = require('moment');
+        var chartFormat = date(value[0]).format('HH-MM-SS');
+        this.vmSummaryChartDate = chartFormat;
+
+        chartDataTime.push(chartFormat);
         chartDataData.push(value[1]);
       });
+
+      var datasetsArray = new Array();
+
+      if(datasetsArray.length != 0)
+        datasetsArray = [{
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          spanGaps: false,
+        }];
 
      this.lineChart = new Chart(this.lineCanvas.nativeElement, {
         type: 'line',
@@ -115,25 +142,8 @@ export class VmComponent implements OnInit {
           datasets: [
             {
               label: this.cpuValueObject['name'],
-              fill: false,
-              lineTension: 0.1,
-              backgroundColor: 'rgba(75,192,192,0.4)',
-              borderColor: 'rgba(75,192,192,1)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(75,192,192,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
+              datasets: datasetsArray,
               data: chartDataData,
-              spanGaps: false,
             }
           ]
         }

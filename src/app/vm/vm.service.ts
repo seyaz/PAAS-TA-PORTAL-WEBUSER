@@ -38,6 +38,18 @@ export class VmService {
     })
   }
 
+  getVmMonitoringNowMemUsagePercent(vmName: string) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/now_mem_usage_percent' +"?vmName="+vmName, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringNowCpuUsagePercent(vmName: string) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/now_cpu_usage_percent' +"?vmName="+vmName, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
 }
 
  export class Vm{

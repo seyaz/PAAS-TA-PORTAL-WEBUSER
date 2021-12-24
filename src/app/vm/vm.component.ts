@@ -44,9 +44,8 @@ export class VmComponent implements OnInit {
   public diskIO_Chart: any = undefined;
 
   public cpuValueObject: Observable<any[]>;
-
-  @ViewChild('lineCanvas') lineCanvas: ElementRef;
-  lineChart: any;
+  public memValueObject: Observable<any[]>;
+  public diskValueObject: Observable<any[]>;
 
   constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
@@ -75,14 +74,14 @@ export class VmComponent implements OnInit {
   }
 
   refreshClick() {
-    this.ngOnInit();
+    location.reload(true);
   }
 
   vmInit() {
     /*space 정의*/
     this.vmService.getVmSpace(this.commonService.getCurrentSpaceGuid()).subscribe(data => {
       this.vms = data.data[0];
-      this.vmName =  this.vms['vmNm'];
+      this.vmName = this.vms['vmNm'];
       this.spaceName = this.vms['vmSpaceName'];
       this.getVmMonitoring(this.vmName);
     }, error => {
@@ -90,21 +89,26 @@ export class VmComponent implements OnInit {
     });
   }
 
-
   getVmMonitoring(vmNmae: string) {
+    /*VmMonitoringUsage*/
     this.type = 'day';
     this.interval = '100';
     this.timeGroup = '1';
 
-    this.vmService.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup).subscribe(data => {
+    this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
+    this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);
+  }
+
+  getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
+    this.vmService.getVmMonitoringMemUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       /*lineChartMemory(data : x축, time : y축)*/
       let chartDataTime = [];
       let chartDataData = [];
-      this.cpuValueObject = data.results[0].series[0];
+      this.memValueObject = data.results[0].series[0];
 
-      $.each(this.cpuValueObject['values'], function (index, value) {
+      $.each(this.memValueObject['values'], function (index, value) {
         let date = require('moment');
-        var chartFormat = date(value[0]).format('HH-MM-SS');
+        var chartFormat = date(value[0]).format('HH시 MM분 SS초');
         this.vmSummaryChartDate = chartFormat;
 
         chartDataTime.push(chartFormat);
@@ -113,7 +117,7 @@ export class VmComponent implements OnInit {
 
       var datasetsArray = new Array();
 
-      if(datasetsArray.length != 0)
+      if (datasetsArray.length != 0)
         datasetsArray = [{
           fill: false,
           lineTension: 0.1,
@@ -135,13 +139,15 @@ export class VmComponent implements OnInit {
           spanGaps: false,
         }];
 
-     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+      var ctx = document.getElementById('lineCanvasMem');
+
+      this.sltChartInstances = new Chart(ctx,{
         type: 'line',
         data: {
           labels: chartDataTime,
           datasets: [
             {
-              label: this.cpuValueObject['name'],
+              label: this.memValueObject['name'],
               datasets: datasetsArray,
               data: chartDataData,
             }
@@ -149,7 +155,13 @@ export class VmComponent implements OnInit {
         }
       })
     });
+  }
 
+  getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
+    this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
+      this.cpuValueObject = data.results[0].series[0];
+      console.log(this.cpuValueObject)
+    });
   }
 
 }

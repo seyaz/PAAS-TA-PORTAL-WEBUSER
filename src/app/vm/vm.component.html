@@ -10,15 +10,27 @@
       </ul>
     </dt>
   </dl>
-  <!--VM 자원현황 대시보드 -->
+  <!--VM 자원현황 대시보드 01.Mem -->
   <div>
     <ul>
       <div class="chart_wrap" style="position: relative; height: 200px">
         <div class="chart_title">Memory</div>
-        <canvas #lineCanvas style="height:10vh; width:20vw"></canvas>
+        <!--canvas 사용시 height/width 값 필수  -->
+        <canvas id = 'lineCanvasMem' style="height:10vh; width:20vw"></canvas>
       </div>
     </ul>
   </div>
+  <!--VM 자원현황 대시보드 02. Cpu -->
+  <div>
+    <ul>
+      <div class="chart_wrap" style="position: relative; height: 200px">
+        <div class="chart_title">Cpu</div>
+        <!--canvas 사용시 height/width 값 필수  -->
+        <canvas id = 'lineCanvasCpu' style="height:10vh; width:20vw"></canvas>
+      </div>
+    </ul>
+  </div>
+
   <!--VM 자원현황 대시보드 끝-->
 </div>
 

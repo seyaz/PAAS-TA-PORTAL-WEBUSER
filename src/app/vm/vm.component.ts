@@ -95,8 +95,8 @@ export class VmComponent implements OnInit {
     this.interval = '100';
     this.timeGroup = '1';
 
-    this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);
+    this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
   }
 
   getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
@@ -159,8 +159,46 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
+      let chartDataTime = [];
+      let chartDataData = [];
+
       this.cpuValueObject = data.results[0].series[0];
-      console.log(this.cpuValueObject)
+
+      $.each(this.cpuValueObject['values'], function (index, value) {
+        let date = require('moment');
+        var chartFormat = date(value[0]).format('HH시 MM분 SS초');
+        this.vmSummaryChartDate = chartFormat;
+
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+
+      });
+
+      var datasetsArray = new Array();
+
+      if (datasetsArray.length != 0)
+        datasetsArray = [{
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          spanGaps: false,
+        }];
+
+
     });
   }
 

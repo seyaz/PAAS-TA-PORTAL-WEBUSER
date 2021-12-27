@@ -68,8 +68,6 @@ export class VmService {
     })
   }
 
-
-
 }
 
  export class Vm{

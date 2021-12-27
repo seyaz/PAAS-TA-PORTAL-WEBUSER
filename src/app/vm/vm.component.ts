@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {Vm, VmService} from "../vm/vm.service";
-import {HttpClient} from "@angular/common/http";
-import {CommonService} from "../common/common.service";
-import {NGXLogger} from "ngx-logger";
-import {isNullOrUndefined} from "util";
+import {Observable} from 'rxjs/Observable';
+import {Vm, VmService} from '../vm/vm.service';
+import {HttpClient} from '@angular/common/http';
+import {CommonService} from '../common/common.service';
+import {NGXLogger} from 'ngx-logger';
+import {isNullOrUndefined} from 'util';
 
 declare var Chart: any;
 declare var $: any;
@@ -26,13 +26,13 @@ export class VmComponent implements OnInit {
   public isMessage: boolean;
   private jquerySetting: boolean;
 
-  public type: string = '';
-  public vmName: string = '';
-  public interval: string = '';
-  public timeGroup: string = '';
-  public orgGuid: string = '';
-  public spaceGuid: string = '';
-  public spaceName: string = '';
+  public type = '';
+  public vmName = '';
+  public interval = '';
+  public timeGroup = '';
+  public orgGuid = '';
+  public spaceGuid = '';
+  public spaceName = '';
 
   public sltChartInstances: string;
   public vmSummaryChartDate: string;
@@ -57,16 +57,16 @@ export class VmComponent implements OnInit {
   ngOnInit() {
     $(document).ready(() => {
       //TODO 임시로...
-      $.getScript("../../assets/resources/js/common2.js")
+      $.getScript('../../assets/resources/js/common2.js')
         .done(function (script, textStatus) {
         })
         .fail(function (jqxhr, settings, exception) {
         });
     });
     if (this.jquerySetting) {
-      $(".lauthOn").on("click", function () {
-        $(".lauth_dl").toggleClass("on");
-        $("#routeAddHostName").focus();
+      $('.lauthOn').on('click', function () {
+        $('.lauth_dl').toggleClass('on');
+        $('#routeAddHostName').focus();
       });
       this.jquerySetting = false;
     }
@@ -111,7 +111,7 @@ export class VmComponent implements OnInit {
   }
 
   getVmNoUsage(canvas, label) {
-    var ctx = document.getElementById(canvas);
+    const ctx = document.getElementById(canvas);
     this.sltChartInstances = new Chart(ctx, {
       type: 'line',
       data: {
@@ -146,31 +146,31 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        let canvas = 'lineCanvasCpuUsage';
-        let label = 'CPU Usage';
+        const canvas = 'lineCanvasCpuUsage';
+        const label = 'CPU Usage';
         this.getVmNoUsage(canvas, label);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
         $.each(this.cpuValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             label: this.memValueObject['name'],
             fill: false,
@@ -193,8 +193,9 @@ export class VmComponent implements OnInit {
             spanGaps: false,
             data: chartDataData,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasCpuUsage');
+        const ctx = document.getElementById('lineCanvasCpuUsage');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -208,7 +209,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -218,88 +219,58 @@ export class VmComponent implements OnInit {
   getVmMonitoringCpuLatency(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuLatency(vmNmae, type, interval, timeGroup).subscribe(data => {
       /*lineChartMemory(data : x축, time : y축)*/
-      let chartDataTime = [];
-      let chartDataData = [];
+      const chartDataTime = [];
+      const chartDataData = [];
 
       this.cpuValueObject = data.results[0].series[0];
 
       $.each(this.cpuValueObject['values'], function (index, value) {
-        let date = require('moment');
-        var chartFormat = date(value[0]).format('HH:MM');
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
         this.vmSummaryChartDate = chartFormat;
 
         chartDataTime.push(chartFormat);
         chartDataData.push(value[1]);
       });
 
-      var datasetsArray = new Array();
-
-      if (datasetsArray.length != 0)
-        datasetsArray = [{
-          fill: false,
-          lineTension: 0.1,
-          backgroundColor: 'rgba(75,192,192,0.4)',
-          borderColor: 'rgba(75,192,192,1)',
-          borderCapStyle: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(75,192,192,1)',
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-          pointHoverBorderColor: 'rgba(220,220,220,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10,
-          spanGaps: false,
-        }];
-
-      var ctx = document.getElementById('lineCanvasCpuLatency');
+      const ctx = document.getElementById('lineCanvasCpuLatency');
 
       this.sltChartInstances = new Chart(ctx, {
         type: 'line',
         data: {
           labels: chartDataTime,
-          datasets: [
-            {
-              label: 'CPU Latency',
-              datasets: datasetsArray,
-              data: chartDataData,
-            }
-          ]
+          datasets: this.dataArray(chartDataData, 'CPU Latency')
         }
-      })
+      });
     });
   }
 
   getVmMonitoringCpuCostop(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuCostopy(vmNmae, type, interval, timeGroup).subscribe(data => {
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        let canvas = 'lineCanvasCpuCostop';
-        let label = 'Cpu Costop';
+        const canvas = 'lineCanvasCpuCostop';
+        const label = 'Cpu Costop';
         this.getVmNoUsage(canvas, label);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
         $.each(this.cpuValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -320,8 +291,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasCpuCostop');
+        const ctx = document.getElementById('lineCanvasCpuCostop');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -335,7 +307,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -346,24 +318,24 @@ export class VmComponent implements OnInit {
   getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       /*lineChartMemory(data : x축, time : y축)*/
-      let chartDataTime = [];
-      let chartDataData = [];
-      let size = data.length;
+      const chartDataTime = [];
+      const chartDataData = [];
+      const size = data.length;
 
       this.memValueObject = data.results[0].series[0];
 
       $.each(this.memValueObject['values'], function (index, value) {
-        let date = require('moment');
-        var chartFormat = date(value[0]).format('HH:MM');
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
         this.vmSummaryChartDate = chartFormat;
 
         chartDataTime.push(chartFormat);
         chartDataData.push(value[1]);
       });
 
-      var datasetsArray = new Array();
+      let datasetsArray = new Array();
 
-      if (datasetsArray.length != 0)
+      if (datasetsArray.length != 0) {
         datasetsArray = [{
           fill: false,
           lineTension: 0.1,
@@ -384,8 +356,9 @@ export class VmComponent implements OnInit {
           pointHitRadius: 10,
           spanGaps: false,
         }];
+      }
 
-      var ctx = document.getElementById('lineCanvasMemUsage');
+      const ctx = document.getElementById('lineCanvasMemUsage');
 
       this.sltChartInstances = new Chart(ctx, {
         type: 'line',
@@ -399,37 +372,37 @@ export class VmComponent implements OnInit {
             }
           ]
         }
-      })
+      });
     });
   }
 
   getVmMonitoringMemActiveConsumed(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemActiveConsumed(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data[0].results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data[0].results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        let canvas = 'lineCanvasMemActiveConsumed';
-        let label = 'MEM Active vs Consumed ';
+        const canvas = 'lineCanvasMemActiveConsumed';
+        const label = 'MEM Active vs Consumed ';
         this.getVmNoUsage(canvas, label);
       } else {
         this.memValueObject = data.results[0].series[0];
 
         $.each(this.memValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -450,8 +423,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasMemActiveConsumed');
+        const ctx = document.getElementById('lineCanvasMemActiveConsumed');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -465,7 +439,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
 
     }, error => {
@@ -476,30 +450,30 @@ export class VmComponent implements OnInit {
   getVmMonitoringMemSwap(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemSwap(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        let canvas = 'lineCanvasMemSwap';
-        let label = 'MEM Swap';
+        const canvas = 'lineCanvasMemSwap';
+        const label = 'MEM Swap';
         this.getVmNoUsage(canvas, label);
       } else {
         this.memValueObject = data.results[0].series[0];
 
         $.each(this.memValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -520,8 +494,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasMemSwap');
+        const ctx = document.getElementById('lineCanvasMemSwap');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -535,7 +510,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -544,7 +519,7 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringDiskIOps(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskIOps(vmNmae, type, interval, timeGroup).subscribe(data => {
-      console.log("getVmMonitoringDiskIOps");
+      console.log('getVmMonitoringDiskIOps');
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -553,30 +528,30 @@ export class VmComponent implements OnInit {
   getVmMonitoringDiskTraffic(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskTraffic(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        let canvas = 'lineCanvasDiskTraffic';
-        let label = 'Storage Traffic';
+        const canvas = 'lineCanvasDiskTraffic';
+        const label = 'Storage Traffic';
         this.getVmNoUsage(canvas, label);
       } else {
         this.diskValueObject = data.results[0].series[0];
 
         $.each(this.diskValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -597,8 +572,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasDiskTraffic');
+        const ctx = document.getElementById('lineCanvasDiskTraffic');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -612,7 +588,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -622,29 +598,29 @@ export class VmComponent implements OnInit {
   getVmMonitoringDiskLatency(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskLatency(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       if (valueObject == null) {
-        let canvas = 'lineCanvasDiskLatency';
-        let label = 'Storage Latency';
+        const canvas = 'lineCanvasDiskLatency';
+        const label = 'Storage Latency';
         this.getVmNoUsage(canvas, label);
       } else {
         this.diskValueObject = data.results[0].series[0];
 
         $.each(this.diskValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -665,8 +641,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasDiskLatency');
+        const ctx = document.getElementById('lineCanvasDiskLatency');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -680,7 +657,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -690,29 +667,29 @@ export class VmComponent implements OnInit {
   getVmMonitoringNetUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       if (valueObject == null) {
-        let canvas = 'lineCanvasNetUsage';
-        let label = 'NET Usage';
+        const canvas = 'lineCanvasNetUsage';
+        const label = 'NET Usage';
         this.getVmNoUsage(canvas, label);
       } else {
         this.netValueObject = data.results[0].series[0];
 
         $.each(this.netValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -733,8 +710,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasNetUsage');
+        const ctx = document.getElementById('lineCanvasNetUsage');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -748,7 +726,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -758,29 +736,29 @@ export class VmComponent implements OnInit {
   getVmMonitoringNetTransmitReceive(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetTransmitReceive(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       if (valueObject == null) {
-        let canvas = 'lineCanvasNetTransmitReceive';
-        let label = 'NET Transmit/ Receive';
+        const canvas = 'lineCanvasNetTransmitReceive';
+        const label = 'NET Transmit/ Receive';
         this.getVmNoUsage(canvas, label);
       } else {
         this.netValueObject = data.results[0].series[0];
 
         $.each(this.netValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -801,8 +779,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasNetTransmitReceive');
+        const ctx = document.getElementById('lineCanvasNetTransmitReceive');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -816,7 +795,7 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -826,29 +805,29 @@ export class VmComponent implements OnInit {
   getVmMonitoringNetError(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetError(vmNmae, type, interval, timeGroup).subscribe(data => {
 
-      let valueObject = data.results[0].series;
-      let chartDataTime = [];
-      let chartDataData = [];
+      const valueObject = data.results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
 
       if (valueObject == null) {
-        let canvas = 'lineCanvasNetErrors';
-        let label = 'NEt Errors';
+        const canvas = 'lineCanvasNetErrors';
+        const label = 'NEt Errors';
         this.getVmNoUsage(canvas, label);
       } else {
         this.netValueObject = data.results[0].series[0];
 
         $.each(this.netValueObject['values'], function (index, value) {
-          let date = require('moment');
-          var chartFormat = date(value[0]).format('HH:MM');
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
           this.vmSummaryChartDate = chartFormat;
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
 
-        var datasetsArray = new Array();
+        let datasetsArray = new Array();
 
-        if (datasetsArray.length != 0)
+        if (datasetsArray.length != 0) {
           datasetsArray = [{
             fill: false,
             lineTension: 0.1,
@@ -869,8 +848,9 @@ export class VmComponent implements OnInit {
             pointHitRadius: 10,
             spanGaps: false,
           }];
+        }
 
-        var ctx = document.getElementById('lineCanvasNetErrors');
+        const ctx = document.getElementById('lineCanvasNetErrors');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
@@ -884,11 +864,37 @@ export class VmComponent implements OnInit {
               }
             ]
           }
-        })
+        });
       }
     }, error => {
       this.commonService.isLoading = false;
     });
+  }
+
+
+  dataArray(chartDataData: any, label: string) {
+    return [{
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: 'rgba(75,192,192,1)',
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      spanGaps: false,
+      data: chartDataData,
+      label: label
+    }];
   }
 
 }

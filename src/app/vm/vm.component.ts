@@ -92,7 +92,7 @@ export class VmComponent implements OnInit {
   getVmMonitoring(vmNmae: string) {
     /*VmMonitoringUsage*/
     this.type = 'day';
-    this.interval = '100';
+    this.interval = '10';
     this.timeGroup = '1';
 
     this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);

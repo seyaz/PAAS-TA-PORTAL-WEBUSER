@@ -27,29 +27,29 @@ import {CommonService} from './common/common.service';
 import {DashModule} from './dash/dash.module';
 import {AuthGuard} from './auth/auth.guard';
 import {OrgModule} from './org/org.module';
-import {CatalogModule} from "./catalog/catalog.module";
-import {CatalogService} from "./catalog/main/catalog.service";
+import {CatalogModule} from './catalog/catalog.module';
+import {CatalogService} from './catalog/main/catalog.service';
 import {ErrorComponent} from './error/error.component';
-import {IndexModule} from "./index/index.module";
-import {ExternalModule} from "./external/external.module";
+import {IndexModule} from './index/index.module';
+import {ExternalModule} from './external/external.module';
 import {SharedModule} from './shared/shared.module';
-import {UsermgmtModule} from "./usermgmt/usermgmt.module";
-import {UsermgmtService} from "./usermgmt/usermgmt.service";
+import {UsermgmtModule} from './usermgmt/usermgmt.module';
+import {UsermgmtService} from './usermgmt/usermgmt.service';
 import {VmComponent} from './vm/vm.component';
-import {VmModule} from "./vm/vm.module";
-import {VmService} from "./vm/vm.service"
-import {DocumentComponent} from "./document/document.component";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {DocumentService} from "./document/document.service";
-import {DocumentNavComponent} from "./document/document-layout/document-nav/document-nav.component";
-import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from "ngx-markdown"
+import {VmModule} from './vm/vm.module';
+import {VmService} from './vm/vm.service';
+import {DocumentComponent} from './document/document.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {DocumentService} from './document/document.service';
+import {DocumentNavComponent} from './document/document-layout/document-nav/document-nav.component';
+import {MarkdownModule, MarkdownService, MarkedOptions, MarkedRenderer} from 'ngx-markdown';
 import {JsonpModule} from '@angular/http';
-
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import 'prismjs';
 import 'prismjs/components/prism-typescript.min.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
-import {DocumentModule} from "./document/document.module";
+import {DocumentModule} from './document/document.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -97,6 +97,16 @@ function markedOptionsFactory(): MarkedOptions {
     BrowserAnimationsModule,
     HttpClientModule,
     DocumentModule,
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: '#78C000',
+      innerStrokeColor: '#C7E596',
+      animationDuration: 300,
+      showUnits : false
+    }),
     JsonpModule,
     BrowserModule.withServerTransition({appId: 'serverApp'}),
     LoadingModule.forRoot({
@@ -117,7 +127,6 @@ function markedOptionsFactory(): MarkedOptions {
     }),
     SharedModule.forRoot(),
     LoggerModule.forRoot({
-      //serverLoggingUrl: '/ps/logs',
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR
     }),
@@ -135,7 +144,7 @@ function markedOptionsFactory(): MarkedOptions {
           smartypants: false,
         },
       },
-    }), //마크다운 추가
+    }),
   ],
   providers: [
     AuthGuard,

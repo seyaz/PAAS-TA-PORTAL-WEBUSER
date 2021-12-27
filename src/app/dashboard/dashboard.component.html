@@ -580,30 +580,34 @@
                     </div>
                     <!-- VM 정보 영역 시작 -->
                     <div class="app_graph1 clearfix">
-                      <div>CPU</div>
-                      <div><span>10</span><i>%</i></div>
-                      <div class="space_bar5">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
-                        </div>
-                      </div>
-                      <div>Disk</div>
-                      <div><span>10</span><i>%</i></div>
-                      <div class="space_bar3">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
-                        </div>
-                      </div>
-                      <div>Memory</div>
-                      <div><span>10</span><i>%</i></div>
-                      <div class="space_bar4">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                               aria-valuemax="100" [ngStyle]="{'width': '' + 10 + '%'}"></div>
-                        </div>
-                      </div>
+                      <circle-progress
+                        [radius]= "60"
+                        [space]= "-10"
+                        [toFixed]= "1"
+                        [maxPercent]= "100"
+                        [subtitle]="'20%'"
+                        [outerStrokeWidth]= "8"
+                        [outerStrokeColor]= "'#ff0000'"
+                        [innerStrokeColor]= "'#e7e8ea'"
+                        [innerStrokeWidth]= "10"
+                        [title]="'CPU'"
+                        [animationDuration]= "1000"
+                        [percent]="20"
+                      ></circle-progress>
+                      <circle-progress
+                        [radius]= "60"
+                        [space]= "-10"
+                        [toFixed]= "1"
+                        [maxPercent]= "100"
+                        [subtitle]="'20%'"
+                        [outerStrokeWidth]= "8"
+                        [outerStrokeColor]= "'#ad6de8'"
+                        [innerStrokeColor]= "'#e7e8ea'"
+                        [innerStrokeWidth]= "10"
+                        [title]="'Memory'"
+                        [animationDuration]= "1000"
+                        [percent]="20"
+                      ></circle-progress>
                     </div>
                   </div>
                   <!-- 애플리케이션 영역 끝 -->
@@ -794,6 +798,7 @@
       </div>
     </div>
   </div>
+  <div id="testtest" name="testtest"></div>
   <div class="footer_n">Copyright © 2018 PaaS-TA. All rights reserved</div>
 </div>
 <!-- modal -->

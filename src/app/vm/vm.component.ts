@@ -4,8 +4,7 @@ import {Vm, VmService} from "../vm/vm.service";
 import {HttpClient} from "@angular/common/http";
 import {CommonService} from "../common/common.service";
 import {NGXLogger} from "ngx-logger";
-import {Organization} from "../model/organization";
-import {Space} from "../model/space";
+import {isNullOrUndefined} from "util";
 
 declare var Chart: any;
 declare var $: any;
@@ -20,28 +19,39 @@ declare var require: any;
 
 export class VmComponent implements OnInit {
 
-  public isMessage: boolean;
-
-  /*query*/
-  private jquerySetting: boolean;
-  public sltChartInstances: string;
-
-  /*vm*/
-  public vm: Observable<Vm>;
+  public vms: Array<Vm> = [];
   public vmEntities: any;
   public translateEntities: any = [];
 
-  /*org sapce*/
+  public isMessage: boolean;
+  private jquerySetting: boolean;
+
+  public type: string = '';
+  public vmName: string = '';
+  public interval: string = '';
+  public timeGroup: string = '';
   public orgGuid: string = '';
   public spaceGuid: string = '';
+  public spaceName: string = '';
 
-  /*vm.component.html*/
-  @ViewChild('lineCanvasCPU') lineCanvasCPU: ElementRef;
-  public lineChartCPU: any;
+  public sltChartInstances: string;
+  public vmSummaryChartDate: string;
+  public sltChartDefaultTimeRange: number;
+  public sltChartGroupBy: number;
 
-  constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {;
+  public cpu_Chart: any = undefined;
+  public memory_Chart: any = undefined;
+  public diskIO_Chart: any = undefined;
+
+  public cpuValueObject: Observable<any[]>;
+  public memValueObject: Observable<any[]>;
+  public diskValueObject: Observable<any[]>;
+
+  constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
+
+    this.vms = new Array<Vm>();
+    this.vmInit();
   }
-
 
   ngOnInit() {
     $(document).ready(() => {
@@ -61,68 +71,97 @@ export class VmComponent implements OnInit {
     }
     this.orgGuid = this.commonService.getCurrentOrgGuid();
     this.spaceGuid = this.commonService.getCurrentSpaceGuid();
-    this.getVmSummary(this.orgGuid, this.spaceGuid);
   }
 
-  getVmSummary(orgId: string, spaceId: string) {
-    /*
-    * TODO : spaceId를 통한 해당 vm usage 확인
-    *  1. 공간의 이름명 확인.
-    *  2. 공간에 존재하는 vm 을 확인
-    *  3. 해당하는 vm에 대한 usage 그래프 도출
-    * */
-    console.log("orgId: "+ orgId + " spaceId: "+ spaceId);
-    this.vmService.getVmSummary(orgId, spaceId).subscribe(data => {
-      $.each(data.data, function (key, dataobj) {
-        if(dataobj.vmSpaceGuid == spaceId) {
-          data.data[key]['vmNm'] = dataobj.vmNm;
-          data.data[key]['vmSpaceName'] = dataobj.vmSpaceName;
-          data.data[key]['vmOrgName'] = dataobj.vmOrgName;
-        }
-      });
-      this.vmEntities = data.data;
-    },error => {
+  refreshClick() {
+    location.reload(true);
+  }
+
+  vmInit() {
+    /*space 정의*/
+    this.vmService.getVmSpace(this.commonService.getCurrentSpaceGuid()).subscribe(data => {
+      this.vms = data.data[0];
+      this.vmName = this.vms['vmNm'];
+      this.spaceName = this.vms['vmSpaceName'];
+      this.getVmMonitoring(this.vmName);
+    }, error => {
       this.commonService.isLoading = false;
     });
-
-    this.lineChartMethod_CPU();
   }
 
-  lineChartMethod_CPU() {
-    this.lineCanvasCPU = new Chart(this.lineCanvasCPU.nativeElement, {
-      type: 'line',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
-        datasets: [
-          {
-            label: 'CPU Usage',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [65, 59, 80, 81, 56, 55, 40, 10, 5, 50, 10, 15], //변경되는 값
-            spanGaps: false,
-          }
-        ]
-      }
+  getVmMonitoring(vmNmae: string) {
+    /*VmMonitoringUsage*/
+    this.type = 'day';
+    this.interval = '100';
+    this.timeGroup = '1';
+
+    this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
+    this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);
+  }
+
+  getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
+    this.vmService.getVmMonitoringMemUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
+      /*lineChartMemory(data : x축, time : y축)*/
+      let chartDataTime = [];
+      let chartDataData = [];
+      this.memValueObject = data.results[0].series[0];
+
+      $.each(this.memValueObject['values'], function (index, value) {
+        let date = require('moment');
+        var chartFormat = date(value[0]).format('HH시 MM분 SS초');
+        this.vmSummaryChartDate = chartFormat;
+
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+      });
+
+      var datasetsArray = new Array();
+
+      if (datasetsArray.length != 0)
+        datasetsArray = [{
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          spanGaps: false,
+        }];
+
+      var ctx = document.getElementById('lineCanvasMem');
+
+      this.sltChartInstances = new Chart(ctx,{
+        type: 'line',
+        data: {
+          labels: chartDataTime,
+          datasets: [
+            {
+              label: this.memValueObject['name'],
+              datasets: datasetsArray,
+              data: chartDataData,
+            }
+          ]
+        }
+      })
     });
   }
 
-  refreshClick(){
-    this.ngOnInit();
+  getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
+    this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
+      this.cpuValueObject = data.results[0].series[0];
+      console.log(this.cpuValueObject)
+    });
   }
 
 }

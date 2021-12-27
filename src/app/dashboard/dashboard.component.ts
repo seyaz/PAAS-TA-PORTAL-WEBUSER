@@ -1018,7 +1018,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     }
   }
 
-  showWindowVm(){
+  showWindowVM(){
     window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700')
   }
 

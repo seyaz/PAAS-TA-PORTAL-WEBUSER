@@ -25,6 +25,51 @@ export class VmService {
       return res;
     })
   }
+
+  getVmSpace(spaceId: string) {
+    return this.commonService.doGet('/commonapi/v2/vm/space/' + spaceId, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringMemUsage(vmName: string, type: String,interval: string, timeGroup: string ) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/mem_usage' +"?vmName="+vmName+"&type="+type+"&interval="+interval+"&timeGroup="+timeGroup, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringCpuUsage(vmName: string, type: String,interval: string, timeGroup: string ) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/cpu_usage' +"?vmName="+vmName+"&type="+type+"&interval="+interval+"&timeGroup="+timeGroup, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+
+  getVmMonitoringDiskIOps(vmName: string, type: String,interval: string, timeGroup: string ) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/disk_iops' +"?vmName="+vmName+"&type="+type+"&interval="+interval+"&timeGroup="+timeGroup, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringNetUsage(vmName: string, type: String,interval: string, timeGroup: string ) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/net_usage' +"?vmName="+vmName+"&type="+type+"&interval="+interval+"&timeGroup="+timeGroup, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmMonitoringNowMemUsagePercent(vmName: string) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/now_mem_usage_percent' +"?vmName="+vmName, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+  getVmMonitoringNowCpuUsagePercent(vmName: string) {
+    return this.commonService.doGet('/commonapi/v2/vm_monitoring/now_cpu_usage_percent' +"?vmName="+vmName, this.commonService.getToken()).map((res: any) => {
+      return res;
+    })
+  }
+
+
+
 }
 
  export class Vm{

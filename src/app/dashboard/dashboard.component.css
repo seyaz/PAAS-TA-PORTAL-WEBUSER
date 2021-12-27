@@ -1,3 +1,10 @@
 .serviceTitle {
   width: 200px;
 }
+.app_per1{margin-top:15px;margin-bottom:15px;width:100%;}/*180621 스타일 수정*/
+.app_per1 ul{width:100%;}/*180621 스타일 수정*/
+.app_per1 div{float:left}
+.app_per1 li:after{display:table;clear:both;content:'';overflow:hidden;visibility:hidden;height:0;width:0;}
+.app_per1 div:nth-child(1){padding-left:10px;width:105px}
+.app_per1 div:nth-child(2){width:20px}
+.app_per1 div:nth-child(3){min-width:80px;color:#737580;width:auto;word-break:break-all;max-width:calc(100% - 150px);max-height:90px;}/*180621 스타일 수정*/

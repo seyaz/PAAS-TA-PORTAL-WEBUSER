@@ -26,6 +26,22 @@ export class VmService {
     })
   }
 
+  getVmNowCpu(vmName: string) {
+    return this.commonService
+      .doGet('/commonapi/v2/vm_monitoring/now_cpu_usage_percent' + '?vmName=' + vmName, this.commonService.getToken())
+      .map((res: any) => {
+      return res;
+    })
+  }
+
+  getVmNowMem(vmName: string) {
+    return this.commonService
+      .doGet('/commonapi/v2/vm_monitoring/now_mem_usage_percent' + '?vmName=' + vmName, this.commonService.getToken())
+      .map((res: any) => {
+      return res;
+    })
+  }
+
   getVmSpace(spaceId: string) {
     return this.commonService.doGet('/commonapi/v2/vm/space/' + spaceId, this.commonService.getToken()).map((res: any) => {
       return res;

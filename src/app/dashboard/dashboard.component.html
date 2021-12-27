@@ -573,7 +573,7 @@
                         </div>
                         <span
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: 260px;">
-                    &nbsp;{{item.vmNm}} </span>
+                    &nbsp;{{item.vmAlias}} </span>
                       </div>
                       <div class="app_per1 clearfix">
                         <ul>
@@ -588,36 +588,34 @@
                       </div>
                     </ng-container>
                     <ng-container>
-                    </ng-container>
-                    <ng-container>
                       <div class="app_graph1 clearfix">
                         <circle-progress
                           [radius]="60"
                           [space]="-10"
                           [toFixed]="1"
                           [maxPercent]="100"
-                          [subtitle]="'20%'"
+                          [subtitle]="item.nowCpu+'%'"
                           [outerStrokeWidth]="8"
                           [outerStrokeColor]="'#ff0000'"
                           [innerStrokeColor]="'#e7e8ea'"
                           [innerStrokeWidth]="10"
                           [title]="'CPU'"
                           [animationDuration]="1000"
-                          [percent]="20"
+                          [percent]="item.nowCpu"
                         ></circle-progress>
                         <circle-progress
                           [radius]="60"
                           [space]="-10"
                           [toFixed]="1"
                           [maxPercent]="100"
-                          [subtitle]="'20%'"
+                          [subtitle]="item.nowMem+'%'"
                           [outerStrokeWidth]="8"
                           [outerStrokeColor]="'#ad6de8'"
                           [innerStrokeColor]="'#e7e8ea'"
                           [innerStrokeWidth]="10"
                           [title]="'Memory'"
                           [animationDuration]="1000"
-                          [percent]="20"
+                          [percent]="item.nowMem"
                         ></circle-progress>
                       </div>
                     </ng-container>

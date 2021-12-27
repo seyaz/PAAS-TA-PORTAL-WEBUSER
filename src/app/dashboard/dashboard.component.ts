@@ -5,14 +5,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {DashboardService, Service} from './dashboard.service';
-import {Organization} from "../model/organization";
+import {Organization} from '../model/organization';
 import {Space} from '../model/space';
 import {AppMainService} from '../dash/app-main/app-main.service';
 import {CatalogService} from '../catalog/main/catalog.service';
-import {VmService} from "../vm/vm.service";
-import {isBoolean, isNullOrUndefined} from "util";
+import {VmService} from '../vm/vm.service';
+import {isBoolean, isNullOrUndefined} from 'util';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
-import {replaceNgsp} from "@angular/compiler/src/ml_parser/html_whitespaces";
+import {replaceNgsp} from '@angular/compiler/src/ml_parser/html_whitespaces';
+import {forEach} from '@angular/router/src/utils/collection';
 
 
 declare var $: any;
@@ -24,14 +25,14 @@ declare var jQuery: any;
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit,  AfterViewChecked{
+export class DashboardComponent implements OnInit,  AfterViewChecked {
 
   public isEmpty: boolean;
-  public isSpace: boolean = false;
+  public isSpace = false;
   public isMessage: boolean;
   public isPatten: boolean;
   private isLoadingSpaces = false;
-  public isLength: boolean = true;
+  public isLength = true;
 
   public token: string;
   public userid: string;
@@ -44,16 +45,16 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   public appName: string;
   public appNewName: string;
   public appDelName: string;
-  public dashboardUseYn : string;
+  public dashboardUseYn: string;
   public appSummaryGuid: string;
 
-  public orgName: string = '';
-  public orgGuid: string = '';
-  public spaceName: string = '';
-  public spaceGuid: string = '';
-  public appGuid: string = '';
+  public orgName = '';
+  public orgGuid = '';
+  public spaceName = '';
+  public spaceGuid = '';
+  public appGuid = '';
 
-  public selectedGuid: string = '';
+  public selectedGuid = '';
   public selectedType: string;
   public selectedName: string;
 
@@ -80,7 +81,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   public userProvideCredentials: string;
   public userProvideSyslogDrainUrl: string;
   public userProvideType: string;
-  public userProvideRouteServiceUrl : string;
+  public userProvideRouteServiceUrl: string;
 
   public orgMemoryDevelopmentTotal: number;
   public orgMemoryProductionTotal: string;
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   public orgTotalRoutes: string;
   public orgTotalServiceKeys: string;
   public orgTotalServices: string;
-  public selectedBinding : boolean;
+  public selectedBinding: boolean;
 
   public caas_on_off = false;
 
@@ -98,10 +99,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   public caas_Use_M = 0;
   public caas_Use_D = 0;
 
-  public caas_Pods : any;
-  public caas_Deployments : any;
-  public caas_ReplicaSets  : any;
-  public caas_Services  : any;
+  public caas_Pods: any;
+  public caas_Deployments: any;
+  public caas_ReplicaSets: any;
+  public caas_Services: any;
 
   public caas_Pods_length = 0;
   public caas_Deployments_length = 0;
@@ -112,14 +113,14 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   private caas_loading = false;
   private caas_countdown = 0;
 
-  public sltVmUrl: string = '';
+  public sltVmUrl = '';
 
   /*사용자 정보*/
   public vmNmae: string;
 
-  public placeholder = "credentialsStr:{'username':'admin','password':'password';}";
+  public placeholder = 'credentialsStr:{\'username\':\'admin\',\'password\':\'password\';}';
 
-  constructor(private translate: TranslateService, private commonService: CommonService, private dashboardService: DashboardService,private appMainService: AppMainService,
+  constructor(private translate: TranslateService, private commonService: CommonService, private dashboardService: DashboardService, private appMainService: AppMainService,
               private catalogService: CatalogService, private vmService: VmService, private route: ActivatedRoute, private router: Router,  private log: NGXLogger, private http: HttpClient) {
 
     if (commonService.getToken() == null) {
@@ -194,17 +195,17 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   currentSpaceBox() {
     if (this.orgs.length > 0) {
-      this.getOrg(this.currentOrg,'defalut');
+      this.getOrg(this.currentOrg, 'defalut');
     } else {
       setTimeout(this.currentSpaceBox(), 3000);
     }
   }
 
   ngOnInit() {
-    $("[id^='apopmenu_']").hide();
-    $("[id^='layerpop']").modal("hide");
+    $('[id^=\'apopmenu_\']').hide();
+    $('[id^=\'layerpop\']').modal('hide');
   }
-  ngAfterViewChecked(){
+  ngAfterViewChecked() {
     this.SETTTING_SCRIPTS();
   }
 
@@ -218,43 +219,43 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       });
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
       if (this.currentOrg != '') {
         this.commonService.isLoading = false;
-        this.getOrg(this.currentOrg,'defalut');
+        this.getOrg(this.currentOrg, 'defalut');
       } else {
-        this.getOrg("",'first');
+        this.getOrg('', 'first');
       }
     });
     return this.orgs;
   }
 
-  getOrgSpaceList(orgId: string, spacedefault : boolean) {
+  getOrgSpaceList(orgId: string, spacedefault: boolean) {
     this.commonService.isLoading = true;
     this.dashboardService.getOrgSpaceList(orgId).subscribe(data => {
       (data['resources'] as Array<Object>).forEach(spaceData => {
         this.spaces.push(new Space(spaceData['metadata'], spaceData['entity'], orgId));
       });
-      this.space = this.spaces.find(space => space.guid === this.commonService.getCurrentSpaceGuid())
-      if(isNullOrUndefined(this.space)){
-        if(this.spaces.length > 0){
+      this.space = this.spaces.find(space => space.guid === this.commonService.getCurrentSpaceGuid());
+      if (isNullOrUndefined(this.space)) {
+        if (this.spaces.length > 0) {
           this.currentSpace = this.spaces[0].guid;
         } else {
           this.currentSpace = '';
         }
-      }else if (data['resources'].length > 0){
-        this.currentSpace = this.commonService.getCurrentSpaceGuid()
+      } else if (data['resources'].length > 0) {
+        this.currentSpace = this.commonService.getCurrentSpaceGuid();
         this.commonService.setCurrentSpaceGuid(this.space.guid);
         this.commonService.setCurrentSpaceName(this.space.name);
-      }else {
+      } else {
         this.currentSpace = '';
       }
       this.commonService.isLoading = false;
       return data;
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
       if (this.currentSpace != null) {
         this.commonService.isLoading = false;
@@ -273,15 +274,15 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.vmEntities;
       this.spaces = [];
       this.currentSpace = null;
-    } else if(type === 'first'){
-      if(this.orgs.length > 0) {
+    } else if (type === 'first') {
+      if (this.orgs.length > 0) {
         this.org = this.orgs[0];
         this.commonService.setCurrentOrgGuid(this.org.guid);
         this.commonService.setCurrentOrgName(this.org.name);
         this.currentOrg = this.org.OrgName();
         this.getOrgSpaceList(this.org.guid, true);
-      }else{
-        this.commonService.isLoading =false;
+      } else {
+        this.commonService.isLoading = false;
       }
       return;
     }
@@ -299,8 +300,8 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         /* 세이브 ORG 정보*/
         this.commonService.setCurrentOrgGuid(this.org.guid);
         this.commonService.setCurrentOrgName(this.org.name);
-      }else{
-        if(this.orgs.length > 0){
+      } else {
+        if (this.orgs.length > 0) {
           this.org = this.orgs[0];
           this.commonService.setCurrentOrgGuid(this.org.guid);
           this.commonService.setCurrentOrgName(this.org.name);
@@ -355,10 +356,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   getOrgSummary() {
     this.dashboardService.getOrgSummary(this.org.guid).subscribe(data => {
 
-      this.orgMemoryDevelopmentTotal = parseInt(data["all_memoryDevelopmentTotal"],10) ;
-      this.orgMemoryProductionTotal = data["all_memoryProductionTotal"];
-      this.orgServiceTotal = data["all_serviceTotal"];
-      this.orgQuotaMemoryLimit = data.quota["memoryLimit"];
+      this.orgMemoryDevelopmentTotal = parseInt(data['all_memoryDevelopmentTotal'], 10) ;
+      this.orgMemoryProductionTotal = data['all_memoryProductionTotal'];
+      this.orgServiceTotal = data['all_serviceTotal'];
+      this.orgQuotaMemoryLimit = data.quota['memoryLimit'];
       this.orgTotalRoutes = data.quota['totalRoutes'];
       this.orgTotalServiceKeys = data.quota['totalServiceKeys'];
       this.orgTotalServices = data.quota['totalServices'];
@@ -366,7 +367,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       return data;
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
     });
   }
@@ -377,10 +378,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       $.each(data.apps, function (key, dataobj) {
         $.each(data.appsPer, function (key2, dataobj2) {
           if (dataobj.guid == dataobj2.guid) {
-            data.apps[key]["cpuPer"] = dataobj2.cpuPer;
-            data.apps[key]["memPer"] = dataobj2.memPer;
-            data.apps[key]["diskPer"] = dataobj2.diskPer;
-            data.apps[key]["thumbImgPath"] = dataobj2.thumbImgPath;
+            data.apps[key]['cpuPer'] = dataobj2.cpuPer;
+            data.apps[key]['memPer'] = dataobj2.memPer;
+            data.apps[key]['diskPer'] = dataobj2.diskPer;
+            data.apps[key]['thumbImgPath'] = dataobj2.thumbImgPath;
           }
         });
       });
@@ -389,39 +390,44 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.servicesEntities = data.services;
       this.servicesEntities.forEach(service => {
         service['binding'] = false;
-      })
+      });
       this.thumnail();
     }, () => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     });
   }
 
-  getVmSummary(value){
+  getVmSummary(value) {
     let cnt = 0;
+    this.vmEntities = [];
     this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
-      $.each(data.data, function (key, dataobj) {
-        if(dataobj.vmSpaceGuid == value) {
-          data.data[key]['vmNm'] = dataobj.vmNm;
-          data.data[key]['vmSpaceName'] = dataobj.vmSpaceName;
-          data.data[key]['vmOrgName'] = dataobj.vmOrgName;
-          data.data[key]['vmSpaceGuid'] = dataobj.vmSpaceGuid;
+      data.data.forEach(vm => {
+        if (vm.vmSpaceGuid === value) {
+          console.log('확인');
+              this.vmService.getVmNowMem(vm.vmNm).subscribe(data1 => {
+                vm.nowMem = data1.data;
+              });
+          this.vmService.getVmNowCpu(vm.vmNm).subscribe(data2 => {
+            vm.nowCpu = data2.data;
+          });
+          console.log(vm);
+          this.vmEntities.push(vm);
         }
-       });
-      this.vmEntities = data.data;
+      });
       if (cnt = 0) {
         this.vmEntities['thumbImgPath'] = '../.. /assets/resources/images/catalog/MONITORING.png';
       }
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
       this.commonService.isLoading = false;
     });
 }
 
   thumnail(): void {
-    let catalog = this.catalogService;
+    const catalog = this.catalogService;
     this.dashboardService.getServicePacks().subscribe(data => {
 
       $.each(this.servicesEntities, function (skey, servicesEntitie) {
@@ -431,26 +437,26 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
             if (servicesEntitie['service_plan']['service']['label'] === servicepack['servicePackName']) {
               servicesEntitie['dashboardUseYn'] = servicepack['dashboardUseYn'];
               servicesEntitie['appBindYn'] = servicepack['appBindYn'];
-              try{
-                var pathHeader = servicepack['thumbImgPath'].lastIndexOf("/");
-                var pathEnd = servicepack['thumbImgPath'].length;
-                var fileName = servicepack['thumbImgPath'].substring(pathHeader + 1, pathEnd);
+              try {
+                const pathHeader = servicepack['thumbImgPath'].lastIndexOf('/');
+                const pathEnd = servicepack['thumbImgPath'].length;
+                const fileName = servicepack['thumbImgPath'].substring(pathHeader + 1, pathEnd);
                 catalog.getImg('/storageapi/v2/swift/' + fileName).subscribe(data => {
-                  let reader = new FileReader();
-                  reader.addEventListener("load", () => {
+                  const reader = new FileReader();
+                  reader.addEventListener('load', () => {
                     servicesEntitie['thumbImgPath'] = reader.result;
                   }, false);
                   if (data) {
                     reader.readAsDataURL(data);
                   }
                 });
-                cnt++
-              }catch (e) {
+                cnt++;
+              } catch (e) {
                 servicesEntitie['thumbImgPath'] = '../../assets/resources/images/catalog/catalog_3.png';
               }
             }
           }
-        })
+        });
         if (cnt == 0) {
           servicesEntitie['thumbImgPath'] = '../../assets/resources/images/catalog/catalog_3.png';
         }
@@ -458,7 +464,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       return data;
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
       this.commonService.isLoading = false;
     });
@@ -466,32 +472,31 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
 
   thumnailApp(): void {
-    let catalog = this.catalogService;
+    const catalog = this.catalogService;
     this.dashboardService.getBuildPacks().subscribe(data => {
       $.each(this.appEntities, function (skey, appEntitie) {
         let cnt = 0;
         $.each(data['list'], function (dkey, buildpack) {
           if (appEntitie['buildpack'] != null) {
             if (appEntitie['buildpack'] === buildpack['buildPackName']) {
-              try{
-                var pathHeader = buildpack['thumbImgPath'].lastIndexOf("/");
-                var pathEnd = buildpack['thumbImgPath'].length;
-                var fileName = buildpack['thumbImgPath'].substring(pathHeader + 1, pathEnd);
+              try {
+                const pathHeader = buildpack['thumbImgPath'].lastIndexOf('/');
+                const pathEnd = buildpack['thumbImgPath'].length;
+                const fileName = buildpack['thumbImgPath'].substring(pathHeader + 1, pathEnd);
                 catalog.getImg('/storageapi/v2/swift/' + fileName).subscribe(data => {
-                  let reader = new FileReader();
-                  reader.addEventListener("load", () => {
+                  const reader = new FileReader();
+                  reader.addEventListener('load', () => {
                     appEntitie['thumbImgPath'] = reader.result;
                   }, false);
                   if (data) {
                     reader.readAsDataURL(data);
-                  }});}
-              catch (e) {
+                  }}); } catch (e) {
                 appEntitie['thumbImgPath'] = '../../assets/resources/images/catalog/catalog_3.png';
               }
-              cnt++
+              cnt++;
             }
           }
-        })
+        });
         if (cnt == 0) {
           appEntitie['thumbImgPath'] = '../../assets/resources/images/catalog/catalog_3.png';
         }
@@ -499,7 +504,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       return data;
     }, error => {
       this.commonService.isLoading = false;
-      this.commonService.alertMessage("서버가 불안정합니다.", false);
+      this.commonService.alertMessage('서버가 불안정합니다.', false);
     }, () => {
       // this.log.debug('END');
       // this.log.debug(this.appEntities);
@@ -514,7 +519,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
 
   renameApp() {
-    let params = {
+    const params = {
       guid: this.selectedGuid,
       newName: this.selectedName,
     };
@@ -530,14 +535,14 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   }
 
   delApp(guidParam: string) {
-    let params = {
+    const params = {
       guid: guidParam
     };
     this.commonService.isLoading = true;
     this.dashboardService.delApp(params).subscribe(data => {
-      if(data.result){
+      if (data.result) {
         this.commonService.alertMessage(this.translateEntities.alertLayer.deleteSuccess, true);
-      }else{
+      } else {
         this.commonService.alertMessage(data.msg, false);
       }
     }, error => {
@@ -549,40 +554,40 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   }
 
   showPopAppStopClick() {
-    $("#layerpop_app_stop").modal("show");
+    $('#layerpop_app_stop').modal('show');
   }
 
   stopAppClick() {
-    $("[id^='layerpop']").modal("hide");
+    $('[id^=\'layerpop\']').modal('hide');
     this.commonService.isLoading = true;
 
-    let params = {
+    const params = {
       guid: this.selectedGuid
     };
 
     this.appMainService.stopApp(params).subscribe(data => {
-      if(data.result){
+      if (data.result) {
         this.commonService.isLoading = false;
         this.commonService.alertMessage(this.translateEntities.alertLayer.appstopSuccess, true);
         this.getAppSummary(this.selectedSpaceId);
 
         this.ngOnInit();
-      }else{
+      } else {
         this.commonService.isLoading = false;
-        this.commonService.alertMessage(this.translateEntities.alertLayer.appstopFail + "<br><br>" + data.msg.description, false);
+        this.commonService.alertMessage(this.translateEntities.alertLayer.appstopFail + '<br><br>' + data.msg.description, false);
       }
     });
   }
 
   showPopAppStartClick() {
-    $("#layerpop_app_start").modal("show");
+    $('#layerpop_app_start').modal('show');
   }
 
   startAppClick() {
-    $("[id^='layerpop']").modal("hide");
+    $('[id^=\'layerpop\']').modal('hide');
     this.commonService.isLoading = true;
 
-    let params = {
+    const params = {
       guid: this.selectedGuid,
       orgName: this.org['name'],
       spaceName: this.space['name'],
@@ -590,15 +595,15 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     };
 
     this.appMainService.startApp(params).subscribe(data => {
-      if(data.result){
+      if (data.result) {
         this.commonService.isLoading = false;
         this.getAppSummary(this.selectedSpaceId);
         this.commonService.alertMessage(this.translateEntities.alertLayer.appstartSuccess, true);
 
         this.ngOnInit();
-      }else{
+      } else {
         this.commonService.isLoading = false;
-        this.commonService.alertMessage(this.translateEntities.alertLayer.appstartFail + "<br><br>" + data.msg, false);
+        this.commonService.alertMessage(this.translateEntities.alertLayer.appstartFail + '<br><br>' + data.msg, false);
       }
     });
   }
@@ -606,10 +611,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   userProvidedInfo() {
     this.dashboardService.userProvidedInfo(this.selectedGuid).subscribe(data => {
-      this.userProvideName = data.entity["name"];
-      this.userProvideCredentials = JSON.stringify(data.entity["credentials"]);
-      this.userProvideSyslogDrainUrl = data.entity["syslog_drain_url"];
-      this.userProvideType = data.entity["type"];
+      this.userProvideName = data.entity['name'];
+      this.userProvideCredentials = JSON.stringify(data.entity['credentials']);
+      this.userProvideSyslogDrainUrl = data.entity['syslog_drain_url'];
+      this.userProvideType = data.entity['type'];
       this.userProvideRouteServiceUrl = data.entity['route_service_url'];
       return data;
     });
@@ -617,10 +622,10 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   createUserProvided() {
 
-    if(this.userProvideCredentials.length > 0){
-      var str = JSON.stringify(this.userProvideCredentials);
+    if (this.userProvideCredentials.length > 0) {
+      const str = JSON.stringify(this.userProvideCredentials);
     }
-    let params = {
+    const params = {
       orgName: this.org.name,
       spaceGuid: this.selectedSpaceId,
       serviceInstanceName: this.userProvideName,
@@ -630,12 +635,11 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     };
     this.commonService.isLoading = true;
     this.dashboardService.createUserProvided(params).subscribe(data => {
-      if(data.result){
+      if (data.result) {
         this.getAppSummary(this.selectedSpaceId);
         this.ngOnInit();
         this.commonService.alertMessage(this.translateEntities.alertLayer.createSuccess, true);
-        return data;}
-      else if(!data.result){
+        return data; } else if (!data.result) {
         this.commonService.alertMessage(data.msg, false);
         this.commonService.isLoading = false;
         return data;
@@ -656,7 +660,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     }
   }
 
-  provideinit(){
+  provideinit() {
     this.userProvideCredentials = '';
     this.userProvideName = '';
     this.userProvideSyslogDrainUrl = '';
@@ -665,30 +669,30 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
 
   isUserProvideValidation() {
-    if (this.userProvideName !=='') {
+    if (this.userProvideName !== '') {
       try {
-        if (this.userProvideCredentials !==''){
-          if(this.userProvideCredentials.length > 0 && this.userProvideCredentials.indexOf("{") > -1 && this.userProvideCredentials.indexOf("}")){
+        if (this.userProvideCredentials !== '') {
+          if (this.userProvideCredentials.length > 0 && this.userProvideCredentials.indexOf('{') > -1 && this.userProvideCredentials.indexOf('}')) {
             JSON.parse(this.userProvideCredentials);
             return true;
-          }else {
-            this.commonService.alertMessage("Credential 작성 형식이 맞지 않습니다.", false);
+          } else {
+            this.commonService.alertMessage('Credential 작성 형식이 맞지 않습니다.', false);
             return false;
           }
         }
-        if( this.userProvideRouteServiceUrl !== '' ){
-          if(this.userProvideRouteServiceUrl.indexOf("https://") === -1){
-            this.commonService.alertMessage("Route Service Url 작성 형식이 맞지 않습니다.", false);
+        if ( this.userProvideRouteServiceUrl !== '' ) {
+          if (this.userProvideRouteServiceUrl.indexOf('https://') === -1) {
+            this.commonService.alertMessage('Route Service Url 작성 형식이 맞지 않습니다.', false);
             return false;
           }
         }
         return true;
       } catch (e) {
-        this.commonService.alertMessage("Credential 작성 형식이 맞지 않습니다.", false);
+        this.commonService.alertMessage('Credential 작성 형식이 맞지 않습니다.', false);
         return false;
       }
     } else {
-      this.commonService.alertMessage("userProvideName을 입력해주십시오", false);
+      this.commonService.alertMessage('userProvideName을 입력해주십시오', false);
       return false;
     }
   }
@@ -698,7 +702,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     if (!this.isUserProvideValidation()) {
       return;
     }
-    let params = {
+    const params = {
       orgName: this.org.name,
       guid: this.selectedGuid,
       serviceInstanceName: this.userProvideName,
@@ -708,11 +712,11 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     };
     this.commonService.isLoading = true;
     this.dashboardService.updateUserProvided(params).subscribe(data => {
-        if(data.result){
+        if (data.result) {
           this.getAppSummary(this.selectedSpaceId);
           this.commonService.alertMessage(this.translateEntities.alertLayer.updateSuccess, true);
           return data;
-        }else {
+        } else {
           this.commonService.alertMessage(data.msg, false);
           this.commonService.isLoading = false;
           return data;
@@ -726,13 +730,13 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   }
 
   renameInstance() {
-    let params = {
+    const params = {
       guid: this.selectedGuid,
       newName: this.selectedName
     };
     this.commonService.isLoading = true;
     this.dashboardService.renameInstance(params).subscribe(data => {
-      if(data.result) {
+      if (data.result) {
         this.commonService.alertMessage(this.translateEntities.alertLayer.updateSuccess, true);
         return data;
       } else {
@@ -749,18 +753,18 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
 
   /*UserProvide Delete*/
   delInstance() {
-    if(this.selectedBinding){
+    if (this.selectedBinding) {
       this.commonService.alertMessage(this.translateEntities.alertLayer.bindingService, false);
       return;
     }
-    let params = {
+    const params = {
       guid: this.selectedGuid
     };
     this.commonService.isLoading = true;
     this.dashboardService.delInstance(params).subscribe(data => {
-      if(data.result){
+      if (data.result) {
         this.commonService.alertMessage(this.translateEntities.alertLayer.deleteSuccess, true);
-      }else{
+      } else {
         this.commonService.alertMessage(data.msg, false);
         this.commonService.isLoading = false;
         return data;
@@ -795,13 +799,13 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
     this.commonService.isLoading = true;
   }
 
-  setAppBinding(app : any){
+  setAppBinding(app: any) {
     app.binding = true;
   }
 
   dashTabClick(id: string) {
-    $("[id^='dashTab_']").hide();
-    $("#" + id).show();
+    $('[id^=\'dashTab_\']').hide();
+    $('#' + id).show();
     // if (id == "dashTab_1") {
     //   $('.monitor_tabs li:nth-child(1)').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
     //   $('.monitor_tabs li:nth-child(2)').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
@@ -815,7 +819,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
   popclick(id: string, type: string, guid: string, name: string, binding: boolean) {
     $('.space_pop_submenu').hide();
     if (this.current_popmenu_id != id) {
-      $("#" + id).show();
+      $('#' + id).show();
       this.current_popmenu_id = id;
       this.selectedType = type;
       this.selectedGuid = guid;
@@ -828,116 +832,116 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       this.selectedName = '';
       this.selectedBinding = false;
     }
-    if (type == "provided") {
+    if (type == 'provided') {
       this.userProvidedInfo();
     }
     // this.log.debug('TYPE :: ' + type + ' GUID :: ' + guid + ' NAME :: ' + name);
   }
-  renamefocus(){
-    $("#layerpop1").modal("show");
+  renamefocus() {
+    $('#layerpop1').modal('show');
     setTimeout(() => {
       $('#appName').trigger('focus');
       $('input[id=appName]').keydown(function (key) {
-        if(key.keyCode == 13){
+        if (key.keyCode == 13) {
           $('#renameApp').trigger('click');
           $('#renameApp').trigger('click');
         }
       });
-    }, 250)
+    }, 250);
   }
 
-  serviceRename(){
-    $("#layerpop3").modal("show");
+  serviceRename() {
+    $('#layerpop3').modal('show');
     setTimeout(() => {
       $('#selectedName').trigger('focus');
       $('input[id=selectedName]').keydown(function (key) {
-        if(key.keyCode == 13){
+        if (key.keyCode == 13) {
           $('#renameInstance').trigger('click');
           $('#renameInstance').trigger('click');
         }
       });
-    }, 300)
+    }, 300);
   }
 
-  serviceDashbaordlenght(data : any){
-    return data.toString().split("|").length;
+  serviceDashbaordlenght(data: any) {
+    return data.toString().split('|').length;
   }
 
-  serviceDashbaordArray(data : any, number : number){
-    return data.toString().split("|");
+  serviceDashbaordArray(data: any, number: number) {
+    return data.toString().split('|');
   }
 
-  app_started() : number {
-    if(isNullOrUndefined(this.appEntities)) return 0;
-    var started_app = [];
+  app_started(): number {
+    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    const started_app = [];
 
     this.appEntities.forEach(entity => {
-      if(entity.state === "STARTED"){
+      if (entity.state === 'STARTED') {
         started_app.push(entity);
       }
     });
     return started_app.length;
   }
 
-  app_stoped() : number{
-    if(isNullOrUndefined(this.appEntities)) return 0;
-    var stoped_app = [];
+  app_stoped(): number {
+    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    const stoped_app = [];
     this.appEntities.forEach(entity => {
-      if(entity.state === "STOPPED"){
+      if (entity.state === 'STOPPED') {
         stoped_app.push(entity);
       }
     });
     return stoped_app.length;
   }
 
-  app_instances()  : number {
-    if(isNullOrUndefined(this.appEntities)) return 0;
-    var instances = 0;
+  app_instances(): number {
+    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    let instances = 0;
     this.appEntities.forEach(entity => {
       instances += entity.instances;
     });
     return instances;
   }
 
-  app_memory_quota() : number{
-    if(isNullOrUndefined(this.appEntities)) return 0;
-    var memory = 0;
+  app_memory_quota(): number {
+    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    let memory = 0;
     this.appEntities.forEach(entity => {
       memory += entity.memory;
     });
     return memory;
   }
 
-  app_disk_quota() : number{
-    if(isNullOrUndefined(this.appEntities)) return 0;
-    var disk_quota = 0;
+  app_disk_quota(): number {
+    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    let disk_quota = 0;
     this.appEntities.forEach(entity => {
       disk_quota += entity.disk_quota;
     });
     return disk_quota;
   }
 
-  cass_common_api(){
-    if(isNullOrUndefined(this.commonService.getCaaSApiUri()) || this.commonService.getCaaSApiUri() === '') return;
-    if(this.caas_loading){ this.commonService.isLoading = true; }
-    try{
-      this.dashboardService.getCaasCommonUser().subscribe(caasuser=>{
-        if(caasuser === null) {return ;}
+  cass_common_api() {
+    if (isNullOrUndefined(this.commonService.getCaaSApiUri()) || this.commonService.getCaaSApiUri() === '') { return; }
+    if (this.caas_loading) { this.commonService.isLoading = true; }
+    try {
+      this.dashboardService.getCaasCommonUser().subscribe(caasuser => {
+        if (caasuser === null) {return ; }
         caasuser.forEach(r => {
-          if(this.commonService.getCurrentOrgGuid() === r.organizationGuid){
+          if (this.commonService.getCurrentOrgGuid() === r.organizationGuid) {
             this.caas_on_off = true;
             //네임스페이스 메모리, 디스크 현재, 최대 사용량
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/resourceQuotas").subscribe(data=>{
-              this.caas_Limit_M = this.int_Change(data.items[0].status.hard["limits.memory"]);
-              this.caas_Limit_D = this.int_Change(data.items[0].status.hard["requests.storage"]);
-              this.caas_Use_M = this.int_Change(data.items[0].status.used["limits.memory"]);
-              this.caas_Use_D = this.int_Change(data.items[0].status.used["requests.storage"]);
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/resourceQuotas').subscribe(data => {
+              this.caas_Limit_M = this.int_Change(data.items[0].status.hard['limits.memory']);
+              this.caas_Limit_D = this.int_Change(data.items[0].status.hard['requests.storage']);
+              this.caas_Use_M = this.int_Change(data.items[0].status.used['limits.memory']);
+              this.caas_Use_D = this.int_Change(data.items[0].status.used['requests.storage']);
               this.getCaasOffLoading();
             }, error1 => {
               this.commonService.isLoading = false;
             });
 
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/pods").subscribe(data => {
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/pods').subscribe(data => {
               this.caas_Pods_length = data.items.length;
               this.caas_Pods = data.items;
               this.getCaasOffLoading();
@@ -945,7 +949,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
               this.commonService.isLoading = false;
             });
 
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/deployments").subscribe(data => {
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/deployments').subscribe(data => {
               this.caas_Deployments = data.items;
               this.caas_Deployments_length = data.items.length;
               this.getCaasOffLoading();
@@ -953,22 +957,22 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
               this.commonService.isLoading = false;
             });
 
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/replicaSets").subscribe(data => {
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/replicaSets').subscribe(data => {
               this.caas_ReplicaSets_length = data.items.length;
-              this.caas_ReplicaSets= data.items;
+              this.caas_ReplicaSets = data.items;
               this.getCaasOffLoading();
             }, error1 => {
               this.commonService.isLoading = false;
             });
 
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/services").subscribe(data => {
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/services').subscribe(data => {
               this.caas_Services_length = data.items.length;
               this.getCaasOffLoading();
             }, error1 => {
               this.commonService.isLoading = false;
             });
 
-            this.dashboardService.getCaasAPI("namespaces/"+ r.caasNamespace+"/persistentVolumeClaims").subscribe(data => {
+            this.dashboardService.getCaasAPI('namespaces/' + r.caasNamespace + '/persistentVolumeClaims').subscribe(data => {
               this.caas_Pvc = data.items;
               this.getCaasOffLoading();
             }, error1 => {
@@ -978,60 +982,59 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
       }, error1 => {
         this.commonService.isLoading = false;
       });
-    }
-    catch (e) {
-      console.error("CaaS Domain Error");
+    } catch (e) {
+      console.error('CaaS Domain Error');
       this.commonService.isLoading = false;
     }
   }
 
-  int_Change(used : String ) : number{
-    if(used === "0"){
+  int_Change(used: String ): number {
+    if (used === '0') {
       return 0;
     }
-    var _used = 0;
-    if(used.indexOf("G") > 0){
+    let _used = 0;
+    if (used.indexOf('G') > 0) {
       _used = +used.substring(0, used.length - 2);
-    } else if(used.indexOf("M") > 0){
-      _used = (+used.substring(0, used.length - 2))/1024 ;
+    } else if (used.indexOf('M') > 0) {
+      _used = (+used.substring(0, used.length - 2)) / 1024 ;
     }
     return _used;
   }
 
-  getPaasTaRefresh(value: string){
+  getPaasTaRefresh(value: string) {
     this.showLoading();
     this.getAppSummary(value);
     this.getOrgSummary();
   }
 
-  getCaasRefresh(){
+  getCaasRefresh() {
     this.caas_loading = true;
     this.caas_countdown = 0;
     this.cass_common_api();
   }
 
-  getCaasOffLoading(){
+  getCaasOffLoading() {
     this.caas_countdown++;
-    if(this.caas_countdown == 6){
+    if (this.caas_countdown == 6) {
       this.caas_loading = false;
       this.commonService.isLoading = false;
     }
   }
 
-  showWindowVM(){
-    window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700')
+  showWindowVM() {
+    window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700');
   }
 
-  SETTTING_SCRIPTS(){
+  SETTTING_SCRIPTS() {
 
     // console.log(this.appEntities);
     //
     // console.log(this.appSummaryEntities);
     // console.log(this.servicesEntities);
-    $('.monitor_tabs li').click(function(){
-      var tab_c = $(this).attr('name');
-      var content = tab_c.substr(4, 1);
-      if(tab_c == 'tab01'){
+    $('.monitor_tabs li').click(function() {
+      const tab_c = $(this).attr('name');
+      const content = tab_c.substr(4, 1);
+      if (tab_c == 'tab01') {
 
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
@@ -1040,7 +1043,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
 
-      } else if(tab_c == 'tab02'){
+      } else if (tab_c == 'tab02') {
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
         $('[name="tab03"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
@@ -1048,7 +1051,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
 
-      } else if(tab_c == 'tab03'){
+      } else if (tab_c == 'tab03') {
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab03"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
@@ -1056,7 +1059,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
 
-      } else if(tab_c == 'tab04'){
+      } else if (tab_c == 'tab04') {
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab03"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
@@ -1064,14 +1067,14 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
 
-      } else if(tab_c == 'tab05'){
+      } else if (tab_c == 'tab05') {
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab03"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab04"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
-      } else if(tab_c == 'tab06'){
+      } else if (tab_c == 'tab06') {
         $('[name="tab01"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab02"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab03"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
@@ -1079,16 +1082,14 @@ export class DashboardComponent implements OnInit,  AfterViewChecked{
         $('[name="tab05"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_right');
         $('[name="tab06"]').removeClass('monitor_tabs_on monitor_tabs_right monitor_tabs_left').addClass('monitor_tabs_on');
       }
-      var i = 0;
-      for (i=0; i<4; i++)
-      {
-        $('.monitor_content0'+i).hide();
+      let i = 0;
+      for (i = 0; i < 4; i++) {
+        $('.monitor_content0' + i).hide();
       }
-      $('.monitor_content0'+content).show();
+      $('.monitor_content0' + content).show();
       $('.service_only').hide();
     });
   }
-
 }
 
 

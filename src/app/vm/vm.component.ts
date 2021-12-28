@@ -33,6 +33,7 @@ export class VmComponent implements OnInit {
   public orgGuid = '';
   public spaceGuid = '';
   public spaceName = '';
+  public vmAlias = '';
 
   public sltChartInstances: string;
   public vmSummaryChartDate: string;
@@ -84,6 +85,7 @@ export class VmComponent implements OnInit {
       this.vms = data.data[0];
       this.vmName = this.vms['vmNm'];
       this.spaceName = this.vms['vmSpaceName'];
+      this.vmAlias = this.vms['vmAlias'];
       this.getVmMonitoring(this.vmName);
     }, error => {
       this.commonService.isLoading = false;
@@ -167,49 +169,16 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            label: this.memValueObject['name'],
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-            data: chartDataData,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasCpuUsage');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: this.memValueObject['name'],
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'Cpu Usage')
           }
         });
+
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -268,51 +237,19 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasCpuCostop');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'Cpu Costop',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'CPU Costop')
           }
         });
       }
     }, error => {
       this.commonService.isLoading = false;
     });
-
   }
 
   getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
@@ -333,44 +270,13 @@ export class VmComponent implements OnInit {
         chartDataData.push(value[1]);
       });
 
-      let datasetsArray = new Array();
-
-      if (datasetsArray.length != 0) {
-        datasetsArray = [{
-          fill: false,
-          lineTension: 0.1,
-          backgroundColor: 'rgba(75,192,192,0.4)',
-          borderColor: 'rgba(75,192,192,1)',
-          borderCapStyle: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(75,192,192,1)',
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-          pointHoverBorderColor: 'rgba(220,220,220,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10,
-          spanGaps: false,
-        }];
-      }
-
       const ctx = document.getElementById('lineCanvasMemUsage');
 
       this.sltChartInstances = new Chart(ctx, {
         type: 'line',
         data: {
           labels: chartDataTime,
-          datasets: [
-            {
-              label: 'MEM Usage',
-              datasets: datasetsArray,
-              data: chartDataData,
-            }
-          ]
+          datasets: this.dataArray(chartDataData, 'MEM Usage')
         }
       });
     });
@@ -400,44 +306,13 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasMemActiveConsumed');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'MEM Active vs Consumed',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, '\'MEM Active vs Consumed\'')
           }
         });
       }
@@ -471,44 +346,14 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasMemSwap');
+
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'MEM Swap',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'MEM Swap')
           }
         });
       }
@@ -535,7 +380,7 @@ export class VmComponent implements OnInit {
       //TODO: valueObject != undefined
       if (valueObject == null) {
         const canvas = 'lineCanvasDiskTraffic';
-        const label = 'Storage Traffic';
+        const label = 'Disk Traffic';
         this.getVmNoUsage(canvas, label);
       } else {
         this.diskValueObject = data.results[0].series[0];
@@ -548,45 +393,13 @@ export class VmComponent implements OnInit {
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
-
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasDiskTraffic');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'Storage Traffic',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'Disk Traffic')
           }
         });
       }
@@ -604,7 +417,7 @@ export class VmComponent implements OnInit {
 
       if (valueObject == null) {
         const canvas = 'lineCanvasDiskLatency';
-        const label = 'Storage Latency';
+        const label = 'Disk Latency';
         this.getVmNoUsage(canvas, label);
       } else {
         this.diskValueObject = data.results[0].series[0];
@@ -618,44 +431,13 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasDiskLatency');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'Storage Traffic',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'Disk Latency')
           }
         });
       }
@@ -687,44 +469,13 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasNetUsage');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'NET Usage',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'NET Latency')
           }
         });
       }
@@ -756,44 +507,13 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasNetTransmitReceive');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'NET Transmit/ Receive',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'NET Transmit/ Receive')
           }
         });
       }
@@ -825,44 +545,12 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
-        let datasetsArray = new Array();
-
-        if (datasetsArray.length != 0) {
-          datasetsArray = [{
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            spanGaps: false,
-          }];
-        }
-
         const ctx = document.getElementById('lineCanvasNetErrors');
-
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: [
-              {
-                label: 'NEt Errors',
-                datasets: datasetsArray,
-                data: chartDataData,
-              }
-            ]
+            datasets: this.dataArray(chartDataData, 'NEt Errors')
           }
         });
       }

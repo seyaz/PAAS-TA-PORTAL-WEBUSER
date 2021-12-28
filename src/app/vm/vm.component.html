@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <style>
-  html, body, dl, dl dt, dl dd,{
+  html, body, dl, dl dt, dl dd, {
     margin: 0;
     padding: 0;
   }
@@ -44,34 +44,65 @@
   <dl class="col_in1_dl">
     <dt>
       <ul>
+        <li><span class="on_dot BGcolors3"></span> Vm 명 </li>
+        <li>{{vmAlias}}</li>
+      </ul>
+    </dt>
+    <dt>
+      <ul>
         <li><span class="on_dot BGcolors3"></span> {{ 'appMain.app.space' | translate }}
         </li>
         <li>{{spaceName}}</li>
       </ul>
     </dt>
   </dl>
+
 </div>
 <!--VM 자원현황 대시보드-->
 <div class="layout">
   <dl>
-    <dd><canvas id = 'lineCanvasCpuUsage'></canvas></dd>
-    <dd><canvas id = 'lineCanvasCpuLatency'></canvas></dd>
-    <dd><canvas id = 'lineCanvasCpuCostop'></canvas></dd>
+    <dd>
+      <canvas id='lineCanvasCpuUsage'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasCpuLatency'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasCpuCostop'></canvas>
+    </dd>
   </dl>
   <dl>
-    <dd><canvas id = 'lineCanvasMemUsage'></canvas></dd>
-    <dd><canvas id = 'lineCanvasMemActiveConsumed'></canvas></dd>
-    <dd><canvas id = 'lineCanvasMemSwap'></canvas></dd>
+    <dd>
+      <canvas id='lineCanvasMemUsage'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasMemActiveConsumed'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasMemSwap'></canvas>
+    </dd>
   </dl>
   <dl>
-    <dd><canvas id = 'lineCanvasDiskIOps'></canvas></dd>
-    <dd><canvas id = 'lineCanvasDiskTraffic'></canvas></dd>
-    <dd><canvas id = 'lineCanvasDiskLatency'></canvas></dd>
+    <dd>
+      <canvas id='lineCanvasDiskIOps'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasDiskTraffic'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasDiskLatency'></canvas>
+    </dd>
   </dl>
   <dl>
-    <dd><canvas id = 'lineCanvasNetUsage'></canvas></dd>
-    <dd><canvas id = 'lineCanvasNetTransmitReceive'></canvas></dd>
-    <dd><canvas id = 'lineCanvasNetErrors'></canvas></dd>
+    <dd>
+      <canvas id='lineCanvasNetUsage'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasNetTransmitReceive'></canvas>
+    </dd>
+    <dd>
+      <canvas id='lineCanvasNetErrors'></canvas>
+    </dd>
   </dl>
 </div>
 </body>

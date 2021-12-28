@@ -404,14 +404,12 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
       data.data.forEach(vm => {
         if (vm.vmSpaceGuid === value) {
-          console.log('확인');
               this.vmService.getVmNowMem(vm.vmNm).subscribe(data1 => {
                 vm.nowMem = data1.data;
               });
           this.vmService.getVmNowCpu(vm.vmNm).subscribe(data2 => {
             vm.nowCpu = data2.data;
           });
-          console.log(vm);
           this.vmEntities.push(vm);
         }
       });

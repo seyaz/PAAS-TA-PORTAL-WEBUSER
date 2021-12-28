@@ -39,25 +39,30 @@
 </style>
 <script src="/assets/resources/js/Chart.js" type="text/javascript"></script>
 <body>
-<div>
-  <h2 class="headTH2">VM 자원현황 대시보드 &nbsp; <i class="rot fas fa-sync-alt" (click)="refreshClick()"></i></h2>
-  <dl class="col_in1_dl">
-    <dt>
-      <ul>
-        <li><span class="on_dot BGcolors3"></span> Vm 명 </li>
-        <li>{{vmAlias}}</li>
-      </ul>
-    </dt>
-    <dt>
-      <ul>
-        <li><span class="on_dot BGcolors3"></span> {{ 'appMain.app.space' | translate }}
-        </li>
-        <li>{{spaceName}}</li>
-      </ul>
-    </dt>
-  </dl>
-
+<div class="layout">
+  <ul class="clearfix">
+    <li style="float: right"><i class="rot fas fa-sync-alt" (click)="refreshClick()"></i></li>
+    <h1 class="headTH2">VM 자원현황 대시보드</h1>
+  </ul>
+  <ul class="clearfix">
+    <dl class="col_in1_dl">
+      <dt>
+        <ul>
+          <li><span class="on_dot BGcolors3"></span> VM 명</li>
+          <li>{{vmAlias}}</li>
+        </ul>
+      </dt>
+      <dt>
+        <ul>
+          <li><span class="on_dot BGcolors3"></span> {{ 'appMain.app.space' | translate }}
+          </li>
+          <li>{{spaceName}}</li>
+        </ul>
+      </dt>
+    </dl>
+  </ul>
 </div>
+<br>
 <!--VM 자원현황 대시보드-->
 <div class="layout">
   <dl>

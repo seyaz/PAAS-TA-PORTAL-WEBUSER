@@ -1,10 +1,9 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Vm, VmService} from '../vm/vm.service';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../common/common.service';
 import {NGXLogger} from 'ngx-logger';
-import {isNullOrUndefined} from 'util';
 
 declare var Chart: any;
 declare var $: any;
@@ -26,17 +25,18 @@ export class VmComponent implements OnInit {
   public isMessage: boolean;
   private jquerySetting: boolean;
 
-  public type = '';
-  public vmName = '';
-  public interval = '';
-  public timeGroup = '';
-  public orgGuid = '';
-  public spaceGuid = '';
-  public spaceName = '';
-  public vmAlias = '';
+  public type: string = '';
+  public vmName: string = '';
+  public vmAlias: string = '';
+  public interval: string = '';
+  public timeGroup: string = '';
+  public orgGuid: string = '';
+  public spaceGuid: string = '';
+  public spaceName: string = '';
+
 
   public sltChartInstances: string;
-  public vmSummaryChartDate: string;
+  public vmSummaryChartDate: '';
   public sltChartDefaultTimeRange: number;
   public sltChartGroupBy: number;
 
@@ -112,51 +112,18 @@ export class VmComponent implements OnInit {
     this.getVmMonitoringNetError(vmNmae, this.type, this.interval, this.timeGroup);
   }
 
-  getVmNoUsage(canvas, label) {
-    const ctx = document.getElementById(canvas);
-    this.sltChartInstances = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [0],
-        datasets: [
-          {
-            label: label,
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [0],
-            spanGaps: false,
-          }
-        ]
-      }
-    });
-  }
-
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const canvas = 'lineCanvasCpuUsage';
+      const label = 'usage';
+      const text = 'CPU Usage';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        const canvas = 'lineCanvasCpuUsage';
-        const label = 'CPU Usage';
-        this.getVmNoUsage(canvas, label);
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
@@ -170,15 +137,18 @@ export class VmComponent implements OnInit {
         });
 
         const ctx = document.getElementById('lineCanvasCpuUsage');
-
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'Cpu Usage')
+            datasets: this.dataArray(chartDataData, text)
+          }, options: {
+            title: {
+              display: true,
+              text: 'Cpu Usage'
+            }
           }
         });
-
       }
     }, error => {
       this.commonService.isLoading = false;
@@ -203,12 +173,16 @@ export class VmComponent implements OnInit {
       });
 
       const ctx = document.getElementById('lineCanvasCpuLatency');
-
       this.sltChartInstances = new Chart(ctx, {
         type: 'line',
         data: {
           labels: chartDataTime,
-          datasets: this.dataArray(chartDataData, 'CPU Latency')
+          datasets: this.dataArray(chartDataData, 'latency')
+        }, options: {
+          title: {
+            display: true,
+            text: 'CPU Latency'
+          }
         }
       });
     });
@@ -219,12 +193,14 @@ export class VmComponent implements OnInit {
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const canvas = 'lineCanvasCpuCostop';
+      const label = 'costop';
+      const text = 'Cpu Costop';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        const canvas = 'lineCanvasCpuCostop';
-        const label = 'Cpu Costop';
-        this.getVmNoUsage(canvas, label);
+
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
@@ -238,12 +214,16 @@ export class VmComponent implements OnInit {
         });
 
         const ctx = document.getElementById('lineCanvasCpuCostop');
-
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'CPU Costop')
+            datasets: this.dataArray(chartDataData, text)
+          }, options: {
+            title: {
+              display: true,
+              text: 'CPU Costop'
+            }
           }
         });
       }
@@ -257,7 +237,7 @@ export class VmComponent implements OnInit {
       /*lineChartMemory(data : x축, time : y축)*/
       const chartDataTime = [];
       const chartDataData = [];
-      const size = data.length;
+      const text = 'last';
 
       this.memValueObject = data.results[0].series[0];
 
@@ -276,7 +256,12 @@ export class VmComponent implements OnInit {
         type: 'line',
         data: {
           labels: chartDataTime,
-          datasets: this.dataArray(chartDataData, 'MEM Usage')
+          datasets: this.dataArray(chartDataData, text)
+        }, options: {
+          title: {
+            display: true,
+            text: 'MEM Usage'
+          }
         }
       });
     });
@@ -284,16 +269,17 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringMemActiveConsumed(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemActiveConsumed(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data[0].results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const canvas = 'lineCanvasMemActiveConsumed';
+      const label = 'active';
+      const text = 'MEM Active vs Consumed ';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        const canvas = 'lineCanvasMemActiveConsumed';
-        const label = 'MEM Active vs Consumed ';
-        this.getVmNoUsage(canvas, label);
+
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.memValueObject = data.results[0].series[0];
 
@@ -312,7 +298,12 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, '\'MEM Active vs Consumed\'')
+            datasets: this.dataArray(chartDataData, label)
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
         });
       }
@@ -324,16 +315,16 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringMemSwap(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemSwap(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const canvas = 'lineCanvasMemSwap';
+      const label = 'swap';
+      const text = 'MEM Swap';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        const canvas = 'lineCanvasMemSwap';
-        const label = 'MEM Swap';
-        this.getVmNoUsage(canvas, label);
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.memValueObject = data.results[0].series[0];
 
@@ -353,7 +344,12 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'MEM Swap')
+            datasets: this.dataArray(chartDataData, label)
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
         });
       }
@@ -364,7 +360,37 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringDiskIOps(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskIOps(vmNmae, type, interval, timeGroup).subscribe(data => {
-      console.log('getVmMonitoringDiskIOps');
+      const valueObject = data.results[0].series[0];
+      const chartDataTime = [];
+      const chartDataData = [];
+      const chartDataData2 = [];
+
+      this.diskValueObject = data.results[0].series[0];
+
+      $.each(this.diskValueObject['values'], function (index, value) {
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
+        this.vmSummaryChartDate = chartFormat;
+
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+        chartDataData2.push(value[2]);
+      });
+
+      const ctx = document.getElementById('lineCanvasDiskIOps');
+
+      this.sltChartInstances = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartDataTime,
+          datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
+        }, options: {
+          title: {
+            display: true,
+            text: 'Disk IOps'
+          }
+        }
+      });
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -372,37 +398,37 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringDiskTraffic(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskTraffic(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const chartDataData2 = [];
 
-      //TODO: valueObject != undefined
-      if (valueObject == null) {
-        const canvas = 'lineCanvasDiskTraffic';
-        const label = 'Disk Traffic';
-        this.getVmNoUsage(canvas, label);
-      } else {
-        this.diskValueObject = data.results[0].series[0];
+      this.diskValueObject = data.results[0].series[0];
 
-        $.each(this.diskValueObject['values'], function (index, value) {
-          const date = require('moment');
-          const chartFormat = date(value[0]).format('HH:MM');
-          this.vmSummaryChartDate = chartFormat;
+      $.each(this.diskValueObject['values'], function (index, value) {
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
+        this.vmSummaryChartDate = chartFormat;
 
-          chartDataTime.push(chartFormat);
-          chartDataData.push(value[1]);
-        });
-        const ctx = document.getElementById('lineCanvasDiskTraffic');
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+        chartDataData2.push(value[2]);
+      });
+      const ctx = document.getElementById('lineCanvasDiskTraffic');
 
-        this.sltChartInstances = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'Disk Traffic')
+      this.sltChartInstances = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartDataTime,
+          datasets:  this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
+        }, options: {
+          title: {
+            display: true,
+            text: 'Disk Traffic'
           }
-        });
-      }
+        }
+      });
+
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -410,37 +436,39 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringDiskLatency(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskLatency(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const chartDataData2 = [];
 
-      if (valueObject == null) {
-        const canvas = 'lineCanvasDiskLatency';
-        const label = 'Disk Latency';
-        this.getVmNoUsage(canvas, label);
-      } else {
-        this.diskValueObject = data.results[0].series[0];
+      const text = 'Disk Latency';
 
-        $.each(this.diskValueObject['values'], function (index, value) {
-          const date = require('moment');
-          const chartFormat = date(value[0]).format('HH:MM');
-          this.vmSummaryChartDate = chartFormat;
+      this.diskValueObject = data.results[0].series[0];
 
-          chartDataTime.push(chartFormat);
-          chartDataData.push(value[1]);
-        });
+      $.each(this.diskValueObject['values'], function (index, value) {
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
+        this.vmSummaryChartDate = chartFormat;
 
-        const ctx = document.getElementById('lineCanvasDiskLatency');
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+        chartDataData2.push(value[2]);
+      });
 
-        this.sltChartInstances = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'Disk Latency')
+      const ctx = document.getElementById('lineCanvasDiskLatency');
+
+      this.sltChartInstances = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartDataTime,
+          datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
+        }, options: {
+          title: {
+            display: true,
+            text: text
           }
-        });
-      }
+        }
+      });
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -448,15 +476,16 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringNetUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const chartDataData2 = [];
+      const canvas = 'lineCanvasNetUsage';
+      const label = 'usage';
+      const text = 'NET Usage';
 
       if (valueObject == null) {
-        const canvas = 'lineCanvasNetUsage';
-        const label = 'NET Usage';
-        this.getVmNoUsage(canvas, label);
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -475,7 +504,12 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'NET Latency')
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
         });
       }
@@ -486,15 +520,16 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringNetTransmitReceive(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetTransmitReceive(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const chartDataData2 = [];
+      const canvas = 'lineCanvasNetTransmitReceive';
+      const label = '';
+      const text = 'NET Transmit/ Receive';
 
       if (valueObject == null) {
-        const canvas = 'lineCanvasNetTransmitReceive';
-        const label = 'NET Transmit/ Receive';
-        this.getVmNoUsage(canvas, label);
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -505,15 +540,20 @@ export class VmComponent implements OnInit {
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
         });
 
         const ctx = document.getElementById('lineCanvasNetTransmitReceive');
-
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'NET Transmit/ Receive')
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
         });
       }
@@ -524,15 +564,18 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringNetError(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringNetError(vmNmae, type, interval, timeGroup).subscribe(data => {
-
       const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const chartDataData2 = [];
+      const chartDataData3 = [];
+      const chartDataData4 = [];
+      const canvas = 'lineCanvasNetErrors';
+      const label = 'NEt Errors';
+      const text = 'NEt Errors';
 
       if (valueObject == null) {
-        const canvas = 'lineCanvasNetErrors';
-        const label = 'NEt Errors';
-        this.getVmNoUsage(canvas, label);
+        this.getVmNoUsage(canvas, label, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -543,6 +586,9 @@ export class VmComponent implements OnInit {
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
+          chartDataData3.push(value[3]);
+          chartDataData4.push(value[4]);
         });
 
         const ctx = document.getElementById('lineCanvasNetErrors');
@@ -550,7 +596,12 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'NEt Errors')
+            datasets: this.dataNetEArray(chartDataData, chartDataData2, chartDataData3, chartDataData4, 'drop_rx', 'drop_tx','error_rx', 'error_tx')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
         });
       }
@@ -559,30 +610,72 @@ export class VmComponent implements OnInit {
     });
   }
 
+  getVmNoUsage(canvas, label, text) {
+    const ctx = document.getElementById(canvas);
+    this.sltChartInstances = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [0],
+        datasets: [{
+          borderColor: "#e8c3b9",
+          fill: false,
+          data: [''],
+          label: label
+        }
+        ]
+      }, options: {
+        title: {
+          display: true,
+          text: text
+        }
+      }
+    });
+  }
 
   dataArray(chartDataData: any, label: string) {
     return [{
+      borderColor: "#3cba9f",
       fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(75,192,192,0.4)',
-      borderColor: 'rgba(75,192,192,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      spanGaps: false,
       data: chartDataData,
       label: label
     }];
   }
 
+  dataAMutiArray(chartDataData: any, chartDataData2: any, label: string, label2: string) {
+    return [{
+      borderColor: "#3e95cd",
+      fill: false,
+      data: chartDataData,
+      label: label
+    }, {
+      borderColor: "#8e5ea2",
+      fill: false,
+      data: chartDataData2,
+      label: label2
+    }];
+  }
+
+  dataNetEArray(chartDataData: any, chartDataData2: any, chartDataData3: any, chartDataData4: any, label1: string, label2: string, label3: string, label4: string) {
+    return [{
+      borderColor: "#3e95cd",
+      fill: false,
+      data: chartDataData,
+      label: label1
+    }, {
+      borderColor: "#8e5ea2",
+      fill: false,
+      data: chartDataData2,
+      label: label2
+    }, {
+      borderColor: "#c45850",
+      fill: false,
+      data: chartDataData3,
+      label: label3
+    },{
+      borderColor: "#3cba9f",
+      fill: false,
+      data: chartDataData4,
+      label: label4
+    }];
+  }
 }

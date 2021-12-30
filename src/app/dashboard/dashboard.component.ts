@@ -70,6 +70,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   public appEntities: any;
   public servicesEntities: any;
   public vmEntities: any;
+  public vmSelectedName = '';
   public appSummaryEntities: Observable<any[]>;
   public translateEntities: any = [];
 
@@ -401,11 +402,11 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   getVmSummary(value) {
     let cnt = 0;
     this.vmEntities = [];
-    this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
+       this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
       data.data.forEach(vm => {
         if (vm.vmSpaceGuid === value) {
               this.vmService.getVmNowMem(vm.vmNm).subscribe(data1 => {
-                vm.nowMem = data1.data;
+                vm.nowMem = data1.data;;
               });
           this.vmService.getVmNowCpu(vm.vmNm).subscribe(data2 => {
             vm.nowCpu = data2.data;
@@ -413,6 +414,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
           this.vmEntities.push(vm);
         }
       });
+
       if (cnt = 0) {
         this.vmEntities['thumbImgPath'] = '../.. /assets/resources/images/catalog/MONITORING.png';
       }
@@ -1019,7 +1021,13 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     }
   }
 
-  showWindowVM() {
+  showWindowVM(value) {
+    this.vmService.getVm(value).subscribe(data => {
+      const vmN = data.data['vmId'];
+      if(vmN == value){
+        this.vmSelectedName = value;
+      }
+    });
     window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700');
   }
 

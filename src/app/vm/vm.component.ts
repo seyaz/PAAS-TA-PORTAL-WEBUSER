@@ -4,6 +4,8 @@ import {Vm, VmService} from '../vm/vm.service';
 import {HttpClient} from '@angular/common/http';
 import {CommonService} from '../common/common.service';
 import {NGXLogger} from 'ngx-logger';
+import {DashboardComponent} from "../dashboard/dashboard.component";
+import {DashboardService} from "../dashboard/dashboard.service";
 
 declare var Chart: any;
 declare var $: any;
@@ -33,7 +35,8 @@ export class VmComponent implements OnInit {
   public orgGuid: string = '';
   public spaceGuid: string = '';
   public spaceName: string = '';
-
+  public sltVmUrl = '';
+  public vmSelectedName = '';
 
   public sltChartInstances: string;
   public vmSummaryChartDate: '';
@@ -49,10 +52,9 @@ export class VmComponent implements OnInit {
   public diskValueObject: Observable<any[]>;
   public netValueObject: Observable<any[]>;
 
-  constructor(private httpClient: HttpClient, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
+  constructor(private httpClient: HttpClient, private dashboardService: DashboardService, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
     this.vms = new Array<Vm>();
-    this.vmInit();
   }
 
   ngOnInit() {
@@ -73,35 +75,44 @@ export class VmComponent implements OnInit {
     }
     this.orgGuid = this.commonService.getCurrentOrgGuid();
     this.spaceGuid = this.commonService.getCurrentSpaceGuid();
+    this.vmSelectedName = opener.document.getElementById('showVm').value;
+
+    this.vmInit();
   }
 
   refreshClick() {
     location.reload(true);
   }
 
+
   vmInit() {
-    /*space 정의*/
+    /*
+    1. opener.value 로 vmId 값 확인
+    2. org/space 전체리스트에서 vmId 확인
+    3. 일치할경우, getVmMonitoring
+    */
+    this.vms = [];
     this.vmService.getVmSpace(this.commonService.getCurrentSpaceGuid()).subscribe(data => {
       this.vms = data.data[0];
       this.vmName = this.vms['vmNm'];
       this.spaceName = this.vms['vmSpaceName'];
       this.vmAlias = this.vms['vmAlias'];
       this.getVmMonitoring(this.vmName);
+
     }, error => {
       this.commonService.isLoading = false;
     });
   }
 
   getVmMonitoring(vmNmae: string) {
-    /*VmMonitoringUsage*/
     this.type = 'day';
     this.interval = '40';
     this.timeGroup = '1';
 
     this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
-    this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringCpuLatency(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringCpuCostop(vmNmae, this.type, this.interval, this.timeGroup);
+    this.getVmMonitoringMemUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringMemActiveConsumed(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringMemSwap(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringDiskIOps(vmNmae, this.type, this.interval, this.timeGroup);
@@ -112,18 +123,21 @@ export class VmComponent implements OnInit {
     this.getVmMonitoringNetError(vmNmae, this.type, this.interval, this.timeGroup);
   }
 
+
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       const valueObject = data.results[0].series;
+
       const chartDataTime = [];
       const chartDataData = [];
       const canvas = 'lineCanvasCpuUsage';
-      const label = 'usage';
       const text = 'CPU Usage';
 
-      //TODO: valueObject != undefined
+      let size = data.length;
+      let forEachCount = 0; //ArrLength
+
       if (valueObject == null) {
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
@@ -135,13 +149,13 @@ export class VmComponent implements OnInit {
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
         });
-
         const ctx = document.getElementById('lineCanvasCpuUsage');
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
+
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, text)
+            datasets: this.dataArray(chartDataData, 'usage')
           }, options: {
             title: {
               display: true,
@@ -158,33 +172,50 @@ export class VmComponent implements OnInit {
   getVmMonitoringCpuLatency(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuLatency(vmNmae, type, interval, timeGroup).subscribe(data => {
       /*lineChartMemory(data : x축, time : y축)*/
+      const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
+      const canvas = 'lineCanvasCpuLatency';
+      const text = 'CPU Latency';
 
-      this.cpuValueObject = data.results[0].series[0];
+      if (valueObject == null) {
+        this.getVmNoUsage(canvas, text);
+      } else {
+        this.cpuValueObject = data.results[0].series[0];
 
-      $.each(this.cpuValueObject['values'], function (index, value) {
-        const date = require('moment');
-        const chartFormat = date(value[0]).format('HH:MM');
-        this.vmSummaryChartDate = chartFormat;
+        $.each(this.cpuValueObject['values'], function (index, value) {
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
+          this.vmSummaryChartDate = chartFormat;
 
-        chartDataTime.push(chartFormat);
-        chartDataData.push(value[1]);
-      });
+          chartDataTime.push(chartFormat);
+          chartDataData.push(value[1]);
+        });
 
-      const ctx = document.getElementById('lineCanvasCpuLatency');
-      this.sltChartInstances = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartDataTime,
-          datasets: this.dataArray(chartDataData, 'latency')
-        }, options: {
-          title: {
-            display: true,
-            text: 'CPU Latency'
+        const ctx = document.getElementById('lineCanvasCpuLatency');
+        this.sltChartInstances = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: chartDataTime,
+            datasets: this.dataArray(chartDataData, 'latency')
+          }, options: {
+            /*
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    return value + '%';
+                  }
+                }
+              }]
+            },*/
+            title: {
+              display: true,
+              text: text
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 
@@ -194,13 +225,11 @@ export class VmComponent implements OnInit {
       const chartDataTime = [];
       const chartDataData = [];
       const canvas = 'lineCanvasCpuCostop';
-      const label = 'costop';
       const text = 'Cpu Costop';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.cpuValueObject = data.results[0].series[0];
 
@@ -218,11 +247,11 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, text)
+            datasets: this.dataArray(chartDataData, 'costop')
           }, options: {
             title: {
               display: true,
-              text: 'CPU Costop'
+              text: text
             }
           }
         });
@@ -235,54 +264,16 @@ export class VmComponent implements OnInit {
   getVmMonitoringMemUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringMemUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       /*lineChartMemory(data : x축, time : y축)*/
+      const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
-      const text = 'last';
+      const canvas = 'lineCanvasMemUsage';
+      const text = 'Memory Usage';
 
-      this.memValueObject = data.results[0].series[0];
-
-      $.each(this.memValueObject['values'], function (index, value) {
-        const date = require('moment');
-        const chartFormat = date(value[0]).format('HH:MM');
-        this.vmSummaryChartDate = chartFormat;
-
-        chartDataTime.push(chartFormat);
-        chartDataData.push(value[1]);
-      });
-
-      const ctx = document.getElementById('lineCanvasMemUsage');
-
-      this.sltChartInstances = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartDataTime,
-          datasets: this.dataArray(chartDataData, text)
-        }, options: {
-          title: {
-            display: true,
-            text: 'MEM Usage'
-          }
-        }
-      });
-    });
-  }
-
-  getVmMonitoringMemActiveConsumed(vmNmae: string, type: string, interval: string, timeGroup: string) {
-    this.vmService.getVmMonitoringMemActiveConsumed(vmNmae, type, interval, timeGroup).subscribe(data => {
-      const valueObject = data[0].results[0].series;
-      const chartDataTime = [];
-      const chartDataData = [];
-      const canvas = 'lineCanvasMemActiveConsumed';
-      const label = 'active';
-      const text = 'MEM Active vs Consumed ';
-
-      //TODO: valueObject != undefined
       if (valueObject == null) {
-
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.memValueObject = data.results[0].series[0];
-
         $.each(this.memValueObject['values'], function (index, value) {
           const date = require('moment');
           const chartFormat = date(value[0]).format('HH:MM');
@@ -292,13 +283,55 @@ export class VmComponent implements OnInit {
           chartDataData.push(value[1]);
         });
 
+        const ctx = document.getElementById('lineCanvasMemUsage');
+
+        this.sltChartInstances = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: chartDataTime,
+            datasets: this.dataArray(chartDataData, 'last')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
+          }
+        });
+      }
+    });
+  }
+
+  getVmMonitoringMemActiveConsumed(vmNmae: string, type: string, interval: string, timeGroup: string) {
+    this.vmService.getVmMonitoringMemActiveConsumed(vmNmae, type, interval, timeGroup).subscribe(data => {
+      const valueObject = data[0].results[0].series;
+      const chartDataTime = [];
+      const chartDataData = [];
+      const chartDataData2 = [];
+      const canvas = 'lineCanvasMemActiveConsumed';
+      const text = 'Memory Active vs Consumed ';
+
+      if (valueObject == null) {
+        this.getVmNoUsage(canvas, text);
+      } else {
+        this.memValueObject = data[0].results[0].series[0];
+
+        $.each(this.memValueObject['values'], function (index, value) {
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
+          this.vmSummaryChartDate = chartFormat;
+
+          chartDataTime.push(chartFormat);
+          chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
+        });
+
         const ctx = document.getElementById('lineCanvasMemActiveConsumed');
 
         this.sltChartInstances = new Chart(ctx, {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, label)
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'active', 'consumed')
           }, options: {
             title: {
               display: true,
@@ -319,12 +352,11 @@ export class VmComponent implements OnInit {
       const chartDataTime = [];
       const chartDataData = [];
       const canvas = 'lineCanvasMemSwap';
-      const label = 'swap';
-      const text = 'MEM Swap';
+      const text = 'Memory Swap';
 
       //TODO: valueObject != undefined
       if (valueObject == null) {
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.memValueObject = data.results[0].series[0];
 
@@ -344,7 +376,7 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, label)
+            datasets: this.dataArray(chartDataData, 'swap')
           }, options: {
             title: {
               display: true,
@@ -360,37 +392,43 @@ export class VmComponent implements OnInit {
 
   getVmMonitoringDiskIOps(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringDiskIOps(vmNmae, type, interval, timeGroup).subscribe(data => {
-      const valueObject = data.results[0].series[0];
+      const valueObject = data.results[0].series;
       const chartDataTime = [];
       const chartDataData = [];
       const chartDataData2 = [];
+      const canvas = 'lineCanvasDiskIOps';
+      const text = 'Disk IOps';
 
-      this.diskValueObject = data.results[0].series[0];
+      if (valueObject == null) {
+        this.getVmNoUsage(canvas, text);
+      } else {
+        this.diskValueObject = data.results[0].series[0];
 
-      $.each(this.diskValueObject['values'], function (index, value) {
-        const date = require('moment');
-        const chartFormat = date(value[0]).format('HH:MM');
-        this.vmSummaryChartDate = chartFormat;
+        $.each(this.diskValueObject['values'], function (index, value) {
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
+          this.vmSummaryChartDate = chartFormat;
 
-        chartDataTime.push(chartFormat);
-        chartDataData.push(value[1]);
-        chartDataData2.push(value[2]);
-      });
+          chartDataTime.push(chartFormat);
+          chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
+        });
 
-      const ctx = document.getElementById('lineCanvasDiskIOps');
+        const ctx = document.getElementById(canvas);
 
-      this.sltChartInstances = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartDataTime,
-          datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
-        }, options: {
-          title: {
-            display: true,
-            text: 'Disk IOps'
+        this.sltChartInstances = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: chartDataTime,
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
-        }
-      });
+        });
+      }
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -402,33 +440,38 @@ export class VmComponent implements OnInit {
       const chartDataTime = [];
       const chartDataData = [];
       const chartDataData2 = [];
+      const canvas = 'lineCanvasDiskTraffic';
+      const text = 'Disk Usage';
 
-      this.diskValueObject = data.results[0].series[0];
+      if (valueObject == null) {
+        this.getVmNoUsage(canvas, text);
+      } else {
+        this.diskValueObject = data.results[0].series[0];
 
-      $.each(this.diskValueObject['values'], function (index, value) {
-        const date = require('moment');
-        const chartFormat = date(value[0]).format('HH:MM');
-        this.vmSummaryChartDate = chartFormat;
+        $.each(this.diskValueObject['values'], function (index, value) {
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
+          this.vmSummaryChartDate = chartFormat;
 
-        chartDataTime.push(chartFormat);
-        chartDataData.push(value[1]);
-        chartDataData2.push(value[2]);
-      });
-      const ctx = document.getElementById('lineCanvasDiskTraffic');
+          chartDataTime.push(chartFormat);
+          chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
+        });
+        const ctx = document.getElementById('lineCanvasDiskTraffic');
 
-      this.sltChartInstances = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartDataTime,
-          datasets:  this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
-        }, options: {
-          title: {
-            display: true,
-            text: 'Disk Traffic'
+        this.sltChartInstances = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: chartDataTime,
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'read', 'write')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
-        }
-      });
-
+        });
+      }
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -440,35 +483,38 @@ export class VmComponent implements OnInit {
       const chartDataTime = [];
       const chartDataData = [];
       const chartDataData2 = [];
-
       const text = 'Disk Latency';
+      const canvas = 'lineCanvasDiskLatency';
 
-      this.diskValueObject = data.results[0].series[0];
+      if (valueObject == null) {
+        this.getVmNoUsage(canvas, text);
+      } else {
+        this.diskValueObject = data.results[0].series[0];
 
-      $.each(this.diskValueObject['values'], function (index, value) {
-        const date = require('moment');
-        const chartFormat = date(value[0]).format('HH:MM');
-        this.vmSummaryChartDate = chartFormat;
+        $.each(this.diskValueObject['values'], function (index, value) {
+          const date = require('moment');
+          const chartFormat = date(value[0]).format('HH:MM');
+          this.vmSummaryChartDate = chartFormat;
 
-        chartDataTime.push(chartFormat);
-        chartDataData.push(value[1]);
-        chartDataData2.push(value[2]);
-      });
+          chartDataTime.push(chartFormat);
+          chartDataData.push(value[1]);
+          chartDataData2.push(value[2]);
+        });
 
-      const ctx = document.getElementById('lineCanvasDiskLatency');
-
-      this.sltChartInstances = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartDataTime,
-          datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
-        }, options: {
-          title: {
-            display: true,
-            text: text
+        const ctx = document.getElementById(canvas);
+        this.sltChartInstances = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: chartDataTime,
+            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
+          }, options: {
+            title: {
+              display: true,
+              text: text
+            }
           }
-        }
-      });
+        });
+      }
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -481,11 +527,10 @@ export class VmComponent implements OnInit {
       const chartDataData = [];
       const chartDataData2 = [];
       const canvas = 'lineCanvasNetUsage';
-      const label = 'usage';
       const text = 'NET Usage';
 
       if (valueObject == null) {
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -504,7 +549,7 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataAMutiArray(chartDataData, chartDataData2, 'receive', 'transmit')
+            datasets: this.dataArray(chartDataData, 'usage')
           }, options: {
             title: {
               display: true,
@@ -525,11 +570,10 @@ export class VmComponent implements OnInit {
       const chartDataData = [];
       const chartDataData2 = [];
       const canvas = 'lineCanvasNetTransmitReceive';
-      const label = '';
       const text = 'NET Transmit/ Receive';
 
       if (valueObject == null) {
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -571,11 +615,10 @@ export class VmComponent implements OnInit {
       const chartDataData3 = [];
       const chartDataData4 = [];
       const canvas = 'lineCanvasNetErrors';
-      const label = 'NEt Errors';
-      const text = 'NEt Errors';
+      const text = 'NET Errors';
 
       if (valueObject == null) {
-        this.getVmNoUsage(canvas, label, text);
+        this.getVmNoUsage(canvas, text);
       } else {
         this.netValueObject = data.results[0].series[0];
 
@@ -596,7 +639,7 @@ export class VmComponent implements OnInit {
           type: 'line',
           data: {
             labels: chartDataTime,
-            datasets: this.dataNetEArray(chartDataData, chartDataData2, chartDataData3, chartDataData4, 'drop_rx', 'drop_tx','error_rx', 'error_tx')
+            datasets: this.dataNetEArray(chartDataData, chartDataData2, chartDataData3, chartDataData4, 'drop_rx', 'drop_tx', 'error_rx', 'error_tx')
           }, options: {
             title: {
               display: true,
@@ -610,17 +653,17 @@ export class VmComponent implements OnInit {
     });
   }
 
-  getVmNoUsage(canvas, label, text) {
+  getVmNoUsage(canvas, text) {
     const ctx = document.getElementById(canvas);
     this.sltChartInstances = new Chart(ctx, {
       type: 'line',
       data: {
         labels: [0],
         datasets: [{
-          borderColor: "#e8c3b9",
+          borderColor: "#c45850",
           fill: false,
           data: [''],
-          label: label
+          label: 'No Data'
         }
         ]
       }, options: {
@@ -640,6 +683,31 @@ export class VmComponent implements OnInit {
       label: label
     }];
   }
+
+  dataArrayTest(chartDataData: any, label: string) {
+    return [{
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: 'rgba(75,192,192,1)',
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: chartDataData,
+      spanGaps: false,
+    }];
+  }
+
 
   dataAMutiArray(chartDataData: any, chartDataData2: any, label: string, label2: string) {
     return [{
@@ -667,11 +735,11 @@ export class VmComponent implements OnInit {
       data: chartDataData2,
       label: label2
     }, {
-      borderColor: "#c45850",
+      borderColor: "#e8c3b9",
       fill: false,
       data: chartDataData3,
       label: label3
-    },{
+    }, {
       borderColor: "#3cba9f",
       fill: false,
       data: chartDataData4,

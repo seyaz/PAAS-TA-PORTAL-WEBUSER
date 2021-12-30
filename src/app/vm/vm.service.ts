@@ -14,8 +14,8 @@ export class VmService {
   }
   apiversion = appConfig['apiversion'];
 
-  getVm() {
-    return this.commonService.doGet('/commonapi/v2/vm', this.commonService.getToken()).map((res: any) => {
+  getVm(vmId: string) {
+    return this.commonService.doGet('/commonapi/v2/vm/' + vmId, this.commonService.getToken()).map((res: any) => {
       return res;
     })
   }

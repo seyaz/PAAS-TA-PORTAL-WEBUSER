@@ -575,17 +575,19 @@
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: 260px;">
                     &nbsp;{{item.vmAlias}} </span>
                       </div>
-                      <div class="app_per1 clearfix">
-                        <ul>
-                          <li>
-                            <div>{{'dashboard.service.dashboard' | translate}}</div>
-                            <div>:</div>
-                            <div class="serviceTitle">
-                              <button class="btns colors5"  (click)='showWindowVM()'>{{'dashboard.service.dashboard' | translate}}</button>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
+                      <ng-container>
+                        <div class="app_per1 clearfix">
+                          <ul>
+                            <li>
+                              <div>{{'dashboard.service.dashboard' | translate}}</div>
+                              <div>:</div>
+                              <div class="serviceTitle">
+                                <button class="btns colors5" id="showVm" name="showVm" value="{{vmSelectedName}}"  (click)='showWindowVM(item.vmId)'>{{'dashboard.service.dashboard' | translate}}</button>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </ng-container>
                     </ng-container>
                     <ng-container>
                       <div class="app_graph1 clearfix">

@@ -1443,11 +1443,11 @@ for (var func in conversions) {
   // export rgb2hsl and ["rgb"]["hsl"]
   convert[from] = convert[from] || {};
 
-  convert[from][to] = convert[func] = (function(func) { 
+  convert[from][to] = convert[func] = (function(func) {
     return function(arg) {
       if (typeof arg == "number")
         arg = Array.prototype.slice.call(arguments);
-      
+
       var val = conversions[func](arg);
       if (typeof val == "string" || val === undefined)
         return val; // keyword
@@ -1475,12 +1475,12 @@ Converter.prototype.routeSpace = function(space, args) {
    }
    // color.rgb(10, 10, 10)
    if (typeof values == "number") {
-      values = Array.prototype.slice.call(args);        
+      values = Array.prototype.slice.call(args);
    }
 
    return this.setValues(space, values);
 };
-  
+
 /* Set the values for a space, invalidating cache */
 Converter.prototype.setValues = function(space, values) {
    this.space = space;
@@ -3712,7 +3712,7 @@ module.exports = function(Chart) {
 	function initConfig(config) {
 		config = config || {};
 
-		// Do NOT use configMerge() for the data object because this method merges arrays
+		// Do NOT use configMerge() for the data object because this method merges Vmervices
 		// and so would change references to labels and datasets, preventing data updates.
 		var data = config.data = config.data || {};
 		data.datasets = data.datasets || [];

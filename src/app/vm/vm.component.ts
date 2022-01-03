@@ -23,6 +23,7 @@ export class VmComponent implements OnInit {
   public vms: Array<Vm> = [];
   public vmEntities: any;
   public translateEntities: any = [];
+  public object: any = [];
 
   public isMessage: boolean;
   private jquerySetting: boolean;
@@ -55,6 +56,7 @@ export class VmComponent implements OnInit {
   constructor(private httpClient: HttpClient, private dashboardService: DashboardService, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
     this.vms = new Array<Vm>();
+    this.vmSelectedName = opener.document.getElementById('showVm').value;
   }
 
   ngOnInit() {
@@ -75,30 +77,27 @@ export class VmComponent implements OnInit {
     }
     this.orgGuid = this.commonService.getCurrentOrgGuid();
     this.spaceGuid = this.commonService.getCurrentSpaceGuid();
-    this.vmSelectedName = opener.document.getElementById('showVm').value;
 
-    this.vmInit();
+
+    this.vmInit(this.vmSelectedName);
   }
 
   refreshClick() {
     location.reload(true);
   }
 
-
-  vmInit() {
-    /*
-    1. opener.value 로 vmId 값 확인
-    2. org/space 전체리스트에서 vmId 확인
-    3. 일치할경우, getVmMonitoring
-    */
-    this.vms = [];
-    this.vmService.getVmSpace(this.commonService.getCurrentSpaceGuid()).subscribe(data => {
-      this.vms = data.data[0];
-      this.vmName = this.vms['vmNm'];
-      this.spaceName = this.vms['vmSpaceName'];
-      this.vmAlias = this.vms['vmAlias'];
-      this.getVmMonitoring(this.vmName);
-
+  vmInit(id: string) {
+    console.log("id: " + id);
+    this.vmService.getVm(id).subscribe(data => {
+      this.object = data.data;
+      this.vms = [];
+      if (data['RESULT'] === 'SUCCESS') {
+        this.vms = data.data;
+        this.vmName = this.vms['vmNm'];
+        this.spaceName = this.vms['vmSpaceName'];
+        this.vmAlias = this.vms['vmAlias'];
+        this.getVmMonitoring(this.vmName);
+      }
     }, error => {
       this.commonService.isLoading = false;
     });

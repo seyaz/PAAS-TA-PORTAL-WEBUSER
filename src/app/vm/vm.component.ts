@@ -6,6 +6,8 @@ import {CommonService} from '../common/common.service';
 import {NGXLogger} from 'ngx-logger';
 import {DashboardComponent} from "../dashboard/dashboard.component";
 import {DashboardService} from "../dashboard/dashboard.service";
+import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
+import {Router} from "@angular/router";
 
 declare var Chart: any;
 declare var $: any;
@@ -37,7 +39,7 @@ export class VmComponent implements OnInit {
   public spaceGuid: string = '';
   public spaceName: string = '';
   public sltVmUrl = '';
-  public vmSelectedName = '';
+  public vmSelectedId = '';
 
   public sltChartInstances: string;
   public vmSummaryChartDate: '';
@@ -53,10 +55,19 @@ export class VmComponent implements OnInit {
   public diskValueObject: Observable<any[]>;
   public netValueObject: Observable<any[]>;
 
-  constructor(private httpClient: HttpClient, private dashboardService: DashboardService, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
+  constructor(public translate: TranslateService, private router: Router, private httpClient: HttpClient, private dashboardService: DashboardService, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
     this.vms = new Array<Vm>();
-    this.vmSelectedName = opener.document.getElementById('showVm').value;
+    this.vmSelectedId = opener.document.getElementById('showVm').value;
+    this.vmInit();
+
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.translateEntities = event.translations.vm;
+    });
+    this.translate.get('vm').subscribe((res: string) => {
+      this.translateEntities = res;
+    });
+
   }
 
   ngOnInit() {
@@ -77,18 +88,14 @@ export class VmComponent implements OnInit {
     }
     this.orgGuid = this.commonService.getCurrentOrgGuid();
     this.spaceGuid = this.commonService.getCurrentSpaceGuid();
-
-
-    this.vmInit(this.vmSelectedName);
   }
 
   refreshClick() {
     location.reload(true);
   }
 
-  vmInit(id: string) {
-    console.log("id: " + id);
-    this.vmService.getVm(id).subscribe(data => {
+  vmInit() {
+    this.vmService.getVm(this.vmSelectedId).subscribe(data => {
       this.object = data.data;
       this.vms = [];
       if (data['RESULT'] === 'SUCCESS') {
@@ -120,13 +127,13 @@ export class VmComponent implements OnInit {
     this.getVmMonitoringNetUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringNetTransmitReceive(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringNetError(vmNmae, this.type, this.interval, this.timeGroup);
+
   }
 
 
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {
       const valueObject = data.results[0].series;
-
       const chartDataTime = [];
       const chartDataData = [];
       const canvas = 'lineCanvasCpuUsage';
@@ -137,32 +144,33 @@ export class VmComponent implements OnInit {
 
       if (valueObject == null) {
         this.getVmNoUsage(canvas, text);
-      } else {
-        this.cpuValueObject = data.results[0].series[0];
-
-        $.each(this.cpuValueObject['values'], function (index, value) {
-          const date = require('moment');
-          const chartFormat = date(value[0]).format('HH:MM');
-          this.vmSummaryChartDate = chartFormat;
-
-          chartDataTime.push(chartFormat);
-          chartDataData.push(value[1]);
-        });
-        const ctx = document.getElementById('lineCanvasCpuUsage');
-        this.sltChartInstances = new Chart(ctx, {
-          type: 'line',
-
-          data: {
-            labels: chartDataTime,
-            datasets: this.dataArray(chartDataData, 'usage')
-          }, options: {
-            title: {
-              display: true,
-              text: 'Cpu Usage'
-            }
-          }
-        });
       }
+
+      this.cpuValueObject = data.results[0].series[0];
+
+      $.each(this.cpuValueObject['values'], function (index, value) {
+        const date = require('moment');
+        const chartFormat = date(value[0]).format('HH:MM');
+        this.vmSummaryChartDate = chartFormat;
+
+        chartDataTime.push(chartFormat);
+        chartDataData.push(value[1]);
+      });
+      const ctx = document.getElementById('lineCanvasCpuUsage');
+      this.sltChartInstances = new Chart(ctx, {
+        type: 'line',
+
+        data: {
+          labels: chartDataTime,
+          datasets: this.dataArray(chartDataData, 'usage')
+        }, options: {
+          title: {
+            display: true,
+            text: 'Cpu Usage'
+          },
+        }
+      });
+      return data;
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -215,6 +223,7 @@ export class VmComponent implements OnInit {
           }
         });
       }
+      return data;
     });
   }
 
@@ -255,6 +264,7 @@ export class VmComponent implements OnInit {
           }
         });
       }
+      return data;
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -297,6 +307,7 @@ export class VmComponent implements OnInit {
           }
         });
       }
+      return data;
     });
   }
 
@@ -366,6 +377,7 @@ export class VmComponent implements OnInit {
 
           chartDataTime.push(chartFormat);
           chartDataData.push(value[1]);
+          //chartDataData2.push(value[2]);
         });
 
         const ctx = document.getElementById('lineCanvasMemSwap');
@@ -660,7 +672,7 @@ export class VmComponent implements OnInit {
         labels: [0],
         datasets: [{
           borderColor: "#c45850",
-          fill: false,
+          fill: true,
           data: [''],
           label: 'No Data'
         }
@@ -676,47 +688,40 @@ export class VmComponent implements OnInit {
 
   dataArray(chartDataData: any, label: string) {
     return [{
-      borderColor: "#3cba9f",
-      fill: false,
+      borderColor: "rgba(151,187,205,0.2)",
+      fillColor: "rgba(151,187,205,0.2)",
+      backgroundColor: "rgba(75,192,192,0.4)",
+      strokeColor : "rgba(60,91,87,1)",
+      pointColor : "rgba(60,91,87,1)",
+      pointStrokeColor : "#58606d",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
       data: chartDataData,
-      label: label
+      label: label,
     }];
   }
-
-  dataArrayTest(chartDataData: any, label: string) {
-    return [{
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(75,192,192,0.4)',
-      borderColor: 'rgba(75,192,192,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: chartDataData,
-      spanGaps: false,
-    }];
-  }
-
 
   dataAMutiArray(chartDataData: any, chartDataData2: any, label: string, label2: string) {
     return [{
-      borderColor: "#3e95cd",
-      fill: false,
+      //borderColor: "#3e95cd",
+      //fill: true,
+      borderColor: "rgba(151,187,205,0.2)",
+      fillColor: "rgba(151,187,205,0.2)",
+      backgroundColor: "rgba(75,192,192,0.4)",
+      strokeColor : "rgba(60,91,87,1)",
+      pointColor : "rgba(60,91,87,1)",
+      pointStrokeColor : "#58606d",
       data: chartDataData,
       label: label
     }, {
-      borderColor: "#8e5ea2",
-      fill: false,
+      borderColor: "#e8c3b9",
+      fill: true,
+      // borderColor: "rgba(247, 106, 1, 1))",
+      // fillColor: "rgba(247, 106, 1, 1)",
+      // backgroundColor: "rgba(247, 106, 1, 1))",
+      // strokeColor : "rgba(247, 106, 1, 1))",
+      // pointColor : "rgba(247, 106, 1, 1))",
+      // pointStrokeColor : "#58606d",
       data: chartDataData2,
       label: label2
     }];
@@ -725,22 +730,22 @@ export class VmComponent implements OnInit {
   dataNetEArray(chartDataData: any, chartDataData2: any, chartDataData3: any, chartDataData4: any, label1: string, label2: string, label3: string, label4: string) {
     return [{
       borderColor: "#3e95cd",
-      fill: false,
+      fill: true,
       data: chartDataData,
       label: label1
     }, {
       borderColor: "#8e5ea2",
-      fill: false,
+      fill: true,
       data: chartDataData2,
       label: label2
     }, {
       borderColor: "#e8c3b9",
-      fill: false,
+      fill: true,
       data: chartDataData3,
       label: label3
     }, {
       borderColor: "#3cba9f",
-      fill: false,
+      fill: true,
       data: chartDataData4,
       label: label4
     }];

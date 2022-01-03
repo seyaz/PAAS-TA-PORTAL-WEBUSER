@@ -25,7 +25,7 @@ declare var jQuery: any;
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit,  AfterViewChecked {
+export class DashboardComponent implements OnInit, AfterViewChecked {
 
   public isEmpty: boolean;
   public isSpace = false;
@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   public placeholder = 'credentialsStr:{\'username\':\'admin\',\'password\':\'password\';}';
 
   constructor(private translate: TranslateService, private commonService: CommonService, private dashboardService: DashboardService, private appMainService: AppMainService,
-              private catalogService: CatalogService, private vmService: VmService, private route: ActivatedRoute, private router: Router,  private log: NGXLogger, private http: HttpClient) {
+              private catalogService: CatalogService, private vmService: VmService, private route: ActivatedRoute, private router: Router, private log: NGXLogger, private http: HttpClient) {
 
     if (commonService.getToken() == null) {
       router.navigate(['/']);
@@ -206,6 +206,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     $('[id^=\'apopmenu_\']').hide();
     $('[id^=\'layerpop\']').modal('hide');
   }
+
   ngAfterViewChecked() {
     this.SETTTING_SCRIPTS();
   }
@@ -357,7 +358,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   getOrgSummary() {
     this.dashboardService.getOrgSummary(this.org.guid).subscribe(data => {
 
-      this.orgMemoryDevelopmentTotal = parseInt(data['all_memoryDevelopmentTotal'], 10) ;
+      this.orgMemoryDevelopmentTotal = parseInt(data['all_memoryDevelopmentTotal'], 10);
       this.orgMemoryProductionTotal = data['all_memoryProductionTotal'];
       this.orgServiceTotal = data['all_serviceTotal'];
       this.orgQuotaMemoryLimit = data.quota['memoryLimit'];
@@ -402,12 +403,13 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   getVmSummary(value) {
     let cnt = 0;
     this.vmEntities = [];
-       this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
+    this.vmService.getVmSummary(this.org.guid, value).subscribe(data => {
       data.data.forEach(vm => {
         if (vm.vmSpaceGuid === value) {
-              this.vmService.getVmNowMem(vm.vmNm).subscribe(data1 => {
-                vm.nowMem = data1.data;;
-              });
+          this.vmService.getVmNowMem(vm.vmNm).subscribe(data1 => {
+            vm.nowMem = data1.data;
+            ;
+          });
           this.vmService.getVmNowCpu(vm.vmNm).subscribe(data2 => {
             vm.nowCpu = data2.data;
           });
@@ -424,7 +426,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     }, () => {
       this.commonService.isLoading = false;
     });
-}
+  }
 
   thumnail(): void {
     const catalog = this.catalogService;
@@ -490,7 +492,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
                   }, false);
                   if (data) {
                     reader.readAsDataURL(data);
-                  }}); } catch (e) {
+                  }
+                });
+              } catch (e) {
                 appEntitie['thumbImgPath'] = '../../assets/resources/images/catalog/catalog_3.png';
               }
               cnt++;
@@ -631,7 +635,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
       serviceInstanceName: this.userProvideName,
       credentials: this.userProvideCredentials,
       syslogDrainUrl: this.userProvideSyslogDrainUrl,
-      routeServiceUrl : this.userProvideRouteServiceUrl
+      routeServiceUrl: this.userProvideRouteServiceUrl
     };
     this.commonService.isLoading = true;
     this.dashboardService.createUserProvided(params).subscribe(data => {
@@ -639,7 +643,8 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
         this.getAppSummary(this.selectedSpaceId);
         this.ngOnInit();
         this.commonService.alertMessage(this.translateEntities.alertLayer.createSuccess, true);
-        return data; } else if (!data.result) {
+        return data;
+      } else if (!data.result) {
         this.commonService.alertMessage(data.msg, false);
         this.commonService.isLoading = false;
         return data;
@@ -680,7 +685,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
             return false;
           }
         }
-        if ( this.userProvideRouteServiceUrl !== '' ) {
+        if (this.userProvideRouteServiceUrl !== '') {
           if (this.userProvideRouteServiceUrl.indexOf('https://') === -1) {
             this.commonService.alertMessage('Route Service Url 작성 형식이 맞지 않습니다.', false);
             return false;
@@ -708,7 +713,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
       serviceInstanceName: this.userProvideName,
       credentials: this.userProvideCredentials,
       syslogDrainUrl: this.userProvideSyslogDrainUrl,
-      routeServiceUrl : this.userProvideRouteServiceUrl
+      routeServiceUrl: this.userProvideRouteServiceUrl
     };
     this.commonService.isLoading = true;
     this.dashboardService.updateUserProvided(params).subscribe(data => {
@@ -837,6 +842,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     }
     // this.log.debug('TYPE :: ' + type + ' GUID :: ' + guid + ' NAME :: ' + name);
   }
+
   renamefocus() {
     $('#layerpop1').modal('show');
     setTimeout(() => {
@@ -872,7 +878,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   app_started(): number {
-    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    if (isNullOrUndefined(this.appEntities)) {
+      return 0;
+    }
     const started_app = [];
 
     this.appEntities.forEach(entity => {
@@ -884,7 +892,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   app_stoped(): number {
-    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    if (isNullOrUndefined(this.appEntities)) {
+      return 0;
+    }
     const stoped_app = [];
     this.appEntities.forEach(entity => {
       if (entity.state === 'STOPPED') {
@@ -895,7 +905,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   app_instances(): number {
-    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    if (isNullOrUndefined(this.appEntities)) {
+      return 0;
+    }
     let instances = 0;
     this.appEntities.forEach(entity => {
       instances += entity.instances;
@@ -904,7 +916,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   app_memory_quota(): number {
-    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    if (isNullOrUndefined(this.appEntities)) {
+      return 0;
+    }
     let memory = 0;
     this.appEntities.forEach(entity => {
       memory += entity.memory;
@@ -913,7 +927,9 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   app_disk_quota(): number {
-    if (isNullOrUndefined(this.appEntities)) { return 0; }
+    if (isNullOrUndefined(this.appEntities)) {
+      return 0;
+    }
     let disk_quota = 0;
     this.appEntities.forEach(entity => {
       disk_quota += entity.disk_quota;
@@ -922,11 +938,17 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   }
 
   cass_common_api() {
-    if (isNullOrUndefined(this.commonService.getCaaSApiUri()) || this.commonService.getCaaSApiUri() === '') { return; }
-    if (this.caas_loading) { this.commonService.isLoading = true; }
+    if (isNullOrUndefined(this.commonService.getCaaSApiUri()) || this.commonService.getCaaSApiUri() === '') {
+      return;
+    }
+    if (this.caas_loading) {
+      this.commonService.isLoading = true;
+    }
     try {
       this.dashboardService.getCaasCommonUser().subscribe(caasuser => {
-        if (caasuser === null) {return ; }
+        if (caasuser === null) {
+          return;
+        }
         caasuser.forEach(r => {
           if (this.commonService.getCurrentOrgGuid() === r.organizationGuid) {
             this.caas_on_off = true;
@@ -978,7 +1000,8 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
             }, error1 => {
               this.commonService.isLoading = false;
             });
-          }});
+          }
+        });
       }, error1 => {
         this.commonService.isLoading = false;
       });
@@ -988,7 +1011,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     }
   }
 
-  int_Change(used: String ): number {
+  int_Change(used: String): number {
     if (used === '0') {
       return 0;
     }
@@ -996,7 +1019,7 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
     if (used.indexOf('G') > 0) {
       _used = +used.substring(0, used.length - 2);
     } else if (used.indexOf('M') > 0) {
-      _used = (+used.substring(0, used.length - 2)) / 1024 ;
+      _used = (+used.substring(0, used.length - 2)) / 1024;
     }
     return _used;
   }
@@ -1024,20 +1047,15 @@ export class DashboardComponent implements OnInit,  AfterViewChecked {
   showWindowVM(value) {
     this.vmService.getVm(value).subscribe(data => {
       const vmN = data.data['vmId'];
-      if(vmN == value){
+      if (vmN == value) {
         this.vmSelectedName = value;
+        window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700');
       }
     });
-    window.open(this.sltVmUrl + '/vm', '_blank', 'location=no, directories=no width=1200, height=700');
   }
 
   SETTTING_SCRIPTS() {
-
-    // console.log(this.appEntities);
-    //
-    // console.log(this.appSummaryEntities);
-    // console.log(this.servicesEntities);
-    $('.monitor_tabs li').click(function() {
+    $('.monitor_tabs li').click(function () {
       const tab_c = $(this).attr('name');
       const content = tab_c.substr(4, 1);
       if (tab_c == 'tab01') {

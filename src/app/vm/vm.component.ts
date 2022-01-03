@@ -716,12 +716,6 @@ export class VmComponent implements OnInit {
     }, {
       borderColor: "#e8c3b9",
       fill: true,
-      // borderColor: "rgba(247, 106, 1, 1))",
-      // fillColor: "rgba(247, 106, 1, 1)",
-      // backgroundColor: "rgba(247, 106, 1, 1))",
-      // strokeColor : "rgba(247, 106, 1, 1))",
-      // pointColor : "rgba(247, 106, 1, 1))",
-      // pointStrokeColor : "#58606d",
       data: chartDataData2,
       label: label2
     }];

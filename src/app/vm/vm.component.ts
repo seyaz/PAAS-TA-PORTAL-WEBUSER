@@ -38,8 +38,12 @@ export class VmComponent implements OnInit {
   public orgGuid: string = '';
   public spaceGuid: string = '';
   public spaceName: string = '';
-  public sltVmUrl = '';
-  public vmSelectedId = '';
+  public sltVmUrl: string ='';
+  public vmSelectedId: string ='';
+  public vmCpuPer: number;
+  public vmMemoryPer: number;
+  public vmDiskPer: number;
+
 
   public sltChartInstances: string;
   public vmSummaryChartDate: '';
@@ -168,6 +172,15 @@ export class VmComponent implements OnInit {
             display: true,
             text: 'Cpu Usage'
           },
+          scales: {
+            yAxes: [{
+              ticks: {
+                callback: function (value, index) {
+                  return value.toFixed(1) + '%';
+                }
+              }
+            }]
+          } //scales end
         }
       });
       return data;
@@ -206,20 +219,19 @@ export class VmComponent implements OnInit {
             labels: chartDataTime,
             datasets: this.dataArray(chartDataData, 'latency')
           }, options: {
-            /*
+            title: {
+              display: true,
+              text: text
+            },
             scales: {
               yAxes: [{
                 ticks: {
                   callback: function (value, index) {
-                    return value + '%';
+                    return value.toFixed(1) + '%';
                   }
                 }
               }]
-            },*/
-            title: {
-              display: true,
-              text: text
-            }
+            } //scales end
           }
         });
       }
@@ -260,7 +272,16 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    return value.toFixed(1) + 'ms';
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -303,7 +324,16 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    return value.toFixed(1) + '%';
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -346,11 +376,30 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
-          }
+            }, //title end
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    var memory;
+                    memory = value.toString();
+                    var memoryBytes = parseInt(memory);
+                    var s = ['KB', 'MB', 'GB', 'TB', 'PB'];
+                    var e = Math.floor(Math.log(memoryBytes) / Math.log(1024));
+                    if (e === Number.NEGATIVE_INFINITY) {
+                      memory = "0 " + s[0];
+                    } else {
+                      memory = (memoryBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    return memory;
+                  }
+                }
+              }]
+            } //scales end
+          },
+
         });
       }
-
     }, error => {
       this.commonService.isLoading = false;
     });
@@ -392,7 +441,26 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    var memory;
+                    memory = value.toString();
+                    var memoryBytes = parseInt(memory);
+                    var s = ['KB', 'MB', 'GB', 'TB', 'PB'];
+                    var e = Math.floor(Math.log(memoryBytes) / Math.log(1024));
+                    if (e === Number.NEGATIVE_INFINITY) {
+                      memory = "0 " + s[0];
+                    } else {
+                      memory = (memoryBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    return memory;
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -436,7 +504,16 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    return value.toFixed(1) + 'ops';
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -479,7 +556,26 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    var disk;
+                    disk = value.toString();
+                    var diskBytes = parseInt(disk);
+                    var s = ['KB', 'MB', 'GB', 'TB', 'PB'];
+                    var e = Math.floor(Math.log(diskBytes) / Math.log(1024));
+                    if (e === Number.NEGATIVE_INFINITY) {
+                      disk = "0 " + s[0];
+                    } else {
+                      disk = (diskBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    return disk;
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -522,7 +618,16 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    return value.toFixed(1) + 'ms';
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -565,7 +670,26 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    var net;
+                    net = value.toString();
+                    var netBytes = parseInt(net);
+                    var s = ['KB', 'MB', 'GB', 'TB', 'PB'];
+                    var e = Math.floor(Math.log(netBytes) / Math.log(1024));
+                    if (e === Number.NEGATIVE_INFINITY) {
+                      net = "0 " + s[0];
+                    } else {
+                      net = (netBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    return net;
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -608,7 +732,26 @@ export class VmComponent implements OnInit {
             title: {
               display: true,
               text: text
-            }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function (value, index) {
+                    var net;
+                    net = value.toString();
+                    var netBytes = parseInt(net);
+                    var s = ['KB', 'MB', 'GB', 'TB', 'PB'];
+                    var e = Math.floor(Math.log(netBytes) / Math.log(1024));
+                    if (e === Number.NEGATIVE_INFINITY) {
+                      net = "0 " + s[0];
+                    } else {
+                      net = (netBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    return net;
+                  }
+                }
+              }]
+            } //scales end
           }
         });
       }
@@ -691,9 +834,9 @@ export class VmComponent implements OnInit {
       borderColor: "rgba(151,187,205,0.2)",
       fillColor: "rgba(151,187,205,0.2)",
       backgroundColor: "rgba(75,192,192,0.4)",
-      strokeColor : "rgba(60,91,87,1)",
-      pointColor : "rgba(60,91,87,1)",
-      pointStrokeColor : "#58606d",
+      strokeColor: "rgba(60,91,87,1)",
+      pointColor: "rgba(60,91,87,1)",
+      pointStrokeColor: "#58606d",
       pointHighlightFill: "#fff",
       pointHighlightStroke: "rgba(151,187,205,1)",
       data: chartDataData,
@@ -708,9 +851,9 @@ export class VmComponent implements OnInit {
       borderColor: "rgba(151,187,205,0.2)",
       fillColor: "rgba(151,187,205,0.2)",
       backgroundColor: "rgba(75,192,192,0.4)",
-      strokeColor : "rgba(60,91,87,1)",
-      pointColor : "rgba(60,91,87,1)",
-      pointStrokeColor : "#58606d",
+      strokeColor: "rgba(60,91,87,1)",
+      pointColor: "rgba(60,91,87,1)",
+      pointStrokeColor: "#58606d",
       data: chartDataData,
       label: label
     }, {

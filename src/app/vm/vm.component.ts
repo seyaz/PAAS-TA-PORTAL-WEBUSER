@@ -38,8 +38,8 @@ export class VmComponent implements OnInit {
   public orgGuid: string = '';
   public spaceGuid: string = '';
   public spaceName: string = '';
-  public sltVmUrl: string ='';
-  public vmSelectedId: string ='';
+  public sltVmUrl: string = '';
+  public vmSelectedId: string = '';
   public vmCpuPer: number;
   public vmMemoryPer: number;
   public vmDiskPer: number;
@@ -59,19 +59,22 @@ export class VmComponent implements OnInit {
   public diskValueObject: Observable<any[]>;
   public netValueObject: Observable<any[]>;
 
+  public vmValue: any;
+
   constructor(public translate: TranslateService, private router: Router, private httpClient: HttpClient, private dashboardService: DashboardService, private commonService: CommonService, private vmService: VmService, private log: NGXLogger) {
 
     this.vms = new Array<Vm>();
+    this.type = 'day';
     this.vmSelectedId = opener.document.getElementById('showVm').value;
     this.vmInit();
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.translateEntities = event.translations.vm;
     });
+
     this.translate.get('vm').subscribe((res: string) => {
       this.translateEntities = res;
     });
-
   }
 
   ngOnInit() {
@@ -92,10 +95,12 @@ export class VmComponent implements OnInit {
     }
     this.orgGuid = this.commonService.getCurrentOrgGuid();
     this.spaceGuid = this.commonService.getCurrentSpaceGuid();
+    this.interval = '40';
+    this.vmValue = '1';
   }
 
   refreshClick() {
-    location.reload(true);
+    this.vmInit();
   }
 
   vmInit() {
@@ -107,18 +112,70 @@ export class VmComponent implements OnInit {
         this.vmName = this.vms['vmNm'];
         this.spaceName = this.vms['vmSpaceName'];
         this.vmAlias = this.vms['vmAlias'];
-        this.getVmMonitoring(this.vmName);
+        //this.getVmMonitoring(this.vmName);
+        this.chartTimeClick();
       }
     }, error => {
       this.commonService.isLoading = false;
     });
   }
 
-  getVmMonitoring(vmNmae: string) {
-    this.type = 'day';
-    this.interval = '40';
-    this.timeGroup = '1';
+  chartTimeClick() {
+    switch (this.vmValue) {
+      case '1': {
+        this.vmFilter('min', '5');
+        break;
+      }
+      case '2': {
+        this.vmFilter('min', '15');
+        break;
+      }
+      case '3': {
+        this.vmFilter('min', '30');
+        break;
+      }
+      case '4': {
+        this.vmFilter('min', '60');
+        break;
+      }
+      case '5': {
+        this.vmFilter('min', '150');
+        break;
+      }
+      case '6': {
+        this.vmFilter('min', '350');
+        break;
+      }
+      case '7': {
+        this.vmFilter('hour', '12');
+        break;
+      }
+      case '8': {
+        this.vmFilter('day', '1');
+        break;
+      }
+      case '9': {
+        this.vmFilter('day', '2');
+        break;
+      }
+      case '10': {
+        this.vmFilter('day', '7');
+        break;
+      }
+      case '11': {
+        this.vmFilter('day', '30');
+        break;
+      }
+    }
+    this.getVmMonitoring(this.vmName)
+  }
 
+  vmFilter(_type: string, _timeGroup: string) {
+    this.type = _type;
+    this.timeGroup = _timeGroup
+  }
+
+  getVmMonitoring(vmNmae: string) {
     this.getVmMonitoringCpuUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringCpuLatency(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringCpuCostop(vmNmae, this.type, this.interval, this.timeGroup);
@@ -131,9 +188,7 @@ export class VmComponent implements OnInit {
     this.getVmMonitoringNetUsage(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringNetTransmitReceive(vmNmae, this.type, this.interval, this.timeGroup);
     this.getVmMonitoringNetError(vmNmae, this.type, this.interval, this.timeGroup);
-
   }
-
 
   getVmMonitoringCpuUsage(vmNmae: string, type: string, interval: string, timeGroup: string) {
     this.vmService.getVmMonitoringCpuUsage(vmNmae, type, interval, timeGroup).subscribe(data => {

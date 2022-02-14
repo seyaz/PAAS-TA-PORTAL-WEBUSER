@@ -8,6 +8,7 @@ import {DashboardComponent} from "../dashboard/dashboard.component";
 import {DashboardService} from "../dashboard/dashboard.service";
 import {LangChangeEvent, TranslateService} from "@ngx-translate/core";
 import {Router} from "@angular/router";
+import {consoleLog} from "ng2-logger/backend-logging";
 
 declare var Chart: any;
 declare var $: any;
@@ -511,6 +512,9 @@ export class VmComponent implements OnInit {
                     } else {
                       memory = (memoryBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
                     }
+                    if(memory == 'NaN undefined'){
+                      memory = "0 " + s[0];
+                    }
                     return memory;
                   }
                 }
@@ -626,6 +630,9 @@ export class VmComponent implements OnInit {
                     } else {
                       disk = (diskBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
                     }
+                    if(disk == 'NaN undefined'){
+                      disk = "0 " + s[0];
+                    }
                     return disk;
                   }
                 }
@@ -740,6 +747,9 @@ export class VmComponent implements OnInit {
                     } else {
                       net = (netBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
                     }
+                    if(net == 'NaN undefined'){
+                      net = "0 " + s[0];
+                    }
                     return net;
                   }
                 }
@@ -801,6 +811,9 @@ export class VmComponent implements OnInit {
                       net = "0 " + s[0];
                     } else {
                       net = (netBytes / Math.pow(1024, Math.floor(e))).toFixed(1) + " " + s[e];
+                    }
+                    if(net == 'NaN undefined'){
+                      net = "0 " + s[0];
                     }
                     return net;
                   }
